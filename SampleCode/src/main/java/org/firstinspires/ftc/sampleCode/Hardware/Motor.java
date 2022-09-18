@@ -19,6 +19,7 @@ public class Motor {
     public double TICKS_PER_INCH;
     public double ARM_COUNTS_PER_DEGREE;
     public double NANOSECONDS_PER_MIN = 6e+10;
+    public double GearRatio;
 
        /* Constructor for drive train motors
        Parameter name : Pass in name of the motor on the RC phone config
@@ -44,6 +45,15 @@ public class Motor {
         this.WHEEL_DIAMETER = wheelDiameter;
         this.TICKS_PER_INCH = cpr / (wheelDiameter * Math.PI);
         this.ARM_COUNTS_PER_DEGREE = (cpr / 360);
+    }
+
+    public Motor(String name , double cpr , double wheelDiameter, double GearRatio, HardwareMap hwmap){
+        motor = hwmap.get(DcMotorEx.class, name);
+        this.CPR = cpr;
+        this.WHEEL_DIAMETER = wheelDiameter;
+        this.TICKS_PER_INCH = cpr / (wheelDiameter * Math.PI);
+        this.ARM_COUNTS_PER_DEGREE = (cpr / 360);
+        this.GearRatio = GearRatio;
     }
 
     public void reset(){
@@ -83,7 +93,7 @@ public class Motor {
         return motor.getCurrentPosition() / TICKS_PER_INCH;
     }
     public double getCurrPosDegrees(){
-        return 0.23809*(motor.getCurrentPosition()/ARM_COUNTS_PER_DEGREE);
+        return GearRatio*(motor.getCurrentPosition()/ARM_COUNTS_PER_DEGREE);//0.23809
     }
 
     public double getCurrentPosition(){
