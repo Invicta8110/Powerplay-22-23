@@ -1,12 +1,12 @@
-package org.firstinspires.ftc.sampleCode.OpModes.TeleOp_OpModes;
+package org.firstinspires.ftc.team8110_Invicta.OpModes.Auton_OpModes;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp
-public class TestOpMode extends LinearOpMode {
+@Autonomous
+public class Test_OpMode_Auton extends LinearOpMode {
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
         telemetry.addLine("Test Hi");
         telemetry.update();
         waitForStart();
