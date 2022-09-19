@@ -6,7 +6,7 @@ To use this SDK, download/clone the entire project to your local computer.
 
 This repository contains the HHH FTC SDK for the Power Play (2022-2023) competition season.
 
-## Resources
+## Programming Resources
 - [Official FTC Online Documentation](https://ftc-docs.firstinspires.org/programming_resources/index.html)
 - [FTC Javadoc Documentation](https://javadoc.io/doc/org.firstinspires.ftc)
 - [Road Runner Tutorial](https://learnroadrunner.com)
