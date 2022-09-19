@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.sampleCode.Hardware.BotMechanisms.MecanumDriveTrain;
+import org.firstinspires.ftc.sampleCode.Hardware.BotMechanisms.Drivetrains.MecanumDriveTrain;
 
 public class StraferChassisTeleOp_Control {
     MecanumDriveTrain driveTrain;

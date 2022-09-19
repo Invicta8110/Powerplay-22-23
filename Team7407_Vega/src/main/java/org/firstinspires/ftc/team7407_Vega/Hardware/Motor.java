@@ -2,7 +2,6 @@ package org.firstinspires.ftc.team7407_Vega.Hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
@@ -10,7 +9,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class Motor {
-    DcMotorEx motor;
+    DcMotorEx dcMotorEx;
 
     //Declare all the constants in the Motor class
     public double CPR;
@@ -19,6 +18,7 @@ public class Motor {
     public double TICKS_PER_INCH;
     public double ARM_COUNTS_PER_DEGREE;
     public double NANOSECONDS_PER_MIN = 6e+10;
+    public double GearRatio;
 
        /* Constructor for drive train motors
        Parameter name : Pass in name of the motor on the RC phone config
@@ -29,7 +29,7 @@ public class Motor {
        Parameter hwmap : Pass in the hardwareMap from OpMode to initialize the motor */
 
     public Motor(String name, HardwareMap hwmap){
-        motor = hwmap.get(DcMotorEx.class, name);
+        dcMotorEx = hwmap.get(DcMotorEx.class, name);
     }
 
     /* Constructor for dead wheel encoders
@@ -39,25 +39,34 @@ public class Motor {
        Parameter hwmap : Pass in the hardwareMap from OpMode to initialize the motor */
 
     public Motor(String name , double cpr , double wheelDiameter, HardwareMap hwmap){
-        motor = hwmap.get(DcMotorEx.class, name);
+        dcMotorEx = hwmap.get(DcMotorEx.class, name);
         this.CPR = cpr;
         this.WHEEL_DIAMETER = wheelDiameter;
         this.TICKS_PER_INCH = cpr / (wheelDiameter * Math.PI);
         this.ARM_COUNTS_PER_DEGREE = (cpr / 360);
     }
 
+    public Motor(String name , double cpr , double wheelDiameter, double GearRatio, HardwareMap hwmap){
+        dcMotorEx = hwmap.get(DcMotorEx.class, name);
+        this.CPR = cpr;
+        this.WHEEL_DIAMETER = wheelDiameter;
+        this.TICKS_PER_INCH = cpr / (wheelDiameter * Math.PI);
+        this.ARM_COUNTS_PER_DEGREE = (cpr / 360);
+        this.GearRatio = GearRatio;
+    }
+
     public void reset(){
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        dcMotorEx.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        dcMotorEx.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void runToPosition(int target){
-        motor.setTargetPosition(target);
-        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        dcMotorEx.setTargetPosition(target);
+        dcMotorEx.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        motor.setPower(0.1);
+        dcMotorEx.setPower(0.1);
 
-        while (motor.isBusy()){
+        while (dcMotorEx.isBusy()){
 
         }
 
@@ -66,64 +75,64 @@ public class Motor {
 
     // Testing
     public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior zeroPowerBehavior){
-        motor.setZeroPowerBehavior(zeroPowerBehavior);
+        dcMotorEx.setZeroPowerBehavior(zeroPowerBehavior);
     }
     public void setBreakMode(){
-        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        dcMotorEx.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
     public void setFloatMode(){
-        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        dcMotorEx.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
     public void setPIDFCoefficients(DcMotor.RunMode runMode, PIDFCoefficients coefficients){
-        motor.setPIDFCoefficients(runMode, coefficients);
+        dcMotorEx.setPIDFCoefficients(runMode, coefficients);
     }
 
     public double getCurrPosInches(){
-        return motor.getCurrentPosition() / TICKS_PER_INCH;
+        return dcMotorEx.getCurrentPosition() / TICKS_PER_INCH;
     }
     public double getCurrPosDegrees(){
-        return 0.23809*(motor.getCurrentPosition()/ARM_COUNTS_PER_DEGREE);
+        return GearRatio*(dcMotorEx.getCurrentPosition()/ARM_COUNTS_PER_DEGREE);//0.23809
     }
 
     public double getCurrentPosition(){
-        return motor.getCurrentPosition();
+        return dcMotorEx.getCurrentPosition();
     }
     public double getPositionTicks(){
-        return motor.getCurrentPosition();
+        return dcMotorEx.getCurrentPosition();
     }
 
     public double getVelocity(){
-        return motor.getVelocity();
+        return dcMotorEx.getVelocity();
     }
 
     public MotorConfigurationType getMotorType(){
-        return motor.getMotorType();
+        return dcMotorEx.getMotorType();
     }
 
     public void setMotorType(MotorConfigurationType motorConfigurationType){
-        motor.setMotorType(motorConfigurationType);
+        dcMotorEx.setMotorType(motorConfigurationType);
     }
 
     public void setDirectionForward(){
-        motor.setDirection(DcMotor.Direction.FORWARD);
+        dcMotorEx.setDirection(DcMotor.Direction.FORWARD);
     }
     public void setDirectionReverse(){
-        motor.setDirection(DcMotor.Direction.REVERSE);
+        dcMotorEx.setDirection(DcMotor.Direction.REVERSE);
     }
 
     public void setPower(double power){
-        motor.setPower(power);
+        dcMotorEx.setPower(power);
     }
 
     public void setVelocity(double ω){
-        motor.setVelocity(ω);
+        dcMotorEx.setVelocity(ω);
     }
     public void setVelocity(double ω, AngleUnit angleUnit){
-        motor.setVelocity(ω, angleUnit);
+        dcMotorEx.setVelocity(ω, angleUnit);
     }
 
     public void setMode(DcMotor.RunMode runMode) {
-        motor.setMode(runMode);
+        dcMotorEx.setMode(runMode);
     }
 }
