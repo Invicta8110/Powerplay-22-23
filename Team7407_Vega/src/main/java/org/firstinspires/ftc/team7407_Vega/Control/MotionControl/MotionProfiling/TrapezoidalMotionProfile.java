@@ -2,4 +2,5 @@ package org.firstinspires.ftc.team7407_Vega.Control.MotionControl.MotionProfilin
 
 public class TrapezoidalMotionProfile {
 
+    //TODO: I should actually write this before I forget
 }
