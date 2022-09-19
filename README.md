@@ -1,10 +1,10 @@
-## After everything is added, remember to update this file with relevant info for club
+## Welcome! 
+This is the HHH FTC Robotics Club Git Hub Repository.
+This GitHub repository contains the source code that is used to build an Android app to control a *FIRST* Tech Challenge competition robot. 
+To use this SDK, download/clone the entire project to your local computer.
 ## NOTICE
 
 This repository contains the HHH FTC SDK for the Power Play (2022-2023) competition season.
-
-## Welcome!
-This GitHub repository contains the source code that is used to build an Android app to control a *FIRST* Tech Challenge competition robot.  To use this SDK, download/clone the entire project to your local computer.
 
 ## Resources
 Note to self: Add resources here later
