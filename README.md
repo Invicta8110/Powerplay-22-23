@@ -10,6 +10,7 @@ This repository contains the HHH FTC SDK for the Power Play (2022-2023) competit
 - [Official FTC Online Documentation](https://ftc-docs.firstinspires.org/programming_resources/index.html)
 - [FTC Javadoc Documentation](https://javadoc.io/doc/org.firstinspires.ftc)
 - [Road Runner Tutorial](https://learnroadrunner.com)
+- [Resources for Understanding Math Behind Road Runner](https://acme-robotics.gitbook.io/road-runner/advanced/resources)
 
 ### User Documentation and Tutorials
 *FIRST* maintains online documentation with information and tutorials on how to use the *FIRST* Tech Challenge software and robot control system.  You can access this documentation using the following link:
