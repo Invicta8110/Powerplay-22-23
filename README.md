@@ -8,7 +8,8 @@ This repository contains the HHH FTC SDK for the Power Play (2022-2023) competit
 
 ## Resources
 Note to self: Add resources here later
-
+- [Official FTC Coding Documentation](https://ftc-docs.firstinspires.org/programming_resources/index.html)
+- 
 
 ### User Documentation and Tutorials
 *FIRST* maintains online documentation with information and tutorials on how to use the *FIRST* Tech Challenge software and robot control system.  You can access this documentation using the following link:
