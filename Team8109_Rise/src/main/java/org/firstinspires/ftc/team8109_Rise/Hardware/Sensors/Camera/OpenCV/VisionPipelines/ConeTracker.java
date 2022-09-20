@@ -21,38 +21,55 @@ public class ConeTracker extends OpenCvPipeline {
     static final Scalar GREEN = new Scalar(0, 255, 0);
 
     boolean RED = true;
+    boolean BLUE = true;
 
     public int redContourCount = 0;
+    public int blueContourCount = 0;
 
     public List<Rect> redRect;
+    public List<Rect> blueRect;
 
     public Rect RedRect;
+    public Rect BlueRect;
 
     public List<MatOfPoint> redContours;
+    public List<MatOfPoint> blueContours;
 
-    public MatOfPoint biggestContour;
+    public MatOfPoint biggestRedContour;
+    public MatOfPoint biggestBlueContour;
+
     public ConeTracker(Telemetry telemetry) {
         redContours = new ArrayList<MatOfPoint>();
         redRect = new ArrayList<Rect>();
         RedRect = new Rect();
-        biggestContour = new MatOfPoint();
+        biggestRedContour = new MatOfPoint();
+
+        blueContours = new ArrayList<MatOfPoint>();
+        blueRect = new ArrayList<Rect>();
+        BlueRect = new Rect();
+        biggestBlueContour = new MatOfPoint();
 
         this.telemetry = telemetry;
     }
 
     // Filters the contours to be greater than a specific area in order to be tracked
     public boolean filterContours(MatOfPoint contour) {
-        return Imgproc.contourArea(contour) > 100;
+        return Imgproc.contourArea(contour) > 50;
     }
 
-    // Yellow masking thresholding values:
-    Scalar lowRed = new Scalar(0, 170, 0); //10, 100, 50
+    // Red masking thresholding values:
+    Scalar lowRed = new Scalar(0, 160, 0); //10, 100, 50
     Scalar highRed = new Scalar(255, 255, 255); //35, 255, 255
 
-    // Mat object for the yellow mask
-    Mat maskRed = new Mat();
+    // Blue masking thresholding values:
+    Scalar lowBlue = new Scalar(0, 0, 140); //10, 100, 50
+    Scalar highBlue = new Scalar(175, 255, 255); //35, 255, 255
 
-    // Mat object for HSV color space
+    // Mat object for the red and blue mask
+    Mat maskRed = new Mat();
+    Mat maskBlue = new Mat();
+
+    // Mat object for YCrCb color space
     Mat YCrCb = new Mat();
 
     // Kernel size for blurring
@@ -65,7 +82,7 @@ public class ConeTracker extends OpenCvPipeline {
         Imgproc.erode(YCrCb, YCrCb, kernel);
 
         if (RED) {
-            // Finds the pixels within the thresholds and puts them in the mat object "maskYellow"
+            // Finds the pixels within the thresholds and puts them in the mat object "maskRed"
             inRange(YCrCb, lowRed, highRed, maskRed);
 
             // Clears the arraylists
@@ -81,33 +98,62 @@ public class ConeTracker extends OpenCvPipeline {
 
                 // Filters out contours with an area less than 50 (defined in the filter contours method)
                 if (filterContours(redContours.get(i))) {
-                    // Creates a bounding rect around each contourand the draws it
-
-                    biggestContour = Collections.max(redContours, (t0, t1) -> {
+                    biggestRedContour = Collections.max(redContours, (t0, t1) -> {
                         return Double.compare(Imgproc.boundingRect(t0).width, Imgproc.boundingRect(t1).width);
                     });
 
-                    RedRect = Imgproc.boundingRect(biggestContour);
-                    redRect.add(Imgproc.boundingRect(redContours.get(i)));
-                    Imgproc.rectangle(input, redRect.get(redContourCount), GREEN, 2);
-                    // Creates a count for the amount of yellow contours on the the screen
-                    redContourCount++;
+                    // Creates a bounding rect around each contourand the draws it
+                    RedRect = Imgproc.boundingRect(biggestRedContour);
+
+                    Imgproc.rectangle(input, RedRect, GREEN, 2);
                 }
             }
 
-            telemetry.addData("Yellow Contour Count", redContourCount);
-
             // Displays the position of the center of each bounding rect (rect.x/y returns the top left position)
-            for (int i = 0; i < redRect.size(); i++){
-                telemetry.addData("Yellow Contour " + (i+1), "%7d,%7d", redRect.get(i).x + (redRect.get(i).width/2), redRect.get(i).y + (redRect.get(i).height/2));
-            }
+            telemetry.addData("Red Contour ", "%7d,%7d", RedRect.x + (RedRect.width/2), RedRect.y + (RedRect.height/2));
 
             maskRed.release();
         }
 
+        if (BLUE) {
+            // Finds the pixels within the thresholds and puts them in the mat object "maskBlue"
+            inRange(YCrCb, lowBlue, highBlue, maskBlue);
+
+            // Clears the arraylists
+            blueContours.clear();
+            blueRect.clear();
+
+            // Finds the contours and draws them on the screen
+            Imgproc.findContours(maskBlue, blueContours, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+            Imgproc.drawContours(input, blueContours, -1, GREEN); //input
+
+            // Iterates through each contour
+            for (int i = 0; i < blueContours.size(); i++) {
+                // Filters out contours with an area less than 50 (defined in the filter contours method)
+                if (filterContours(blueContours.get(i))) {
+                    biggestBlueContour = Collections.max(blueContours, (t0, t1) -> {
+                        return Double.compare(Imgproc.boundingRect(t0).width, Imgproc.boundingRect(t1).width);
+                    });
+
+                    // Creates a bounding rect around each contourand the draws it
+                    BlueRect = Imgproc.boundingRect(biggestBlueContour);
+                    Imgproc.rectangle(input, BlueRect, GREEN, 2);
+                }
+            }
+
+            // Displays the position of the center of each bounding rect (rect.x/y returns the top left position)
+            telemetry.addData("Blue Contour ", "%7d,%7d", BlueRect.x + (BlueRect.width/2), BlueRect.y + (BlueRect.height/2));
+
+            maskBlue.release();
+        }
+
         redContourCount = 0;
+        blueContourCount = 0;
 
         YCrCb.release();
+
+        //TODO: move this when actually using code (this is just for EasyOpenCV sim)
+        telemetry.update();
 
         return input;
     }
