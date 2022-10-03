@@ -22,7 +22,6 @@ public class NonBlockingRRTest extends LinearOpMode {
 
         while (opModeIsActive() && !isStopRequested()){
             control.RR_Drive();
-
         }
     }
 }

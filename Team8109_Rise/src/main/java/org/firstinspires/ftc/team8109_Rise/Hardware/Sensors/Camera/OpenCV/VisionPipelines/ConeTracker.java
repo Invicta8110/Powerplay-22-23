@@ -34,6 +34,7 @@ public class ConeTracker extends OpenCvPipeline {
 
     public List<MatOfPoint> redContours;
     public List<MatOfPoint> blueContours;
+    public List<MatOfPoint> circleContours;
 
     public MatOfPoint biggestRedContour;
     public MatOfPoint biggestBlueContour;
@@ -58,12 +59,12 @@ public class ConeTracker extends OpenCvPipeline {
     }
 
     // Red masking thresholding values:
-    Scalar lowRed = new Scalar(0, 160, 0); //10, 100, 50
+    Scalar lowRed = new Scalar(0, 150, 0); //10, 100, 50
     Scalar highRed = new Scalar(255, 255, 255); //35, 255, 255
 
     // Blue masking thresholding values:
-    Scalar lowBlue = new Scalar(0, 0, 140); //10, 100, 50
-    Scalar highBlue = new Scalar(175, 255, 255); //35, 255, 255
+    Scalar lowBlue = new Scalar(0, 0, 130); //10, 100, 50
+    Scalar highBlue = new Scalar(255, 255, 255); //35, 255, 255
 
     // Mat object for the red and blue mask
     Mat maskRed = new Mat();
@@ -80,6 +81,7 @@ public class ConeTracker extends OpenCvPipeline {
     public Mat processFrame(Mat input) {
         Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
         Imgproc.erode(YCrCb, YCrCb, kernel);
+        Imgproc.GaussianBlur(YCrCb, YCrCb, kSize, 0);
 
         if (RED) {
             // Finds the pixels within the thresholds and puts them in the mat object "maskRed"
@@ -96,8 +98,11 @@ public class ConeTracker extends OpenCvPipeline {
             // Iterates through each contour
             for (int i = 0; i < redContours.size(); i++) {
 
+//                Imgproc.HoughCircles(redContours.get(i), circles, Imgproc.HOUGH_GRADIENT, Math.PI/180, 50, 1, 50);
                 // Filters out contours with an area less than 50 (defined in the filter contours method)
                 if (filterContours(redContours.get(i))) {
+
+                    // TODO: move outside of for loop to optimize potentially
                     biggestRedContour = Collections.max(redContours, (t0, t1) -> {
                         return Double.compare(Imgproc.boundingRect(t0).width, Imgproc.boundingRect(t1).width);
                     });
@@ -122,6 +127,8 @@ public class ConeTracker extends OpenCvPipeline {
             // Clears the arraylists
             blueContours.clear();
             blueRect.clear();
+
+            //TODO: Canny edge detection?
 
             // Finds the contours and draws them on the screen
             Imgproc.findContours(maskBlue, blueContours, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
