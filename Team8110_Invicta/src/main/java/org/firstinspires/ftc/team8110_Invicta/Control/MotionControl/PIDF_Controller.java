@@ -103,7 +103,7 @@ public class PIDF_Controller {
 
         this.error = tolerance + 1;
     }
-//
+/* //
 //    public void PIDF(double currPos, double targetPos){
 //        error = targetPos - currPos;
 //
@@ -140,7 +140,7 @@ public class PIDF_Controller {
 ////        telemetry.addData("Delta Time", deltaTime);
 //
 //        previousError = error;
-//    }
+//    } */
 
     //TODO: remove and make it just one method
     public double PIDF_Power(double currPos, double targetPos, double maxError){
