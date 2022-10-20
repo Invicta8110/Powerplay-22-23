@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.team8110_Invicta.OpModes.TeleOp_OpModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.team8110_Invicta.Control.TeleOp.StraferChassisTeleOp_Control;
 
+@TeleOp(name="Mecanum TeleOp",group="Your Moms")
 public class StraferChassis_TeleOp extends LinearOpMode {
 
     @Override
