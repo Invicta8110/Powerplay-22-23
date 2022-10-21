@@ -119,8 +119,8 @@ public class MecanumDriveTrain extends MecanumDrive {
 
         // TODO: reverse any motors using DcMotor.setDirection()
 
-        frontLeft.setDirectionReverse();
-        backLeft.setDirectionReverse();
+        frontRight.setDirectionReverse();
+        backRight.setDirectionReverse();
 
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));

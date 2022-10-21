@@ -11,34 +11,31 @@ import org.firstinspires.ftc.team8110_Invicta.Hardware.BotMechanisms.Drivetrains
 
 @Autonomous(name="Square Drive", group="Your Moms")
 public class Polygon extends LinearOpMode {
-    static MecanumDriveTrain driveTrain;
-    private static HardwareMap hardwareMap;
-    static Trajectory trajectory;
+    MecanumDriveTrain driveTrain;
+    Trajectory trajectory;
+    Pose2d globalPose;
 
     @Override
     public void runOpMode() throws InterruptedException {
+        waitForStart();
         driveSquare(20);
     }
 
-    public static void driveSquare(int sideLength) {
+    public void driveSquare(int sideLength) {
         init("frontLeft","frontRight","backLeft","backRight", hardwareMap);
 
         for (int i = 0; i < 4; i++) {
-            setTrajectory(sideLength, new Pose2d(0, 0, 0));
-            driveTrain.followTrajectoryAsync(trajectory);
-            driveTrain.turnAsync(Math.toRadians(90));
+            trajectory = driveTrain.trajectoryBuilder(globalPose).forward(sideLength).build();
+            driveTrain.followTrajectory(trajectory);
+            driveTrain.turn(Math.toRadians(90));
         }
     }
 
-    public static void init(String flName, String frName, String blName, String brName, HardwareMap hardwareMap) {
+    public void init(String flName, String frName, String blName, String brName, HardwareMap hardwareMap) {
         driveTrain = new MecanumDriveTrain(flName, frName, brName, blName, hardwareMap);
 
-        Pose2d globalPose = new Pose2d(0,0,0);
+        globalPose = new Pose2d(0, 0, 0);
 
         driveTrain.setPoseEstimate(globalPose);
-    }
-
-    public static void setTrajectory(int distance, Pose2d globalPose) {
-        trajectory = driveTrain.trajectoryBuilder(globalPose).forward(distance).build();
     }
 }
