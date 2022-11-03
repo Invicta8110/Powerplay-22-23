@@ -35,8 +35,8 @@ public class StraferChassisTeleOp_Control {
         strafe = Math.pow(gamepad1.left_stick_x, 3);
 
         // Mecanum Drive Calculations
-        fLeft = -0.875 * drive - 1 * strafe - 0.8 * turn;
-        fRight = -0.875 * drive + 1 * strafe + 0.8 * turn;
+        fLeft = 0.875 * drive - 1 * strafe - 0.8 * turn;
+        fRight = 0.875 * drive + 1 * strafe + 0.8 * turn;
         bRight = -0.875 * drive - 1 * strafe + 0.8 * turn;
         bLeft = -0.875 * drive + 1 * strafe - 0.8 * turn;
 

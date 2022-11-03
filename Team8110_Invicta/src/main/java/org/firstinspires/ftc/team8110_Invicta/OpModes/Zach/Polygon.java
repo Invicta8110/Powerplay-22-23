@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.team8110_Invicta.OpModes.Zach;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -18,7 +17,7 @@ public class Polygon extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         waitForStart();
-        driveSquare(20);
+        driveSquare(40);
     }
 
     public void driveSquare(int sideLength) {

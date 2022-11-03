@@ -80,6 +80,52 @@ public class MecanumDriveTrain extends MecanumDrive {
     public InertialMeasurementUnit InertialMeasurementUnit;
     private VoltageSensor batteryVoltageSensor;
 
+    public MecanumDriveTrain(HardwareMap hardwareMap) {
+
+        super(DriveConstants.kV, DriveConstants.kA, DriveConstants.kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
+
+        InertialMeasurementUnit = new InertialMeasurementUnit(hardwareMap);
+        follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
+                new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
+
+        LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
+
+        batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
+
+        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
+            module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+        }
+
+        this.frontLeft = new Motor("frontLeft", 537.7, 3.77953, hardwareMap);
+        this.frontRight = new Motor("frontRight", 537.7, 3.77953, hardwareMap);
+        this.backRight = new Motor("backLeft", hardwareMap);
+        this.backLeft = new Motor("backRight", hardwareMap);
+        a
+                motors = Arrays.asList(frontLeft, frontRight, backRight, backLeft);
+
+        for (Motor motor : motors) {
+            motor.setBreakMode();
+            motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
+            motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
+            motor.setMotorType(motorConfigurationType);
+        }
+
+        if (RUN_USING_ENCODER && MOTOR_VELO_PID != null) {
+            setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, MOTOR_VELO_PID);
+        }
+
+        frontRight.setDirectionReverse();
+        backRight.setDirectionReverse();
+
+        // TODO: if desired, use setLocalizer() to change the localization method
+        // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
+
+        trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
+
+    }
+
+
     public MecanumDriveTrain(String flName, String frName, String brName, String blName, HardwareMap hardwareMap) {
 
         super(DriveConstants.kV, DriveConstants.kA, DriveConstants.kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);

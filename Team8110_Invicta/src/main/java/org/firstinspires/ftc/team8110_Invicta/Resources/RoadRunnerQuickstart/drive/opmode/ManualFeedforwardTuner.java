@@ -1,5 +1,12 @@
 package org.firstinspires.ftc.team8110_Invicta.Resources.RoadRunnerQuickstart.drive.opmode;
 
+import static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants.MAX_VEL;
+import static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants.kA;
+import static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants.kStatic;
+import static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants.kV;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -10,20 +17,12 @@ import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.team8110_Invicta.Resources.RoadRunnerQuickstart.drive.SampleMecanumDrive;
 
 import java.util.Objects;
-
-import static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants.kA;
-import static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants.kStatic;
-import static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants.kV;
 
 /*
  * This routine is designed to tune the open-loop feedforward coefficients. Although it may seem unnecessary,
@@ -40,10 +39,9 @@ import static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConst
  * user to reset the position of the bot in the event that it drifts off the path.
  * Pressing B/O (Xbox/PS4) will cede control back to the tuning process.
  */
-@Config
-@Autonomous(group = "drive")
-@Disabled
 
+@Config
+@Autonomous(name = "Feedforward Tuner", group = "drive")
 public class ManualFeedforwardTuner extends LinearOpMode {
     public static double DISTANCE = 72; // in
 
