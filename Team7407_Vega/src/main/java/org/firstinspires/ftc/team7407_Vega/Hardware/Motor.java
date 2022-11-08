@@ -57,7 +57,7 @@ public class Motor {
 
     public void reset(){
         dcMotorEx.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        dcMotorEx.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        dcMotorEx.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void runToPosition(int target){
@@ -91,6 +91,7 @@ public class Motor {
     public double getCurrPosInches(){
         return dcMotorEx.getCurrentPosition() / TICKS_PER_INCH;
     }
+
     public double getCurrPosDegrees(){
         return GearRatio*(dcMotorEx.getCurrentPosition()/ARM_COUNTS_PER_DEGREE);//0.23809
     }
