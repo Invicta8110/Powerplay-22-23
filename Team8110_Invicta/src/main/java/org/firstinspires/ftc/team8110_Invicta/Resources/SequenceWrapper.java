@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.team8110_Invicta.Resources;
 
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
+import org.firstinspires.ftc.team8110_Invicta.Resources.RoadRunnerQuickstart.trajectorysequence.TrajectorySequenceBuilder;
 
 /**
  * Wrapper object for Roadrunner - uses the builder design pattern object WrapperBuilder
