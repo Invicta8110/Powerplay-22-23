@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class Motor {
-    DcMotorEx dcMotorEx;
+    public DcMotorEx dcMotorEx;
 
     //Declare all the constants in the Motor class
     public double CPR;

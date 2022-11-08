@@ -146,7 +146,6 @@ public class PIDF_Controller {
     public double PIDF_Power(double currPos, double targetPos, double maxError){
 
         error = targetPos - currPos;
-        errorChange = error - previousError;
 
         P = kp*(error/Math.abs(maxError)); // Proportional term : KP constant * the error of the system
 
@@ -154,13 +153,13 @@ public class PIDF_Controller {
         runtime.reset();
 //        I += Math.abs(currPos) > Math.abs(targetPos * 0.8) ? deltaTime * error : 0; //TODO: Play with this I
 
-        area = previousArea + deltaTime * ki;
+        area = (previousArea + error*deltaTime);
         previousArea = area;
+        if (Math.abs(error) < tolerance) previousArea = 0;
 
         I = area*ki;
 
-        if ((previousError*error) < 0) area = 0;
-
+        errorChange = error - previousError;
         currentFilterEstimate = (1-a) * errorChange + (a * previousFilterEstimate);
 
 //        D = kd * (currentFilterEstimate / deltaTime);
@@ -169,7 +168,7 @@ public class PIDF_Controller {
         previousError = error;
         previousFilterEstimate = currentFilterEstimate;
 
-        return P + I + D + kF*Math.signum(error);
+        return P + I + D;
     }
 
 //    public double PIDF_Arm(double currPos, double targetPos, double kp, double kd, double ki, double a, double kGravity, double firstError){

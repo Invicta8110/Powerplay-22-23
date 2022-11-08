@@ -26,4 +26,4 @@ public class RiseTeleOp_FF extends LinearOpMode {
             teleOp.Telemetry();
         }
     }
-}
+};
