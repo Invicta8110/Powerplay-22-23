@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.team8110_Invicta.Hardware.Motor;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Pipelines.ColorPipeline;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -13,13 +14,15 @@ import org.openftc.easyopencv.OpenCvWebcam;
 @Autonomous(name="Camera Stream")
 public class SleeveScanTest extends LinearOpMode {
     OpenCvWebcam camera;
-    ColorPipeline pipeline;
+    ColorPipeline pipeline ;
 
     public void runOpMode() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam"), cameraMonitorViewId);
 
         camera.setPipeline(pipeline);
+        pipeline = new ColorPipeline();
+
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
 
             @Override
@@ -37,5 +40,13 @@ public class SleeveScanTest extends LinearOpMode {
 
         waitForStart();
 
+        while (opModeIsActive()) {
+            telemetry.addData("Hue", pipeline.getHue());
+            telemetry.addData("Color", pipeline.findColor());
+            telemetry.update();
+        }
+
     }
 }
+
+

@@ -4,10 +4,10 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.team8110_Invicta.Hardware.BotMechanisms.Drivetrains.MecanumDriveTrain;
+import org.firstinspires.ftc.team8110_Invicta.Hardware.BotMechanisms.Drivetrains.StormyMcNuggets;
 
 public class StraferChassisTeleOp_Control {
-    MecanumDriveTrain driveTrain;
+    StormyMcNuggets driveTrain;
 
     Gamepad gamepad1;
 
@@ -21,7 +21,7 @@ public class StraferChassisTeleOp_Control {
     double max;
 
     public StraferChassisTeleOp_Control(String flName, String frName, String brName, String blName, HardwareMap hardwareMap, Gamepad gamepad1, Telemetry telemetry){
-        driveTrain = new MecanumDriveTrain(flName, frName, brName, blName, hardwareMap);
+        driveTrain = new StormyMcNuggets(flName, frName, brName, blName, hardwareMap);
 
         driveTrain.setBreakMode();
         driveTrain.reset();

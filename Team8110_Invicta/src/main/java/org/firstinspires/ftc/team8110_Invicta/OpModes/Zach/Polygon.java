@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.team8110_Invicta.Hardware.BotMechanisms.Drivetrains.MecanumDriveTrain;
+import org.firstinspires.ftc.team8110_Invicta.Hardware.BotMechanisms.Drivetrains.StormyMcNuggets;
 
 @Autonomous(name="Square Drive", group="Your Moms")
 public class Polygon extends LinearOpMode {
-    MecanumDriveTrain driveTrain;
+    StormyMcNuggets driveTrain;
     Trajectory trajectory;
     Pose2d globalPose;
 
@@ -31,7 +31,7 @@ public class Polygon extends LinearOpMode {
     }
 
     public void init(String flName, String frName, String blName, String brName, HardwareMap hardwareMap) {
-        driveTrain = new MecanumDriveTrain(flName, frName, brName, blName, hardwareMap);
+        driveTrain = new StormyMcNuggets(flName, frName, brName, blName, hardwareMap);
 
         globalPose = new Pose2d(0, 0, 0);
 
