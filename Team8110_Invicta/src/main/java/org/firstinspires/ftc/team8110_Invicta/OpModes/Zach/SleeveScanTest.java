@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.team8110_Invicta.Hardware.Motor;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Pipelines.ColorPipeline;
+import org.firstinspires.ftc.team8110_Invicta.Hardware.States.Colors;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -45,6 +45,25 @@ public class SleeveScanTest extends LinearOpMode {
             telemetry.addData("Color", pipeline.findColor());
             telemetry.update();
         }
+
+        Colors sleeve = pipeline.findColor();
+
+        switch (sleeve) {
+            //TODO: fill this out
+            case RED:
+                //do red stuff
+                break;
+            case GREEN:
+                //do green stuff
+                break;
+            case BLUE:
+                //do blue stuff
+                break;
+            case UNKNOWN:
+                //do unknown stuff
+                break;
+        }
+
 
     }
 }

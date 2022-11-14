@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.team8110_Invicta.Hardware.Pipelines;
 
+import org.firstinspires.ftc.team8110_Invicta.Hardware.States.Colors;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -21,7 +22,7 @@ public class ColorPipeline extends OpenCvPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
-        //Imgproc.cvtColor(input, HSV, Imgproc.COLOR_RGBA2HSV);
+        Imgproc.cvtColor(input, HSV, Imgproc.COLOR_RGB2HSV);
 
         Region = HSV.submat(new Rect(BOTTOMLEFT, TOPRIGHT));
 
@@ -51,12 +52,8 @@ public class ColorPipeline extends OpenCvPipeline {
     }
 
     //@return: the hue!!
-    public double getHue() {return hue;}
+    public double getHue() {
+        return hue;
+    }
 }
 
-enum Colors {
-    RED,
-    GREEN,
-    BLUE,
-    UNKNOWN
-}
