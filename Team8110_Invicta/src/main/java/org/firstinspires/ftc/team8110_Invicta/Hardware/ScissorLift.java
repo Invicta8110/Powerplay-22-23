@@ -1,27 +1,50 @@
 package org.firstinspires.ftc.team8110_Invicta.Hardware;
 
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class ScissorLift {
-    Servo servo;
+    Motor motor;
+    int level;
 
+    /**
+     * Constructor with name I'm probably going with
+     * @param hwmap HardwareMap object
+     */
+    public ScissorLift(HardwareMap hwmap) {
+        motor = new Motor("liftMotor", hwmap);
+    }
+
+    /**
+     * Constructor in case I change the name
+     * @param name Name of the motor in control hub config
+     * @param hwmap HardwareMap object
+     */
     public ScissorLift(String name, HardwareMap hwmap) {
-        servo = hwmap.get(Servo.class, name);
+        motor = new Motor(name, hwmap);
     }
 
-
-    public void alterPosition(double input) {
-        servo.setPosition(input);
+    /**
+     * Moves the scissor lift
+     * @param power Power to move the lift at
+     */
+    public void move(double power) {
+        motor.setPower(power);
     }
 
-    public double getPosition() {
-        return servo.getPosition();
+    /**
+     * Moves the scissor lift to the next position
+     */
+    public void upLevel() {
+        motor.runToPosition(1); //TODO: figure out the positions
     }
 
-
-    public void ground() {
-        servo.getPosition();
+    /**
+     * Moves the scissor lift to the previous position
+     */
+    public void downLevel() {
+        motor.runToPosition(0); //TODO: figure out the positions
     }
 }
 

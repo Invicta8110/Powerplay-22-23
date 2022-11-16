@@ -20,24 +20,19 @@ public class Motor {
     public double NANOSECONDS_PER_MIN = 6e+10;
     public double GearRatio;
 
-       /* Constructor for drive train motors
-       Parameter name : Pass in name of the motor on the RC phone config
-       Parameter hwmap : Pass in the hardwareMap from OpMode to initialize the motor */
-
-    /* Constructor for drive train motors
-       Parameter name : Pass in name of the motor on the RC phone config
-       Parameter hwmap : Pass in the hardwareMap from OpMode to initialize the motor */
-
+       /** Constructor for drive train motors
+       @param name Pass in name of the motor on the RC phone config
+       @param hwmap Pass in the hardwareMap from OpMode to initialize the motor */
     public Motor(String name, HardwareMap hwmap){
         dcMotorEx = hwmap.get(DcMotorEx.class, name);
     }
 
-    /* Constructor for dead wheel encoders
-       Parameter name : Name of the motor connected to the respective encoder port
-       Parameter cpr : Encoder ticks per one revolution
-       Parameter wheelDiameter : Diameter of the dead wheel
-       Parameter hwmap : Pass in the hardwareMap from OpMode to initialize the motor */
-
+    /** Constructor for dead wheel encoders
+       @param name Name of the motor connected to the respective encoder port
+       @param cpr Encoder ticks per one revolution
+       @param wheelDiameter Diameter of the dead wheel
+       @param hwmap Pass in the hardwareMap from OpMode to initialize the motor
+     */
     public Motor(String name , double cpr , double wheelDiameter, HardwareMap hwmap){
         dcMotorEx = hwmap.get(DcMotorEx.class, name);
         this.CPR = cpr;
