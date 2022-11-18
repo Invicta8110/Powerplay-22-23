@@ -16,7 +16,8 @@ public class Motor {
     public double WHEEL_DIAMETER;
     public double MAX_RPM;
     public double TICKS_PER_INCH;
-    public double ARM_COUNTS_PER_DEGREE;
+    public double TICKS_PER_RADIAN;
+    public double TICKS_PER_DEGREE;
     public double NANOSECONDS_PER_MIN = 6e+10;
     public double GearRatio;
 
@@ -43,7 +44,7 @@ public class Motor {
         this.CPR = cpr;
         this.WHEEL_DIAMETER = wheelDiameter;
         this.TICKS_PER_INCH = cpr / (wheelDiameter * Math.PI);
-        this.ARM_COUNTS_PER_DEGREE = (cpr / 360);
+        this.TICKS_PER_DEGREE = (cpr / 360);
     }
 
     public Motor(String name , double cpr , double wheelDiameter, double GearRatio, HardwareMap hwmap){
@@ -51,26 +52,14 @@ public class Motor {
         this.CPR = cpr;
         this.WHEEL_DIAMETER = wheelDiameter;
         this.TICKS_PER_INCH = cpr / (wheelDiameter * Math.PI);
-        this.ARM_COUNTS_PER_DEGREE = (cpr / 360);
+        this.TICKS_PER_DEGREE = (cpr / 360);
+        this.TICKS_PER_RADIAN = (cpr / (2*Math.PI));
         this.GearRatio = GearRatio;
     }
 
     public void reset(){
         dcMotorEx.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dcMotorEx.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }
-
-    public void runToPosition(int target){
-        dcMotorEx.setTargetPosition(target);
-        dcMotorEx.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        dcMotorEx.setPower(0.1);
-
-        while (dcMotorEx.isBusy()){
-
-        }
-
-        reset();
     }
 
     // Testing
@@ -92,13 +81,13 @@ public class Motor {
         return dcMotorEx.getCurrentPosition() / TICKS_PER_INCH;
     }
     public double getCurrPosDegrees(){
-        return GearRatio*(dcMotorEx.getCurrentPosition()/ARM_COUNTS_PER_DEGREE);//0.23809
+        return GearRatio*(dcMotorEx.getCurrentPosition()/TICKS_PER_DEGREE);//0.23809
+    }
+    public double getCurrPosRadians(){
+        return GearRatio*(dcMotorEx.getCurrentPosition()/TICKS_PER_RADIAN);//0.23809
     }
 
     public double getCurrentPosition(){
-        return dcMotorEx.getCurrentPosition();
-    }
-    public double getPositionTicks(){
         return dcMotorEx.getCurrentPosition();
     }
 

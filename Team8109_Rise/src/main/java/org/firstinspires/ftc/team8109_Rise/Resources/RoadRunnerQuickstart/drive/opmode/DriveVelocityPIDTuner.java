@@ -50,10 +50,9 @@ import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstant
  */
 @Config
 @Autonomous(group = "drive")
-@Disabled
 
 public class DriveVelocityPIDTuner extends LinearOpMode {
-    public static double DISTANCE = 72; // in
+    public static double DISTANCE = 90; // in
 
     enum Mode {
         DRIVER_MODE,

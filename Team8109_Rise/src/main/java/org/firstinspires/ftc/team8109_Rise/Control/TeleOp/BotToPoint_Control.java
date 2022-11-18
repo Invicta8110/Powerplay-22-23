@@ -8,7 +8,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.team8109_Rise.Control.MotionControl.PIDF_Controller;
 import org.firstinspires.ftc.team8109_Rise.Hardware.BotMechanisms.Drivetrains.MecanumDriveTrain;
 
-public class StraferChassisTeleOp_Control {
+public class BotToPoint_Control {
     MecanumDriveTrain driveTrain;
 
     Gamepad gamepad1;
@@ -26,24 +26,61 @@ public class StraferChassisTeleOp_Control {
     double bRight;
     double max;
 
-    public StraferChassisTeleOp_Control(String flName, String frName, String brName, String blName, HardwareMap hardwareMap, Gamepad gamepad1, Telemetry telemetry){
+    public enum driveState{
+        MANUAL,
+        TO_POINT
+    }
+
+    driveState DriveState;
+
+    PIDF_Controller drivePID;
+    PIDF_Controller strafePID;
+    PIDF_Controller headingPID;
+
+    public BotToPoint_Control(String flName, String frName, String brName, String blName, HardwareMap hardwareMap, Gamepad gamepad1, Telemetry telemetry){
         driveTrain = new MecanumDriveTrain(flName, frName, brName, blName, hardwareMap);
+
+        drivePID = new PIDF_Controller(0.5);
+        strafePID = new PIDF_Controller(0.5);
+        headingPID = new PIDF_Controller(0.5);
+
+        drivePID.tolerance = 0.5;
+        strafePID.tolerance = 0.5;
 
         driveTrain.setBreakMode();
         driveTrain.reset();
 
         this.gamepad1 = gamepad1;
         this.telemetry = telemetry;
+
+        DriveState = driveState.MANUAL;
     }
 
     public void Drive(){
-//        drive = Math.pow(gamepad1.left_stick_y, 3); //Between -1 and 1
-//        turn = Math.pow(gamepad1.right_stick_x, 3);
-//        strafe = Math.pow(gamepad1.left_stick_x, 3);
+        driveTrain.update();
 
-        drive = gamepad1.left_stick_y; //Between -1 and 1
-        turn = gamepad1.right_stick_x;
-        strafe = gamepad1.left_stick_x;
+        switch (DriveState){
+            case MANUAL:
+                drive = gamepad1.left_stick_y; //Between -1 and 1
+                turn = gamepad1.right_stick_x;
+                strafe = gamepad1.left_stick_x;
+
+                if (gamepad1.x){
+                    DriveState = driveState.TO_POINT;
+                }
+
+                break;
+
+            case TO_POINT:
+                if (gamepad1.y){
+                    DriveState = driveState.MANUAL;
+                }
+
+                drive = drivePID.PIDF_Power(driveTrain.getPoseEstimate().getX(), -10, 10);
+                strafe = strafePID.PIDF_Power(driveTrain.getPoseEstimate().getY(), 10, 10);
+                turn = -headingPID.PIDF_Power(driveTrain.getPoseEstimate().getHeading(), 0, Math.PI);
+        }
+
 
         // Mecanum Drive Calculations
         fLeft = 0.875 * drive - 1 * strafe - 0.8 * turn;
@@ -64,13 +101,10 @@ public class StraferChassisTeleOp_Control {
     }
 
     public void Telemetry(){
-        driveTrain.update();
-        Pose2d poseEstimate = driveTrain.getPoseEstimate();
-
         // Print pose to telemetry
-        telemetry.addData("x", poseEstimate.getX());
-        telemetry.addData("y", poseEstimate.getY());
-        telemetry.addData("heading", poseEstimate.getHeading());
+        telemetry.addData("x", driveTrain.getPoseEstimate().getX());
+        telemetry.addData("y", driveTrain.getPoseEstimate().getY());
+        telemetry.addData("heading", driveTrain.getPoseEstimate().getHeading());
         telemetry.update();
     }
 }
