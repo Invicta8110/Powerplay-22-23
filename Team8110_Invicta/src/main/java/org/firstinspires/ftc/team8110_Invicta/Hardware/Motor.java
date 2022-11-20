@@ -68,6 +68,19 @@ public class Motor {
         reset();
     }
 
+    public void runToPosition(int target, double power){
+        dcMotorEx.setTargetPosition(target);
+        dcMotorEx.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        dcMotorEx.setPower(power);
+
+        while (dcMotorEx.isBusy()){
+
+        }
+
+        reset();
+    }
+
     // Testing
     public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior zeroPowerBehavior){
         dcMotorEx.setZeroPowerBehavior(zeroPowerBehavior);
@@ -90,7 +103,7 @@ public class Motor {
         return GearRatio*(dcMotorEx.getCurrentPosition()/ARM_COUNTS_PER_DEGREE);//0.23809
     }
 
-    public double getCurrentPosition(){
+    public int getCurrentPosition(){
         return dcMotorEx.getCurrentPosition();
     }
     public double getPositionTicks(){

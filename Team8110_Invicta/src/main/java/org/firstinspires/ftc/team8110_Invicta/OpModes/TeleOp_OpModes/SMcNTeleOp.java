@@ -4,21 +4,22 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.team8110_Invicta.Control.TeleOp.StraferChassisTeleOp_Control;
+import org.firstinspires.ftc.team8110_Invicta.Hardware.StormyMcNuggets;
 
 @TeleOp(name="Mecanum TeleOp",group="Your Moms")
-public class StraferChassis_TeleOp extends LinearOpMode {
+public class SMcNTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-
-        StraferChassisTeleOp_Control control = new StraferChassisTeleOp_Control("frontLeft", "frontRight", "backRight", "backLeft", hardwareMap, gamepad1, telemetry);
-        telemetry.addLine("Waiting for start");
+        StormyMcNuggets robot = new StormyMcNuggets(hardwareMap);
+        telemetry.addData("Status", "Initialized");
         telemetry.update();
 
         waitForStart();
 
-        while (opModeIsActive()){
-            control.Drive();
+        while (opModeIsActive()) {
+            robot.Drive();
         }
+
     }
 }

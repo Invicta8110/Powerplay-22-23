@@ -46,7 +46,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Config
-public class StormyMcNuggets extends MecanumDrive {
+public class DriveTrain extends MecanumDrive {
     //Declare the variables for the mecanum drive train class
     /* Although the encoders aren't DcMotors, they can be initialized as one
     since they are connected to the drive train motor encoder ports on the rev hub.
@@ -80,7 +80,7 @@ public class StormyMcNuggets extends MecanumDrive {
     public InertialMeasurementUnit InertialMeasurementUnit;
     private VoltageSensor batteryVoltageSensor;
 
-    public StormyMcNuggets(HardwareMap hardwareMap) {
+    public DriveTrain(HardwareMap hardwareMap) {
 
         super(DriveConstants.kV, DriveConstants.kA, DriveConstants.kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
@@ -126,7 +126,7 @@ public class StormyMcNuggets extends MecanumDrive {
     }
 
 
-    public StormyMcNuggets(String flName, String frName, String brName, String blName, HardwareMap hardwareMap) {
+    public DriveTrain(String flName, String frName, String brName, String blName, HardwareMap hardwareMap) {
 
         super(DriveConstants.kV, DriveConstants.kA, DriveConstants.kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 

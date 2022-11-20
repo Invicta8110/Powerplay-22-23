@@ -15,7 +15,8 @@ public class ColorPipeline extends OpenCvPipeline {
 
     private static final Scalar WHITE = new Scalar(255, 255, 255);
 
-    private Mat Region, HSV;
+    private Mat Region;
+    private Mat HSV = new Mat();
     private static Scalar avg;
     private static double hue;
     private static String color;
@@ -30,7 +31,7 @@ public class ColorPipeline extends OpenCvPipeline {
         hue = avg.val[0];
 
         Imgproc.rectangle(
-                HSV,
+                input,
                 BOTTOMLEFT,
                 TOPRIGHT,
                 WHITE,

@@ -33,18 +33,36 @@ public class ScissorLift {
         motor.setPower(power);
     }
 
+    /** Gets the location of the scissor lift's motor
+     * @return the location of the scissor lift's motor
+     */
+    public int getPosition() {
+        return motor.getCurrentPosition();
+    }
+
+    public int getInches() {
+        return (int) motor.getCurrPosInches();
+    }
+
+    /** Gets the level the scissorlift is at
+     * @return the level the scissorlift is at
+     */
+    public int getLevel() {
+        return level;
+    }
+
     /**
      * Moves the scissor lift to the next position
      */
     public void upLevel() {
-        motor.runToPosition(1); //TODO: figure out the positions
+        motor.runToPosition(1, 0.5); //TODO: figure out the positions
     }
 
     /**
      * Moves the scissor lift to the previous position
      */
     public void downLevel() {
-        motor.runToPosition(0); //TODO: figure out the positions
+        motor.runToPosition(0, 0.5); //TODO: figure out the positions
     }
 }
 
