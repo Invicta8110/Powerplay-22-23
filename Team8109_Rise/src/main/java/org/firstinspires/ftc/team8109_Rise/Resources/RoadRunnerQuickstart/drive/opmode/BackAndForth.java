@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.team7407_Vega.Resources.RoadRunnerQuickstart.drive.SampleMecanumDrive;
 
 /*
  * Op mode for preliminary tuning of the follower PID coefficients (located in the drive base

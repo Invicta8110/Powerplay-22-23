@@ -1,5 +1,11 @@
 package org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.drive.opmode;
 
+import static org.firstinspires.ftc.team7407_Vega.Hardware.Sensors.DriveConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.team7407_Vega.Hardware.Sensors.DriveConstants.MAX_VEL;
+import static org.firstinspires.ftc.team7407_Vega.Hardware.Sensors.DriveConstants.MOTOR_VELO_PID;
+import static org.firstinspires.ftc.team7407_Vega.Hardware.Sensors.DriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.team7407_Vega.Hardware.Sensors.DriveConstants.kV;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -14,15 +20,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.team7407_Vega.Resources.RoadRunnerQuickstart.drive.SampleMecanumDrive;
 
 import java.util.List;
-
-import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.MOTOR_VELO_PID;
-import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.kV;
 
 /*
  * This routine is designed to tune the PID coefficients used by the REV Expansion Hubs for closed-

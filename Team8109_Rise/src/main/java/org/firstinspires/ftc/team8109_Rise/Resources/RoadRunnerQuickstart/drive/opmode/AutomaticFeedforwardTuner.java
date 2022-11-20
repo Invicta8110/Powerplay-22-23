@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.drive.opmode;
 
+import static org.firstinspires.ftc.team7407_Vega.Hardware.Sensors.DriveConstants.MAX_RPM;
+import static org.firstinspires.ftc.team7407_Vega.Hardware.Sensors.DriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.team7407_Vega.Hardware.Sensors.DriveConstants.rpmToVelocity;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -11,16 +15,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
-import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.util.LoggingUtil;
-import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.util.RegressionUtil;
+import org.firstinspires.ftc.team7407_Vega.Resources.RoadRunnerQuickstart.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.team7407_Vega.Resources.RoadRunnerQuickstart.util.LoggingUtil;
+import org.firstinspires.ftc.team7407_Vega.Resources.RoadRunnerQuickstart.util.RegressionUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.MAX_RPM;
-import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.rpmToVelocity;
 
 /*
  * Op mode for computing kV, kStatic, and kA from various drive routines. For the curious, here's an

@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.team7407_Vega.Resources.RoadRunnerQuickstart.drive.SampleMecanumDrive;
 
 import java.util.Objects;
 

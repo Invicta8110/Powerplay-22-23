@@ -11,8 +11,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants;
+import org.firstinspires.ftc.team7407_Vega.Hardware.Sensors.DriveConstants;
+import org.firstinspires.ftc.team7407_Vega.Resources.RoadRunnerQuickstart.drive.SampleMecanumDrive;
 
 import java.util.Objects;
 

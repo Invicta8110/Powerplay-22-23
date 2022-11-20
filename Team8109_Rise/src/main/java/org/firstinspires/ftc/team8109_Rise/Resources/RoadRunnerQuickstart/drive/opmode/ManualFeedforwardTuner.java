@@ -1,5 +1,12 @@
 package org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.drive.opmode;
 
+import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.MAX_VEL;
+import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.kA;
+import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.kStatic;
+import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.kV;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -17,13 +24,6 @@ import com.qualcomm.robotcore.util.RobotLog;
 import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.drive.SampleMecanumDrive;
 
 import java.util.Objects;
-
-import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.kA;
-import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.kStatic;
-import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.kV;
 
 /*
  * This routine is designed to tune the open-loop feedforward coefficients. Although it may seem unnecessary,

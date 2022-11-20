@@ -16,11 +16,11 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryMarker;
 import com.acmerobotics.roadrunner.util.NanoClock;
 
-import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.trajectorysequence.sequencesegment.SequenceSegment;
-import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.trajectorysequence.sequencesegment.TrajectorySegment;
-import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.trajectorysequence.sequencesegment.TurnSegment;
-import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.trajectorysequence.sequencesegment.WaitSegment;
-import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.util.DashboardUtil;
+import org.firstinspires.ftc.team7407_Vega.Resources.RoadRunnerQuickstart.trajectorysequence.sequencesegment.SequenceSegment;
+import org.firstinspires.ftc.team7407_Vega.Resources.RoadRunnerQuickstart.trajectorysequence.sequencesegment.TrajectorySegment;
+import org.firstinspires.ftc.team7407_Vega.Resources.RoadRunnerQuickstart.trajectorysequence.sequencesegment.TurnSegment;
+import org.firstinspires.ftc.team7407_Vega.Resources.RoadRunnerQuickstart.trajectorysequence.sequencesegment.WaitSegment;
+import org.firstinspires.ftc.team7407_Vega.Resources.RoadRunnerQuickstart.util.DashboardUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;

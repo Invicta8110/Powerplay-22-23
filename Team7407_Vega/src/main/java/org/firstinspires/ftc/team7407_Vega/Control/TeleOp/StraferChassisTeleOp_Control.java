@@ -6,11 +6,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.team7407_Vega.Hardware.BotMechanisms.Drivetrains.MecanumDriveTrain;
 
+
 public class StraferChassisTeleOp_Control {
     MecanumDriveTrain driveTrain;
 
     Gamepad gamepad1;
 
+    Telemetry telemetry;
     double drive;
     double turn;
     double strafe;
@@ -20,6 +22,8 @@ public class StraferChassisTeleOp_Control {
     double bRight;
     double max;
 
+    double height = 30;
+
     public StraferChassisTeleOp_Control(String flName, String frName, String brName, String blName, HardwareMap hardwareMap, Gamepad gamepad1, Telemetry telemetry){
         driveTrain = new MecanumDriveTrain(flName, frName, brName, blName, hardwareMap);
 
@@ -27,6 +31,7 @@ public class StraferChassisTeleOp_Control {
         driveTrain.reset();
 
         this.gamepad1 = gamepad1;
+        this.telemetry = telemetry;
     }
 
     public void Drive(){
@@ -50,5 +55,10 @@ public class StraferChassisTeleOp_Control {
         }
 
         driveTrain.setPower(fLeft, fRight, bRight, bLeft);
+        
+        telemetry.addData("slides power", gamepad1.right_trigger - gamepad1.left_trigger);
+        telemetry.update();
+
     }
+
 }
