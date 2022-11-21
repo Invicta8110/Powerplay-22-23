@@ -49,9 +49,7 @@ public class Basic_PID_Drive_Auton_Control {
         // TODO: Actually test this code because this was written off the top of my head
         switch (DriveState){
             case STEP_ONE:
-                power = PID.PIDF_Power(-chassis.frontLeft.getCurrPosInches(), 15, 15); // 0.675, 0.0032, 0, 0.01
-
-                chassis.setPower(-power);
+                power = PID.PIDF_Power(-chassis.frontLeft.getCurrPosInches(), 15, 15); // 0.675, 0.0032, 0, 0.0
 
                 if (PID.getError() < PID.tolerance){
                     chassis.reset();
@@ -76,8 +74,13 @@ public class Basic_PID_Drive_Auton_Control {
             case IDLE:
                 chassis.setPower(0);
         }
+
+        chassis.setPower(-power);
     }
 
+    public void lift(){
+
+    }
     public void Telemetry(){
         telemetry.addData("Auton Step", DriveState);
         telemetry.addData("PID Error", PID.error);
