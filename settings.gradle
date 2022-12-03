@@ -1,6 +1,6 @@
 include ':FtcRobotController'
-include ':Team8109_Rise'
-include ':Team8110_Invicta'
+include ':RISE'
+include ':Invicta'
 include ':SampleCode'
 
 
