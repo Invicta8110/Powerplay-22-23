@@ -4,30 +4,50 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.team8109_Rise.Hardware.Motor;
 
-public class Slides {
-    public Motor slidesMotor;
-    public double pulleyDiameter;
-    public double maxHeight;
+public abstract class Slides {
+
+    public Motor motors[];
+
+    public double pulleyRadius;
     public double kGravity = 0;
 
-    public Slides(String Slides, double gearRatio, double pulleyDiameter, double maxHeight, HardwareMap hardwareMap){
-        slidesMotor = new Motor(Slides, 537.7, pulleyDiameter, hardwareMap); //0.44690708020204210283902560755002
-        this.pulleyDiameter = pulleyDiameter;
-        this.maxHeight = maxHeight;
+    double height;
+    double stages;
+
+    public enum StringingMethod {
+        CONTINUOUS,
+        CASCADE
     }
 
-    public Slides(String Slides, double gearRatio, double pulleyDiameter, double maxHeight, double kGravity, HardwareMap hardwareMap){
-        slidesMotor = new Motor(Slides, 537.7, pulleyDiameter, hardwareMap); //0.44690708020204210283902560755002
-        this.pulleyDiameter = pulleyDiameter;
-        this.maxHeight = maxHeight;
-        this.kGravity = kGravity;
+    StringingMethod method;
+
+    public Slides(int motorCount, String[] name, double pulleyRadius, StringingMethod method, int stages, double kGravity, HardwareMap hardwareMap){
+        Motor motors[] = new Motor[motorCount];
+
+        for (int i = 0; i <motors.length; i++){
+            motors[i] = new Motor(name[i], 537.7, hardwareMap);
+
+            this.pulleyRadius = pulleyRadius;
+        }
+
+        this.method = method;
+        this.stages = stages;
+        this.motors = motors;
     }
 
     public void setPower(double power){
-        slidesMotor.setPower(kGravity + power);
+        for (Motor motor:motors) {
+            motor.setPower(kGravity + power);
+        }
     }
 
     public double getHeight(){
-        return Math.toRadians(slidesMotor.getCurrPosDegrees()) * pulleyDiameter;
+        if (method == StringingMethod.CONTINUOUS){
+            height = Math.toRadians(motors[0].getCurrPosDegrees()) * pulleyRadius;
+        } else if (method == StringingMethod.CASCADE){
+            height = stages*(motors[0].getCurrPosRadians() * pulleyRadius);
+          }
+
+        return height;
     }
 }

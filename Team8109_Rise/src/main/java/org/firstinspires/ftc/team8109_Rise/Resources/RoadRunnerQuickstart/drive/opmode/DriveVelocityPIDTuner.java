@@ -9,7 +9,6 @@ import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.RobotLog;
@@ -18,11 +17,11 @@ import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.drive.
 
 import java.util.List;
 
-import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.MOTOR_VELO_PID;
-import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.kV;
+import static org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.DriveConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.DriveConstants.MAX_VEL;
+import static org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.DriveConstants.MOTOR_VELO_PID;
+import static org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.DriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.DriveConstants.kV;
 
 /*
  * This routine is designed to tune the PID coefficients used by the REV Expansion Hubs for closed-

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.team7407_Vega.Control.TeleOp;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -45,14 +46,8 @@ public class SlidesTest {
     PIDF_Controller slidesPID;
     slideState SlideState;
 
-    public SlidesTest(String flName, String frName, String brName, String blName, Gamepad gamepad1, Telemetry telemetry, HardwareMap hardwareMap){
+    public SlidesTest(Gamepad gamepad1, Telemetry telemetry, HardwareMap hardwareMap){
         viperSlides = new Slides("slides", 1, 0.44690708020204210283902560755002, height, hardwareMap);
-
-        driveTrain = new MecanumDriveTrain(flName, frName, brName, blName, hardwareMap);
-
-        driveTrain.setBreakMode();
-        driveTrain.reset();
-
 
         this.gamepad1 = gamepad1;
         this.telemetry = telemetry;
@@ -62,67 +57,69 @@ public class SlidesTest {
     }
 
     public void SlidesControl(){
-        switch (SlideState){
-            case IDLE:
-                viperSlides.slidesMotor.setPower(0);
-
-                if (gamepad1.x){
-                    SlideState = slideState.HOME;
-                }
-
-                break;
-            case HOME:
-                viperSlides.slidesMotor.setPower(slidesPID.PIDF_Power(viperSlides.getHeight(), 0, viperSlides.maxHeight));
-
-                if ((gamepad1.dpad_up != lastToggleUp) && gamepad1.dpad_up && slidesToggle1){
-                    slidesToggle1 = false;
-                    slidesToggle2 = true;
-
-                    SlideState = slideState.FIVE_INCHES;
-                }
-
-                lastToggleUp = gamepad1.dpad_up;
-
-                break;
-            case FIVE_INCHES:
-                viperSlides.slidesMotor.setPower(slidesPID.PIDF_Power(viperSlides.getHeight(), 5, viperSlides.maxHeight));
-
-                if ((gamepad1.dpad_up != lastToggleUp) && gamepad1.dpad_up && slidesToggle3){
-                    slidesToggle3 = false;
-                    slidesToggle4 = true;
-
-                    SlideState = slideState.FIVE_INCHES;
-                }
-
-                if ((gamepad1.dpad_down != lastToggleDown) && gamepad1.dpad_down && slidesToggle2){
-                    slidesToggle2 = false;
-                    slidesToggle1 = true;
-
-                    SlideState = slideState.HOME;
-                }
-
-                lastToggleUp = gamepad1.dpad_up;
-                lastToggleDown = gamepad1.dpad_down;
-
-                break;
-
-            case TEN_INCHES:
-                viperSlides.slidesMotor.setPower(slidesPID.PIDF_Power(viperSlides.getHeight(), 10, viperSlides.maxHeight));
-
-                if ((gamepad1.dpad_down != lastToggleDown) && gamepad1.dpad_down && slidesToggle4){
-                    slidesToggle4 = false;
-                    slidesToggle3 = true;
-
-                    SlideState = slideState.FIVE_INCHES;
-                }
-
-                lastToggleDown = gamepad1.dpad_down;
-
-                break;
-        }
+        viperSlides.slidesMotor.setPower(Math.pow(gamepad1.right_trigger - gamepad1.left_trigger, 3));
+//        switch (SlideState){
+//            case IDLE:
+//                viperSlides.slidesMotor.setPower(0);
+//
+//                if (gamepad1.x){
+//                    SlideState = slideState.HOME;
+//                }
+//
+//                break;
+//            case HOME:
+//                viperSlides.slidesMotor.setPower(slidesPID.PIDF_Power(viperSlides.getHeight(), 0, viperSlides.maxHeight));
+//
+//                if ((gamepad1.dpad_up != lastToggleUp) && gamepad1.dpad_up && slidesToggle1){
+//                    slidesToggle1 = false;
+//                    slidesToggle2 = true;
+//
+//                    SlideState = slideState.FIVE_INCHES;
+//                }
+//
+//                lastToggleUp = gamepad1.dpad_up;
+//
+//                break;
+//            case FIVE_INCHES:
+//                viperSlides.slidesMotor.setPower(slidesPID.PIDF_Power(viperSlides.getHeight(), 5, viperSlides.maxHeight));
+//
+//                if ((gamepad1.dpad_up != lastToggleUp) && gamepad1.dpad_up && slidesToggle3){
+//                    slidesToggle3 = false;
+//                    slidesToggle4 = true;
+//
+//                    SlideState = slideState.FIVE_INCHES;
+//                }
+//
+//                if ((gamepad1.dpad_down != lastToggleDown) && gamepad1.dpad_down && slidesToggle2){
+//                    slidesToggle2 = false;
+//                    slidesToggle1 = true;
+//
+//                    SlideState = slideState.HOME;
+//                }
+//
+//                lastToggleUp = gamepad1.dpad_up;
+//                lastToggleDown = gamepad1.dpad_down;
+//
+//                break;
+//
+//            case TEN_INCHES:
+//                viperSlides.slidesMotor.setPower(slidesPID.PIDF_Power(viperSlides.getHeight(), 10, viperSlides.maxHeight));
+//
+//                if ((gamepad1.dpad_down != lastToggleDown) && gamepad1.dpad_down && slidesToggle4){
+//                    slidesToggle4 = false;
+//                    slidesToggle3 = true;
+//
+//                    SlideState = slideState.FIVE_INCHES;
+//                }
+//
+//                lastToggleDown = gamepad1.dpad_down;
+//
+//                break;
+//        }
     }
 
     public void Telemetry(){
         telemetry.addData("Slides Height", viperSlides.getHeight());
+        telemetry.update();
     }
 }

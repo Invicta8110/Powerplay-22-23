@@ -4,47 +4,80 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.team8109_Rise.Hardware.Motor;
 
-public class DoubleReverse4Bar {
-    public Motor barMotor;
+public abstract class DoubleReverse4Bar {
+    public Motor leftBarMotor;
+    public Motor rightBarMotor;
+
     public double kGravity;
     public double antiGravity;
     public double barLength;
     public double maxExtension;
     public double initialAngle;
+    public double gearRatio;
 
     double initialHeight;
 
-    public double motorPower = 0;
+    double DR4B_Power;
 
-    public DoubleReverse4Bar(String barMotorName, double GearRatio, HardwareMap hardwareMap){
-        // TODO: move cpr to constructor
-        barMotor = new Motor(barMotorName, 537.7, 1, GearRatio, hardwareMap);
-        barMotor.reset();
-        barMotor.setBreakMode();
+    public DoubleReverse4Bar(String leftBarMotorName, String rightBarMotorName, HardwareMap hardwareMap){
+        leftBarMotor = new Motor(leftBarMotorName, 537.7, hardwareMap);
+        rightBarMotor = new Motor(rightBarMotorName, 537.7, hardwareMap);
+
+        reset();
+
+        leftBarMotor.setBreakMode();
+        rightBarMotor.setBreakMode();
     }
 
-    public DoubleReverse4Bar(String barMotorName, double GearRatio, double kGravity, HardwareMap hardwareMap){
-        barMotor = new Motor(barMotorName, 537.7, 1, GearRatio, hardwareMap);
-        barMotor.reset();
-        barMotor.setBreakMode();
+    public DoubleReverse4Bar(String leftBarMotorName, String rightBarMotorName, double CPR, HardwareMap hardwareMap){
+        leftBarMotor = new Motor(leftBarMotorName, CPR, hardwareMap);
+        rightBarMotor = new Motor(rightBarMotorName, CPR, hardwareMap);
+
+        reset();
+
+        leftBarMotor.setBreakMode();
+        rightBarMotor.setBreakMode();
+    }
+
+    public DoubleReverse4Bar(String leftBarMotorName, String rightBarMotorName, double CPR, double kGravity, HardwareMap hardwareMap){
+        leftBarMotor = new Motor(leftBarMotorName, CPR, hardwareMap);
+        rightBarMotor = new Motor(rightBarMotorName, CPR, hardwareMap);
+
+        reset();
+
+        leftBarMotor.setBreakMode();
+        rightBarMotor.setBreakMode();
 
         this.kGravity = kGravity;
     }
 
-    public DoubleReverse4Bar(String barMotorName, double GearRatio, double kGravity, double initialHeight, HardwareMap hardwareMap){
-        barMotor = new Motor(barMotorName, 537.7, 1, GearRatio, hardwareMap);
-        barMotor.reset();
-        barMotor.setBreakMode();
+    public DoubleReverse4Bar(String leftBarMotorName, String rightBarMotorName, double CPR, double gearRatio, double kGravity, double initialHeight, HardwareMap hardwareMap){
+        leftBarMotor = new Motor(leftBarMotorName, CPR, hardwareMap);
+        rightBarMotor = new Motor(rightBarMotorName, CPR, hardwareMap);
 
+        reset();
+
+        leftBarMotor.setBreakMode();
+        rightBarMotor.setBreakMode();
+
+        this.gearRatio = gearRatio;
         this.kGravity = kGravity;
         this.initialHeight = initialHeight;
     }
 
-    public DoubleReverse4Bar(String barMotorName, double GearRatio, double kGravity, double initialHeight, double maxExtension, double barLength, double initialAngle, HardwareMap hardwareMap){
-        barMotor = new Motor(barMotorName, 537.7, 1, GearRatio, hardwareMap);
-        barMotor.reset();
-        barMotor.setBreakMode();
+    public DoubleReverse4Bar(String leftBarMotorName, String rightBarMotorName, double CPR, double gearRatio, double kGravity, double initialHeight, double maxExtension, double barLength, double initialAngle, HardwareMap hardwareMap){
+        leftBarMotor = new Motor(leftBarMotorName, CPR, hardwareMap);
+        rightBarMotor = new Motor(rightBarMotorName, CPR, hardwareMap);
 
+        reset();
+
+        leftBarMotor.setBreakMode();
+        rightBarMotor.setBreakMode();
+
+        leftBarMotor.setDirectionReverse();
+        rightBarMotor.setDirectionForward();
+
+        this.gearRatio = gearRatio;
         this.kGravity = kGravity;
         this.initialHeight = initialHeight;
         this.maxExtension = maxExtension;
@@ -53,20 +86,22 @@ public class DoubleReverse4Bar {
     }
 
     public void setPower(double power){
-        //TODO: actually do the math
-//        antiGravity = kGravity * Math.cos((1/(maxExtension*Math.PI))*getHeight());
-//        antiGravity = kGravity*Math.sqrt((barLength*barLength) - ((getHeight()/2)*(getHeight()/2)));
-//        antiGravity = (kGravity*barLength)/(2*Math.sin(getAngle()));
+        //TODO: check if gravity is exactly directly proportional with Cos(angle)
         antiGravity = kGravity*Math.cos(getAngle());
-        barMotor.setPower(antiGravity + power);
+        leftBarMotor.setPower(antiGravity + power);
+        rightBarMotor.setPower(antiGravity + power);
     }
 
     public double getAngle(){
-        return barMotor.getCurrPosRadians() + Math.toRadians(initialAngle);
+        return (gearRatio*leftBarMotor.getCurrPosRadians()) + Math.toRadians(initialAngle);
     }
 
     public double getHeight(){
-        // 4 + (barMotor.getCurrentPosition()*kPos)
-        return 2*barLength*Math.sin(getAngle()) + initialHeight; // convert to variable
+        return 2*barLength*Math.sin(getAngle()) + initialHeight;
+    }
+
+    public void reset(){
+        leftBarMotor.reset();
+        rightBarMotor.reset();
     }
 }

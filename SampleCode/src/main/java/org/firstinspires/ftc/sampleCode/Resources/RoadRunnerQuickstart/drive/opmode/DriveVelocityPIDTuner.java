@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.sampleCode.Hardware.Sensors.DriveConstants;
+import org.firstinspires.ftc.sampleCode.Hardware.Sensors.RoadRunner.DriveConstants;
 import org.firstinspires.ftc.sampleCode.Resources.RoadRunnerQuickstart.drive.SampleMecanumDrive;
 
 import java.util.List;

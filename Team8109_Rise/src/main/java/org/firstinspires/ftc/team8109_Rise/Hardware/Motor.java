@@ -7,14 +7,14 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.team8109_Rise.Control.PIDF_Controller;
 
 public class Motor {
     public DcMotorEx dcMotorEx;
 
     //Declare all the constants in the Motor class
-    public double CPR;
+    public double TICKS_PER_REV;
     public double WHEEL_DIAMETER;
-    public double MAX_RPM;
     public double TICKS_PER_INCH;
     public double TICKS_PER_RADIAN;
     public double TICKS_PER_DEGREE;
@@ -29,8 +29,12 @@ public class Motor {
        Parameter name : Pass in name of the motor on the RC phone config
        Parameter hwmap : Pass in the hardwareMap from OpMode to initialize the motor */
 
+    PIDF_Controller motorVeloPID;
+
     public Motor(String name, HardwareMap hwmap){
         dcMotorEx = hwmap.get(DcMotorEx.class, name);
+
+        motorVeloPID = new PIDF_Controller(1);
     }
 
     /* Constructor for dead wheel encoders
@@ -39,22 +43,24 @@ public class Motor {
        Parameter wheelDiameter : Diameter of the dead wheel
        Parameter hwmap : Pass in the hardwareMap from OpMode to initialize the motor */
 
-    public Motor(String name , double cpr , double wheelDiameter, HardwareMap hwmap){
+    public Motor(String name , double cpr, HardwareMap hwmap){
         dcMotorEx = hwmap.get(DcMotorEx.class, name);
-        this.CPR = cpr;
-        this.WHEEL_DIAMETER = wheelDiameter;
-        this.TICKS_PER_INCH = cpr / (wheelDiameter * Math.PI);
-        this.TICKS_PER_DEGREE = (cpr / 360);
+        TICKS_PER_REV = cpr;
+        TICKS_PER_INCH = TICKS_PER_REV / (WHEEL_DIAMETER * Math.PI);
+        TICKS_PER_DEGREE = (TICKS_PER_REV / 360);
+        TICKS_PER_RADIAN = (TICKS_PER_REV / (2*Math.PI));
+        
+        motorVeloPID = new PIDF_Controller(1);
     }
 
-    public Motor(String name , double cpr , double wheelDiameter, double GearRatio, HardwareMap hwmap){
+    public Motor(String name , double cpr, double kp, double kd, double ki, HardwareMap hwmap){
         dcMotorEx = hwmap.get(DcMotorEx.class, name);
-        this.CPR = cpr;
-        this.WHEEL_DIAMETER = wheelDiameter;
-        this.TICKS_PER_INCH = cpr / (wheelDiameter * Math.PI);
-        this.TICKS_PER_DEGREE = (cpr / 360);
-        this.TICKS_PER_RADIAN = (cpr / (2*Math.PI));
-        this.GearRatio = GearRatio;
+        this.TICKS_PER_REV = cpr;
+        TICKS_PER_INCH = TICKS_PER_REV / (WHEEL_DIAMETER * Math.PI);
+        TICKS_PER_DEGREE = (TICKS_PER_REV / 360);
+        TICKS_PER_RADIAN = (TICKS_PER_REV / (2*Math.PI));
+
+        motorVeloPID = new PIDF_Controller(kp, kd, ki);
     }
 
     public void reset(){
@@ -77,17 +83,14 @@ public class Motor {
         dcMotorEx.setPIDFCoefficients(runMode, coefficients);
     }
 
-    public double getCurrPosInches(){
-        return dcMotorEx.getCurrentPosition() / TICKS_PER_INCH;
-    }
     public double getCurrPosDegrees(){
-        return GearRatio*(dcMotorEx.getCurrentPosition()/TICKS_PER_DEGREE);//0.23809
+        return (dcMotorEx.getCurrentPosition()/TICKS_PER_DEGREE);
     }
     public double getCurrPosRadians(){
-        return GearRatio*(dcMotorEx.getCurrentPosition()/TICKS_PER_RADIAN);//0.23809
+        return (dcMotorEx.getCurrentPosition()/TICKS_PER_RADIAN);
     }
 
-    public double getCurrentPosition(){
+    public double getCurrPosTicks(){
         return dcMotorEx.getCurrentPosition();
     }
 
@@ -114,8 +117,9 @@ public class Motor {
         dcMotorEx.setPower(power);
     }
 
+    //TODO: Test
     public void setVelocity(double ω){
-        dcMotorEx.setVelocity(ω);
+        dcMotorEx.setPower(motorVeloPID.PIDF_Power(dcMotorEx.getVelocity(AngleUnit.DEGREES), ω));
     }
     public void setVelocity(double ω, AngleUnit angleUnit){
         dcMotorEx.setVelocity(ω, angleUnit);

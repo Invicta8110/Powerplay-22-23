@@ -27,7 +27,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
-import org.firstinspires.ftc.sampleCode.Hardware.Sensors.DriveConstants;
+import org.firstinspires.ftc.sampleCode.Hardware.Sensors.RoadRunner.DriveConstants;
 import org.firstinspires.ftc.sampleCode.Resources.RoadRunnerQuickstart.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.sampleCode.Resources.RoadRunnerQuickstart.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.sampleCode.Resources.RoadRunnerQuickstart.trajectorysequence.TrajectorySequenceRunner;

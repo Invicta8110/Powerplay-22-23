@@ -18,9 +18,9 @@ import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.util.R
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.MAX_RPM;
-import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.DriveConstants.rpmToVelocity;
+import static org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.DriveConstants.MAX_RPM;
+import static org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.DriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.DriveConstants.rpmToVelocity;
 
 /*
  * Op mode for computing kV, kStatic, and kA from various drive routines. For the curious, here's an

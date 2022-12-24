@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
-import org.firstinspires.ftc.sampleCode.Hardware.Sensors.DriveConstants;
+import org.firstinspires.ftc.sampleCode.Hardware.Sensors.RoadRunner.DriveConstants;
 import org.firstinspires.ftc.sampleCode.Resources.RoadRunnerQuickstart.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.sampleCode.Resources.RoadRunnerQuickstart.util.LoggingUtil;
 import org.firstinspires.ftc.sampleCode.Resources.RoadRunnerQuickstart.util.RegressionUtil;

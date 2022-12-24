@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.team8109_Rise.Hardware.Motor;
 
-public class H_Drive {
+public abstract class H_Drive {
     Motor left;
     Motor right;
     Motor middle;
@@ -16,9 +16,9 @@ public class H_Drive {
     }
 
     public H_Drive(String leftName, String rightName, String middleName, double cpr, double wheelDiameter, double GearRatio, HardwareMap hardwareMap){
-        left = new Motor(leftName, cpr, wheelDiameter, GearRatio, hardwareMap);
-        right = new Motor(rightName, cpr, wheelDiameter, GearRatio, hardwareMap);
-        middle = new Motor(middleName, cpr, wheelDiameter, GearRatio, hardwareMap);
+        left = new Motor(leftName, cpr, hardwareMap);
+        right = new Motor(rightName, cpr, hardwareMap);
+        middle = new Motor(middleName, cpr, hardwareMap);
 
         right.setDirectionReverse();
     }
