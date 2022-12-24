@@ -26,6 +26,8 @@ public class SlidesBot_TeleOp extends LinearOpMode {
         while (opModeIsActive()){
             slides.setSlidePosition();
             chassis.ManualDrive();
+            telemetry.addData("slides height", slides.getHeight());
+            telemetry.update();
         }
     }
 }
