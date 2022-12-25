@@ -14,9 +14,7 @@ public class SlidesBot_TeleOp extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         ViperSlides slides = new ViperSlides(gamepad1, hardwareMap);
-        Chassis chassis = new Chassis(gamepad1, telemetry, hardwareMap);
-
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+//        Chassis chassis = new Chassis(gamepad1, telemetry, hardwareMap);
 
         telemetry.addLine("Waiting For Start");
         telemetry.update();
@@ -25,7 +23,6 @@ public class SlidesBot_TeleOp extends LinearOpMode {
 
         while (opModeIsActive()){
             slides.setSlidePosition();
-            chassis.ManualDrive();
             telemetry.addData("slides height", slides.getHeight());
             telemetry.update();
         }

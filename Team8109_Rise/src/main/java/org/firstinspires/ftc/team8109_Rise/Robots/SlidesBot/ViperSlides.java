@@ -32,6 +32,7 @@ public class ViperSlides extends Slides {
         super(2, name, pulleyDiameter, StringingMethod.CASCADE, 2, 0, hardwareMap);
         slidesPID = new PIDF_Controller(0);
         slidesState = SlidesState.MANUAL;
+        motors[1].setDirectionReverse();
 
         this.gamepad1 = gamepad1;
     }
