@@ -36,8 +36,8 @@ public class ViperSlides extends Slides {
     public ViperSlides(Gamepad gamepad1, Telemetry telemetry, HardwareMap hardwareMap) {
         super(2, name, pulleyDiameter, StringingMethod.CASCADE, 2, 0, hardwareMap);
 
-        // ki: 0.008
-        slidesPID = new PIDF_Controller(0.01, 0, 0, 0);
+        // ki: 0.004
+        slidesPID = new PIDF_Controller(0.015, 0, 0, 0);
 
         // One of the motors needs to be reversed since the motors face opposite directions
         motors[1].setDirectionReverse();
