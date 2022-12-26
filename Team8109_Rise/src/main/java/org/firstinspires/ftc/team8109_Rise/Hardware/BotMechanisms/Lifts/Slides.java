@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.team8109_Rise.Hardware.BotMechanisms;
+package org.firstinspires.ftc.team8109_Rise.Hardware.BotMechanisms.Lifts;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 

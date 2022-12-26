@@ -1,15 +1,12 @@
 package org.firstinspires.ftc.team8109_Rise.Robots.DR4B_Bot;
 
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.team8109_Rise.Control.PIDF_Controller;
-import org.firstinspires.ftc.team8109_Rise.Hardware.BotMechanisms.DoubleReverse4Bar;
-import org.firstinspires.ftc.team8109_Rise.Hardware.Motor;
+import org.firstinspires.ftc.team8109_Rise.Hardware.BotMechanisms.Lifts.DoubleReverse4Bar;
 import org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.Claw;
-import org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.Gate;
 
 public class DR4B extends DoubleReverse4Bar {
     static double GearRatio = 0.2;

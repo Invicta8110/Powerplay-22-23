@@ -1,11 +1,10 @@
 package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.TeleOp_OpModes;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Chassis;
+import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Claw;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.ViperSlides;
 
 @TeleOp
@@ -13,8 +12,10 @@ public class SlidesBot_TeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        ViperSlides slides = new ViperSlides(gamepad1, hardwareMap);
+        // Creating objects of each mechanism
+        ViperSlides slides = new ViperSlides(gamepad1, telemetry, hardwareMap);
 //        Chassis chassis = new Chassis(gamepad1, telemetry, hardwareMap);
+//        Claw claw = new Claw(gamepad1, telemetry, hardwareMap);
 
         telemetry.addLine("Waiting For Start");
         telemetry.update();
@@ -22,8 +23,12 @@ public class SlidesBot_TeleOp extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()){
-            slides.setSlidePosition();
-            telemetry.addData("slides height", slides.getHeight());
+            // Setting methods from mechanism classes to be looped
+//            chassis.ManualDrive();
+            slides.setSlidePower();
+            slides.slidesTelemetry();
+
+            // Updating telemetry to display all of the telemetry in the telemetry queue on the driver station
             telemetry.update();
         }
     }
