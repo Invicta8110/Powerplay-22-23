@@ -3,6 +3,7 @@ package org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.Camera.OpenCV.Visio
 import static org.opencv.core.Core.inRange;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Rect;
@@ -42,8 +43,8 @@ public class OpenCV_Masking_Pipeline extends OpenCvPipeline {
     // These are the boolean toggles for each color the code will track
     boolean ORANGE = false;
     boolean YELLOW = false;
-    boolean GREEN = false;
-    boolean BLUE = true;
+    boolean GREEN = true;
+    boolean BLUE = false;
     boolean RED = true;
     boolean PINK = false;
     boolean BLACK = false;
@@ -118,43 +119,45 @@ public class OpenCV_Masking_Pipeline extends OpenCvPipeline {
     /** Note: These thresholding values are approximates and you should try to finetune them to your specific necessities **/
 
     // Orange masking thresholding values:
-    Scalar lowOrange = new Scalar(5, 100, 175); // 160, 170, 80 || 160, 170, 0
-    Scalar highOrange = new Scalar(15, 255, 255); //180, 240, 220
+    Scalar lowOrange = new Scalar(10, 50, 50); // 160, 170, 80 || 160, 170, 0
+    Scalar highOrange = new Scalar(30, 255, 255); //180, 240, 220
 
     // Mat object for the orange mask
     Mat maskOrange = new Mat();
 
     // Yellow masking thresholding values:
-    Scalar lowYellow = new Scalar(10, 100, 50); //180
+    Scalar lowYellow = new Scalar(20, 100, 50); //180
     Scalar highYellow = new Scalar(35, 255, 255);
 
     // Mat object for the yellow mask
     Mat maskYellow = new Mat();
 
     // Green masking thresholding values:
-    Scalar lowGreen = new Scalar(30, 0, 0); //38, 0, 0
-    Scalar highGreen = new Scalar(70, 255, 255); //70, 255, 255
+    Scalar lowGreen = new Scalar(30, 50, 20); //38, 0, 0
+    Scalar highGreen = new Scalar(60, 240, 255); //70, 255, 255
 
     // Mat object for the yellow mask
     Mat maskGreen = new Mat();
 
     // Blue masking thresholding values:
-    Scalar lowBlue = new Scalar(90, 40, 100); // 90, 160, 20
-    Scalar highBlue = new Scalar(255, 255, 255); // 130, 255, 255
+    Scalar lowBlue = new Scalar(90, 40, 50); // 90, 160, 20
+    Scalar highBlue = new Scalar(200, 255, 255); // 130, 255, 255
 
     // Mat object for the blue mask
     Mat maskBlue = new Mat();
 
     // Red masking thresholding values:
-    Scalar lowRed = new Scalar(0, 20, 10); // 160, 170, 80 || 160, 140, 10
-    Scalar highRed = new Scalar(5, 255, 255); //179, 255, 220
+    Scalar lowRed = new Scalar(85, 60, 90); // 160, 170, 80 || 160, 140, 10
+    Scalar highRed = new Scalar(105, 255, 255); //179, 255, 220
+
+    //120,120,120
 
     // Mat object for the red mask
     Mat maskRed = new Mat();
 
     // Pink masking thresholding values:
-    Scalar lowPink = new Scalar(100, 20, 100); // 160, 10, 225
-    Scalar highPink = new Scalar(179, 100, 255); // 180, 255, 255
+    Scalar lowPink = new Scalar(140, 10, 10); // 160, 10, 225
+    Scalar highPink = new Scalar(179, 255, 255); // 180, 255, 255
 
     // Mat object for the pink mask
     Mat maskPink = new Mat();
@@ -175,6 +178,7 @@ public class OpenCV_Masking_Pipeline extends OpenCvPipeline {
 
     // Mat object for HSV color space
     Mat HSV = new Mat();
+    Mat HSV_inv = new Mat();
 
     // Kernel size for blurring
     Size kSize = new Size(5, 5);
@@ -311,7 +315,18 @@ public class OpenCV_Masking_Pipeline extends OpenCvPipeline {
         }
 
         if (RED){
-            inRange(HSV, lowRed, highRed, maskRed);
+            Core.bitwise_not(input, input);
+
+            Imgproc.cvtColor(input, HSV_inv, Imgproc.COLOR_RGB2HSV);
+
+//        Imgproc.morphologyEx(HSV, HSV, Imgproc.MORPH_OPEN, new Mat());
+//        Imgproc.morphologyEx(HSV, HSV, Imgproc.MORPH_CLOSE, new Mat());
+
+//        Imgproc.GaussianBlur(HSV, HSV, kSize,0);
+//        Imgproc.blur(HSV, HSV, kSize);
+            Imgproc.erode(HSV_inv, HSV_inv, kernel);
+
+            inRange(HSV_inv, lowRed, highRed, maskRed);
             redContours.clear();
             redRect.clear();
 
@@ -431,6 +446,9 @@ public class OpenCV_Masking_Pipeline extends OpenCvPipeline {
 
         // TODO: Remove
         telemetry.update();
+
+//        Core.bitwise_not(input, input);
+
         return input;
     }
 }

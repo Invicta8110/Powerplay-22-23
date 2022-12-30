@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot;
+package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms;
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.team8109_Rise.Hardware.BotMechanisms.Drivetrains.MecanumDriveTrain;
@@ -16,6 +17,8 @@ public class Chassis extends MecanumDriveTrain {
 
     Gamepad gamepad1;
     Telemetry telemetry;
+
+    ElapsedTime runtime = new ElapsedTime();
 
     public org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.InertialMeasurementUnit imu;
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
@@ -40,6 +43,13 @@ public class Chassis extends MecanumDriveTrain {
     private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(SlidesBot_DriveConstants.MAX_ACCEL);
 
     Vector3D controllerInput = new Vector3D(0, 0, 0);
+
+    public enum AutonState{
+        READ_PARKING,
+        TO_CONE_STACK,
+        CYCLE,
+        PARK
+    }
 
     public Chassis(Gamepad gamepad1, Telemetry telemetry, HardwareMap hardwareMap){
         super("fLeft", "fRight", "bRight", "bLeft",
@@ -95,5 +105,9 @@ public class Chassis extends MecanumDriveTrain {
     public void ManualDrive(){
         controllerInput.set(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
         setDriveVectorsRobotCentric(controllerInput);
+    }
+
+    public void AutonomousControl(){
+
     }
 }

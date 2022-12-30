@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot;
+package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -36,8 +36,11 @@ public class ViperSlides extends Slides {
     public ViperSlides(Gamepad gamepad1, Telemetry telemetry, HardwareMap hardwareMap) {
         super(2, name, pulleyDiameter, StringingMethod.CASCADE, 2, 0, hardwareMap);
 
-        // ki: 0.004
-        slidesPID = new PIDF_Controller(0.015, 0, 0, 0);
+        // ki: 0.005
+        slidesPID = new PIDF_Controller(0.08, 0, 0, 0.008);
+
+        motors[0].reset();
+        motors[1].reset();
 
         // One of the motors needs to be reversed since the motors face opposite directions
         motors[1].setDirectionReverse();
@@ -59,9 +62,9 @@ public class ViperSlides extends Slides {
             case MANUAL:
                 // Changes power set to slides when using d-pad
                 if (gamepad1.dpad_up){
-                    slidesPower = 0.2;
+                    slidesPower = 0.5;
                 } else if (gamepad1.dpad_down){
-                    slidesPower = -0.2;
+                    slidesPower = -0.5;
                 } else {
                     slidesPower = 0;
                 }
@@ -71,13 +74,13 @@ public class ViperSlides extends Slides {
                 /* PID controller calculates the power needed to be set to the motors
                 to stay at the target position (of 2 inches as my guess of what ground level is) */
 
-                slidesPower = slidesPID.PIDF_Power(getHeight(), 2);
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 1);
                 break;
 
             case HIGH:
                 /* PID controller calculates the power needed to be set to the motors
                 to stay at the target position (of 36 inches as my guess of what the high level is) */
-                slidesPower = slidesPID.PIDF_Power(getHeight(), 36);
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 18);
                 break;
         }
     }
@@ -109,6 +112,7 @@ public class ViperSlides extends Slides {
     // Sends telemetry data for slides to a queue to be shown on driver station after telemetry.update() is called
     public void slidesTelemetry(){
         telemetry.addData("slides height", getHeight());
+        telemetry.addData("Target Position", slidesState);
         telemetry.addData("PID Power", slidesPower);
         telemetry.addData("Proportion", slidesPID.P);
         telemetry.addData("Proportion", slidesPID.I);

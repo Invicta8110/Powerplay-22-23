@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot;
+package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -33,7 +33,7 @@ public class ServoIntakeArm extends ServoArm {
         servoPosition = ServoPosition.INTAKE_POSITION;
     }
 
-    public void PositionTest(){
+    public void togglePosition(){
         switch (servoPosition){
             case INTAKE_POSITION:
                 setAngle(0);

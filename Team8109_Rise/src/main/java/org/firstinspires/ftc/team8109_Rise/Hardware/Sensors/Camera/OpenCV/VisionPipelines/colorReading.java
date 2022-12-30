@@ -46,8 +46,10 @@ public class colorReading extends OpenCvPipeline {
         // Creates a field of type "Mat"
         Mat region;
 
+//        Core.bitwise_not(input,input);
+
         // Converts the RGB colors from the video to HSV, which is more useful for image analysis
-        Imgproc.cvtColor(input, colorSpace, Imgproc.COLOR_RGB2YCrCb);
+        Imgproc.cvtColor(input, colorSpace, Imgproc.COLOR_RGB2HSV);
 
 //        Core.extractChannel(colorSpace, colorSpace, 1);
 

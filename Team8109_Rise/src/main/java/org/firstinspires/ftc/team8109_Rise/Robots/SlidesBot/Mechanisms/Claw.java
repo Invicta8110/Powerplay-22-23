@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot;
+package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -37,7 +37,6 @@ public class Claw extends ServoClaw {
 
                     clawState = ClawState.CLOSED;
                 }
-
                 break;
             case CLOSED:
                 setAngle(closedPosition);
@@ -48,7 +47,6 @@ public class Claw extends ServoClaw {
 
                     clawState = ClawState.OPEN;
                 }
-
                 break;
         }
         lastToggleY = gamepad1.y;

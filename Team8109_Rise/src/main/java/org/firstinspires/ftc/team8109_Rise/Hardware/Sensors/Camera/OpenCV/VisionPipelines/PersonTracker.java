@@ -74,16 +74,16 @@ public class PersonTracker extends OpenCvPipeline {
         return Imgproc.contourArea(contour) > 50;
     }
 
-    // Red masking thresholding values: TODO: re-threshold
-    Scalar lowRed = new Scalar(90, 0, 0); //10, 100, 50
-    Scalar highRed = new Scalar(150, 255, 255); //35, 255, 255
-
-    // Green masking thresholding values: TODO: re-threshold
-    Scalar lowGreen = new Scalar(0, 20, 10); //10, 100, 50
-    Scalar highGreen = new Scalar(10, 255, 255); //35, 255, 255
+    // Red masking thresholding values:
+    Scalar lowRed = new Scalar(0, 20, 10); // 160, 170, 80 || 160, 140, 10
+    Scalar highRed = new Scalar(5, 255, 255); //179, 255, 220
 
     // Mat object for the red mask
     Mat maskRed = new Mat();
+
+    // Green masking thresholding values:
+    Scalar lowGreen = new Scalar(30, 0, 0); //38, 0, 0
+    Scalar highGreen = new Scalar(70, 255, 255); //70, 255, 255
 
     // Mat object for the green mask
     Mat maskGreen = new Mat();
@@ -225,5 +225,4 @@ public class PersonTracker extends OpenCvPipeline {
     public int getRectCenterY(Rect rect){
         return rect.y + (rect.height/2);
     }
-
 }
