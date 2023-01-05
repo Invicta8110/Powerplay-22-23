@@ -12,7 +12,9 @@ public class ScissorLift {
      */
     public ScissorLift(HardwareMap hwmap) {
         motor = new Motor("lift", hwmap);
+        motor.setDirectionReverse();
     }
+
 
     /**
      * Constructor in case I change the name
@@ -21,25 +23,31 @@ public class ScissorLift {
      */
     public ScissorLift(String name, HardwareMap hwmap) {
         motor = new Motor(name, hwmap);
+        motor.setDirectionReverse();
     }
 
     /**
-     * Moves the scissor lift
-     * @param power Power to move the lift at
+     * Alters the power of the motor
+     * @param power Power to set the motor to
      */
     public void move(double power) {
         motor.setPower(power);
     }
 
-    /** Gets the location of the scissor lift's motor
-     * @return the location of the scissor lift's motor
+    /**
+     * Gets the position of the motor
+     * @return the motor position
      */
     public int getPosition() {
         return motor.getCurrentPosition();
     }
 
-    public int getInches() {
-        return (int) motor.getCurrPosInches();
+    /**
+     * Gets the position the scissor lift is at in inches
+     * @return the position in inches
+     */
+    public double getInches() {
+        return motor.getCurrPosInches();
     }
 
     /** Gets the level the scissorlift is at

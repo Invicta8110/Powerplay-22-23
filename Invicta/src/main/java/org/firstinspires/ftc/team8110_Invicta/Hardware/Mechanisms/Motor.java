@@ -13,7 +13,7 @@ public class Motor {
 
     //Declare all the constants in the Motor class
     public double CPR;
-    public double WHEEL_DIAMETER;
+    public double WHEEL_DIAMETER = 1;
     public double MAX_RPM;
     public double TICKS_PER_INCH;
     public double ARM_COUNTS_PER_DEGREE;
