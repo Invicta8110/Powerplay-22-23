@@ -33,6 +33,7 @@ public abstract class Slides {
         this.method = method;
         this.stages = stages;
         this.motors = motors;
+        this.kGravity = kGravity;
     }
 
     public void setPower(double power){

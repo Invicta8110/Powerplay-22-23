@@ -78,6 +78,7 @@ public class Chassis extends MecanumDriveTrain {
             bLeft /= max;
             bRight /= max;
         }
+
         setPower(fLeft, fRight, bRight, bLeft);
     }
 

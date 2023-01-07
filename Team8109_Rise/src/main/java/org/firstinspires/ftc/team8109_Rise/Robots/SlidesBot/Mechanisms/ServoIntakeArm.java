@@ -22,7 +22,7 @@ public class ServoIntakeArm extends ServoArm {
         OUTTAKE_POSITION
     }
 
-    ServoPosition servoPosition;
+    public ServoPosition servoPosition;
 
     public ServoIntakeArm(Gamepad gamepad1, Telemetry telemetry, HardwareMap hardwareMap) {
         super(ServoArmType.DOUBLE_SERVO, name, hardwareMap);
@@ -32,11 +32,22 @@ public class ServoIntakeArm extends ServoArm {
 
         servoPosition = ServoPosition.INTAKE_POSITION;
     }
+    public void setArmPosition(){
+        switch (servoPosition){
+            case INTAKE_POSITION:
+                setAngle(80);
+                break;
 
+            case OUTTAKE_POSITION:
+                setAngle(260);
+                break;
+        }
+        lastToggleX = gamepad1.x;
+    }
     public void togglePosition(){
         switch (servoPosition){
             case INTAKE_POSITION:
-                setAngle(0);
+                setAngle(80);
 
                 if ((gamepad1.x != lastToggleX) && gamepad1.x && toggle1){
                     toggle1 = false;
@@ -47,7 +58,7 @@ public class ServoIntakeArm extends ServoArm {
                 break;
 
             case OUTTAKE_POSITION:
-                setAngle(180);
+                setAngle(260);
 
                 if ((gamepad1.x != lastToggleX) && gamepad1.x && toggle2){
                     toggle2 = false;

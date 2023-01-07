@@ -11,8 +11,8 @@ public class Claw extends ServoClaw {
     Gamepad gamepad1;
     Telemetry telemetry;
 
-    static double openPosition = 120;
-    static double closedPosition = 15;
+    static double openPosition = 200;
+    static double closedPosition = 120;
 
     boolean toggle1 = true;
     boolean toggle2 = false;
@@ -26,6 +26,7 @@ public class Claw extends ServoClaw {
         this.telemetry = telemetry;
     }
 
+    //TODO: reduce open angle,
     public void toggleClaw(){
         switch (clawState){
             case OPEN:

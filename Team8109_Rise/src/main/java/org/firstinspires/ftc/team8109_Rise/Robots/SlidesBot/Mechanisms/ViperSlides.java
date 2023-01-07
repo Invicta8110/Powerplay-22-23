@@ -11,6 +11,7 @@ public class ViperSlides extends Slides {
 
     Gamepad gamepad1;
     Telemetry telemetry;
+
     // Names for the motors in configuration
     static String[] name = {"slidesLeft", "slidesRight"};
 
@@ -19,8 +20,14 @@ public class ViperSlides extends Slides {
     double slidesPower = 0;
 
     public enum SlidesState{
-        HIGH,
         GROUND,
+        LOW_JUNCTION,
+        MIDDLE_JUNCTION,
+        HIGH_JUNCTION,
+        CONESTACK_BOTTOM_MIDDLE,
+        CONESTACK_MIDDLE,
+        CONESTACK_TOP_MIDDLE,
+        CONESTACK_TOP,
         MANUAL
     }
 
@@ -29,15 +36,15 @@ public class ViperSlides extends Slides {
 
     boolean lastToggleX = false;
 
-    SlidesState slidesState;
+    public SlidesState slidesState;
 
     PIDF_Controller slidesPID;
 
     public ViperSlides(Gamepad gamepad1, Telemetry telemetry, HardwareMap hardwareMap) {
-        super(2, name, pulleyDiameter, StringingMethod.CASCADE, 2, 0, hardwareMap);
+        super(2, name, pulleyDiameter, StringingMethod.CASCADE, 2, 0.1, hardwareMap);
 
         // ki: 0.005
-        slidesPID = new PIDF_Controller(0.08, 0, 0, 0.008);
+        slidesPID = new PIDF_Controller(0.03, 0.03, 0, 0.02);
 
         motors[0].reset();
         motors[1].reset();
@@ -77,13 +84,31 @@ public class ViperSlides extends Slides {
                 slidesPower = slidesPID.PIDF_Power(getHeight(), 1);
                 break;
 
-            case HIGH:
+            case HIGH_JUNCTION:
                 /* PID controller calculates the power needed to be set to the motors
                 to stay at the target position (of 36 inches as my guess of what the high level is) */
-                slidesPower = slidesPID.PIDF_Power(getHeight(), 18);
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 20);
+                break;
+
+            case CONESTACK_BOTTOM_MIDDLE:
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 2);
+                break;
+
+            case CONESTACK_MIDDLE:
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 3);
+                break;
+
+            case CONESTACK_TOP_MIDDLE:
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 4);
+                break;
+
+            case CONESTACK_TOP:
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 5);
                 break;
         }
     }
+
+    //TODO: Cycle count
 
     public void toggleStates(){
         switch (slidesState){
@@ -92,11 +117,11 @@ public class ViperSlides extends Slides {
                     toggle1 = false;
                     toggle2 = true;
 
-                    slidesState = SlidesState.HIGH;
+                    slidesState = SlidesState.HIGH_JUNCTION;
                 }
 
                 break;
-            case HIGH:
+            case HIGH_JUNCTION:
                 if ((gamepad1.x != lastToggleX) && gamepad1.x && toggle2){
                     toggle2 = false;
                     toggle1 = true;
@@ -115,6 +140,7 @@ public class ViperSlides extends Slides {
         telemetry.addData("Target Position", slidesState);
         telemetry.addData("PID Power", slidesPower);
         telemetry.addData("Proportion", slidesPID.P);
-        telemetry.addData("Proportion", slidesPID.I);
+        telemetry.addData("Integral", slidesPID.I);
+        telemetry.addData("Derivative", slidesPID.D);
     }
 }

@@ -19,26 +19,28 @@ public abstract class ServoClaw {
     public ServoClaw(String name, double openPosition, double closedPosition, HardwareMap hardwareMap){
         clawServo = hardwareMap.get(Servo.class, name);
 
+        this.openPosition = openPosition;
+        this.closedPosition = closedPosition;
         clawState = ClawState.OPEN;
     }
 
     public double getPositionDegrees(){
-        return 2*(clawServo.getPosition()*300);
+        return clawServo.getPosition()*300;
     }
 
     public void setAngle(double angle){
-        clawServo.setPosition(angle/(2*300));
+        clawServo.setPosition(angle/(300));
     }
 
-//    public void setPosition(){
-//        switch (clawState){
-//            case OPEN:
-//                setAngle(openPosition);
-//                break;
-//
-//            case CLOSED:
-//                setAngle(closedPosition);
-//                break;
-//        }
-//    }
+    public void setPosition(){
+        switch (clawState){
+            case OPEN:
+                setAngle(openPosition);
+                break;
+
+            case CLOSED:
+                setAngle(closedPosition);
+                break;
+        }
+    }
 }

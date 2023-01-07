@@ -29,7 +29,7 @@ public abstract class ServoArm {
     }
 
     public double getPositionDegrees(){
-        return armServo1.getPosition()*270;
+        return armServo1.getPosition()*300;
     }
 
     public double getPositionRadians(){
@@ -37,14 +37,14 @@ public abstract class ServoArm {
     }
 
     public void setAngle(double angle){
-        armServo1.setPosition(angle/270);
-        armServo2.setPosition(angle/270);
+        armServo1.setPosition(angle/300);
+        armServo2.setPosition(angle/300);
     }
 
     public void setAngle(double angle, AngleUnit unit){
         if (unit == AngleUnit.DEGREES) {
-            armServo1.setPosition(angle/270);
-            armServo2.setPosition(angle/270);
+            armServo1.setPosition(angle/300);
+            armServo2.setPosition(angle/300);
         }
 
         if (unit == AngleUnit.RADIANS) {
