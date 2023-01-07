@@ -118,6 +118,8 @@ public class ViperSlides extends Slides {
                     toggle2 = true;
 
                     slidesState = SlidesState.HIGH_JUNCTION;
+                } else if (gamepad1.a) {
+                    slidesState = SlidesState.MANUAL;
                 }
 
                 break;
@@ -127,8 +129,18 @@ public class ViperSlides extends Slides {
                     toggle1 = true;
 
                     slidesState = SlidesState.GROUND;
+                } else if (gamepad1.a) {
+                    slidesState = SlidesState.MANUAL;
                 }
 
+                break;
+            case MANUAL:
+                if (gamepad1.a) {
+                    slidesState = SlidesState.GROUND;
+
+                    toggle2 = false;
+                    toggle1 = true;
+                }
                 break;
         }
         lastToggleX = gamepad1.x;
