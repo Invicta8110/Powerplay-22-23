@@ -3,7 +3,7 @@ package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.team8109_Rise.Hardware.BotMechanisms.Arms.ArmExtensions.ArmWrist;
+import org.firstinspires.ftc.team8109_Rise.Hardware.Arms.ArmExtensions.ArmWrist;
 
 public class Wrist extends ArmWrist {
 

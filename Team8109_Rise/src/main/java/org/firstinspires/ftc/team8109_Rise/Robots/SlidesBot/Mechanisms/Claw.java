@@ -4,15 +4,15 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.team8109_Rise.Hardware.BotMechanisms.Intakes.ServoClaw;
+import org.firstinspires.ftc.team8109_Rise.Hardware.Intakes.ServoClaw;
 
 public class Claw extends ServoClaw {
 
     Gamepad gamepad1;
     Telemetry telemetry;
 
-    static double openPosition = 200;
-    static double closedPosition = 120;
+    static double openPosition = 180;
+    static double closedPosition = 100;
 
     boolean toggle1 = true;
     boolean toggle2 = false;

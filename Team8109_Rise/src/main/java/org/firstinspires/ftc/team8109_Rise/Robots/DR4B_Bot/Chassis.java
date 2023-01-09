@@ -12,8 +12,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.team8109_Rise.Hardware.BotMechanisms.Drivetrains.MecanumDriveTrain;
-import org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.InertialMeasurementUnit;
+import org.firstinspires.ftc.team8109_Rise.Hardware.Drivetrains.MecanumDriveTrain;
+import org.firstinspires.ftc.team8109_Rise.Sensors.InertialMeasurementUnit;
 import org.firstinspires.ftc.team8109_Rise.Math.Vectors.Vector3D;
 import org.firstinspires.ftc.team8109_Rise.Robots.DR4B_Bot.Sensors.DR4B_Bot_DriveConstants;
 
