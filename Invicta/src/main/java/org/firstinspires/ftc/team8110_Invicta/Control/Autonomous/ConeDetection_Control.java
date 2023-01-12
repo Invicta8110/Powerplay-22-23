@@ -10,24 +10,23 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 
 public class ConeDetection_Control {
-    Webcam camera;
+    Webcam webcam;
+    OpenCvCamera camera;
 
     public ConeDetection_Control(Webcam webcam) {
 
-        camera = webcam;
+        this.webcam = webcam;
+        camera = webcam.getCamera();
 
         // Set up pipeline
         ColorPipeline pipeline = new ColorPipeline();
-        camera.getCamera().setPipeline(pipeline);
+        camera.setPipeline(pipeline);
     }
 
     public void closeCamera(){
-        camera.getCamera().closeCameraDeviceAsync(new OpenCvCamera.AsyncCameraCloseListener() {
-            @Override
-            public void onClose() {
-                camera.getCamera().closeCameraDevice();
-                camera.getCamera().stopStreaming();
-            }
+        camera.closeCameraDeviceAsync(() -> {
+            camera.closeCameraDevice();
+            camera.stopStreaming();
         });
     }
 }

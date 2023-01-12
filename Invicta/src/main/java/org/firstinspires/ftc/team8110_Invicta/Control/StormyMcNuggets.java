@@ -40,8 +40,11 @@ public class StormyMcNuggets extends StraferChassis implements ScissorLift, Claw
     public void teleOpDrive(Gamepad gamepad) {
         switch (state) {
             case NORMAL:
-                if (gamepad.x) { state = TeleOpState.LOWPOWER; }:
-
+                if (gamepad.x) { state = TeleOpState.LOWPOWER; }
+                break;
+            case LOWPOWER:
+                if (gamepad.x) { state = TeleOpState.NORMAL; }
+                break;
         }
 
         double drive = Math.pow(gamepad.left_stick_y, 3); //Between -1 and 1
@@ -56,7 +59,7 @@ public class StormyMcNuggets extends StraferChassis implements ScissorLift, Claw
 
         // This ensures that the power values the motors are set to are in the range (-1, 1)
         double max = Math.max(Math.max(Math.abs(fLeft), Math.abs(fRight)), Math.max(Math.abs(bLeft), Math.abs(bRight)));
-        if (max > 0.6) {
+        if (max > 1) {
             fLeft /= max;
             fRight /= max;
             bLeft /= max;
