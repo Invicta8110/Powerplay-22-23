@@ -270,16 +270,16 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     public double[] getPositions() {
        double[] wheelPositions = new double[4];
-        for (DcMotorEx motor : motors) {
-            wheelPositions[motor] = encoderTicksToInches(motor.getCurrentPosition());
+        for (int i = 0; i < motors.size(); i++) {
+            wheelPositions[i] = encoderTicksToInches(motors.get(i).getCurrentPosition());
         }
         return wheelPositions;
     }
 
     public double[] getVelocities() {
         double[] wheelVelocities = new double[4];
-        for (DcMotorEx motor : motors) {
-            wheelVelocities[motor] = encoderTicksToInches(motor.getVelocity());
+        for (int i = 0; i < motors.size(); i++) {
+            wheelVelocities[i] = encoderTicksToInches(motors.get(i).getVelocity());
         }
         return wheelVelocities;
     }
@@ -316,5 +316,11 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     public static TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel) {
         return new ProfileAccelerationConstraint(maxAccel);
+    }
+
+    @NonNull
+    @Override
+    public List<Double> getWheelPositions() {
+        return null;
     }
 }

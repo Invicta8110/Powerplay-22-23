@@ -3,11 +3,13 @@ package org.firstinspires.ftc.team8110_Invicta.OpModes.Auton;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Drivetrains.StraferChassis;
 
+@Disabled
 @Autonomous(name="Square Drive", group="Your Moms")
 public class Polygon extends LinearOpMode {
     StraferChassis straferChassis;

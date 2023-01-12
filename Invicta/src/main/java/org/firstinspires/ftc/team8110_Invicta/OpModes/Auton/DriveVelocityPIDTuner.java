@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.team8110_Invicta.Resources.RoadRunnerQuickstart.drive.opmode;
+package org.firstinspires.ftc.team8110_Invicta.OpModes.Auton;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -50,8 +50,6 @@ import static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConst
  */
 @Config
 @Autonomous(group = "drive")
-@Disabled
-
 public class DriveVelocityPIDTuner extends LinearOpMode {
     public static double DISTANCE = 72; // in
 

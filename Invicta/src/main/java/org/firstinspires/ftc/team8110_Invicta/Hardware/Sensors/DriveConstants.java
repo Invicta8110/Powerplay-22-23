@@ -20,7 +20,7 @@ public class DriveConstants {
      * These are motor constants that should be listed online for your motors.
      */
     public static final double TICKS_PER_REV = 537.7;
-    public static final double MAX_RPM = 312;
+    public static final double MAX_RPM = 312.0;
 
     /*
      * Set RUN_USING_ENCODER to true to enable built-in hub velocity control using drive encoders.
@@ -30,7 +30,7 @@ public class DriveConstants {
      * If using the built-in motor velocity PID, update MOTOR_VELO_PID with the tuned coefficients
      * from DriveVelocityPIDTuner.
      */
-    public static final boolean RUN_USING_ENCODER = false;
+    public static final boolean RUN_USING_ENCODER = true;
     public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(25, 0, 7, 12.87981936782902);
 
     /*
@@ -42,7 +42,7 @@ public class DriveConstants {
      * convenience. Make sure to exclude any gear ratio included in MOTOR_CONFIG from GEAR_RATIO.
      */
     public static double WHEEL_RADIUS = 48/25.4; // in
-    public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
+    public static double GEAR_RATIO = 1.0; // output (wheel) speed / input (motor) speed
     public static double TRACK_WIDTH = 19.07; // in
 
     /*
@@ -63,13 +63,13 @@ public class DriveConstants {
      * inches.
      */
     public static double MAX_VEL = ((MAX_RPM / 60.0) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.75;
-    public static double MAX_ACCEL = 30;
+    public static double MAX_ACCEL = 30.0;
     public static double MAX_ANG_VEL = Math.toRadians(30);
     public static double MAX_ANG_ACCEL = Math.toRadians(60);
 
 
     public static double encoderTicksToInches(double ticks) {
-        return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
+        return WHEEL_RADIUS * 2.0 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
     }
 
     public static double rpmToVelocity(double rpm) {

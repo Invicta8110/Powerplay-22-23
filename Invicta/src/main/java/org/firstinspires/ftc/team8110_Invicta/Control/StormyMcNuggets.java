@@ -2,28 +2,28 @@ package org.firstinspires.ftc.team8110_Invicta.Control;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Drivetrains.StraferChassis;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms.Claw;
+import org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms.Motor;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms.ScissorLift;
 
-import java.util.ArrayList;
-import java.util.List;
+public class StormyMcNuggets extends StraferChassis implements ScissorLift, Claw {
+    public Motor lift;
+    public Servo claw;
+    public Position position;
 
-public class StormyMcNuggets extends StraferChassis {
-    public ScissorLift lift;
-    public Claw claw;
-    public List<Double> positions = new ArrayList<>();
+    public StormyMcNuggets(HardwareMap hardwareMap, String liftName, String clawName) {
+        super(hardwareMap);
+        lift = new Motor(liftName, hardwareMap);
+        lift.setDirectionReverse();
 
-    public StormyMcNuggets(HardwareMap hwmap) {
-        super(hwmap);
-        this.lift = new ScissorLift("lift", hwmap);
-        this.claw = new Claw("claw", hwmap);
+        claw = hardwareMap.servo.get(clawName);
     }
 
-    public StormyMcNuggets(HardwareMap hwmap, ScissorLift scissorLift, Claw claw) {
-        super(hwmap);
-        this.lift = scissorLift;
-        this.claw = claw;
+    public StormyMcNuggets(HardwareMap hardwareMap) {
+        this(hardwareMap, "lift", "claw");
     }
 
     /**
@@ -52,28 +52,106 @@ public class StormyMcNuggets extends StraferChassis {
         this.setPower(fLeft, fRight, bRight, bLeft);
     }
 
+    public void teleOpClaw(Gamepad gamepad) {
+        Claw.Position state = this.getState();
+
+        if (gamepad.a) {
+            this.open();
+        } else if (gamepad.y) {
+            this.close();
+        }
+    }
+
     public void teleOpLift(Gamepad gamepad) {
         double down = gamepad.dpad_down ? 1 : 0;
         double up = gamepad.dpad_up ? 1 : 0;
 
-        lift.move(up-down);
+        this.move(up-down);
     }
 
     public double getLiftPosition() {
-        return lift.getPosition();
+        return lift.getCurrentPosition();
     }
 
     public double getLiftHeight() {
-        return lift.getInches();
+        return lift.getCurrPosInches();
     }
 
-    public void teleOpClaw(Gamepad gamepad) {
-        Claw.Position state = claw.getState();
 
-        if (gamepad.a) {
-            claw.open();
-        } else if (gamepad.y) {
-            claw.close();
-        }
+
+    @Override
+    public void open() {
+        claw.setPosition(0.755);
+        position = Claw.Position.OPEN;
+    }
+
+    @Override
+    public void close() {
+        claw.setPosition(0.765);
+        position = Claw.Position.CLOSED;
+    }
+
+    public void alter(double amount) {
+        claw.setPosition(claw.getPosition() + amount);
+        position = Claw.Position.OTHER;
+    }
+
+    public void direct(double position) {
+        claw.setPosition(position);
+        this.position = Claw.Position.OTHER;
+    }
+
+    /**
+     * Alters the power of the motor
+     *
+     * @param power Power to set the motor to
+     */
+    @Override
+    public void move(double power) {
+        lift.setPower(power);
+    }
+
+    /**
+     * Gets the position of the motor
+     *
+     * @return the lift motor position
+     */
+    @Override
+    public double getPosition() {
+        return lift.getCurrentPosition();
+    }
+
+    /**
+     * Gets the position of the claw servo
+     * @return the claw servo position
+     */
+    public double getClawPosition() {
+        return claw.getPosition();
+    }
+
+    /**
+     * Gets the position the scissor lift is at in inches
+     *
+     * @return the position in inches
+     */
+    @Override
+    public double getInches() {
+        return lift.getCurrPosInches();
+    }
+
+    /**
+     * Moves the scissor lift to the next position
+     */
+    @Override
+    public void upLevel() {
+        lift.runToPosition(lift.getCurrentPosition() + 20);
+    }
+
+    /**
+     * Moves the scissor lift to the previous position
+     */
+    @Override
+    public void downLevel() {
+        lift.runToPosition(lift.getCurrentPosition() - 20);
     }
 }
