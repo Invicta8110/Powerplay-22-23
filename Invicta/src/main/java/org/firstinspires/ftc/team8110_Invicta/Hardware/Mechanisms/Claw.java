@@ -22,4 +22,5 @@ public interface Claw {
     }
 
     public double getPosition();
+
 }

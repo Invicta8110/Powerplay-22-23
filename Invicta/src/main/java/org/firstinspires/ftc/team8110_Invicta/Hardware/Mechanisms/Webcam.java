@@ -16,4 +16,9 @@ public class Webcam {
 
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcam, cameraMonitorViewId);
     }
+
+    public OpenCvCamera getCamera() {
+        return camera;
+    }
+
 }

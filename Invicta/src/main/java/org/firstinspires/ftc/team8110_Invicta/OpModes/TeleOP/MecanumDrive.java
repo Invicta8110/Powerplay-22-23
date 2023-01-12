@@ -13,7 +13,7 @@ public class MecanumDrive extends LinearOpMode {
         StormyMcNuggets robot = new StormyMcNuggets(hardwareMap);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        robot.direct(0.1);
+        robot.direct(0.765);
 
         waitForStart();
 

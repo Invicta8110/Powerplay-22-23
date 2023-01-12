@@ -13,6 +13,13 @@ public class StormyMcNuggets extends StraferChassis implements ScissorLift, Claw
     public Motor lift;
     public Servo claw;
     public Position position;
+    public TeleOpState state;
+
+
+    public enum TeleOpState {
+        NORMAL,
+        LOWPOWER
+    }
 
     public StormyMcNuggets(HardwareMap hardwareMap, String liftName, String clawName) {
         super(hardwareMap);
@@ -31,6 +38,12 @@ public class StormyMcNuggets extends StraferChassis implements ScissorLift, Claw
      * @param gamepad the gamepad used to control the robot
      */
     public void teleOpDrive(Gamepad gamepad) {
+        switch (state) {
+            case NORMAL:
+                if (gamepad.x) { state = TeleOpState.LOWPOWER; }:
+
+        }
+
         double drive = Math.pow(gamepad.left_stick_y, 3); //Between -1 and 1
         double turn = Math.pow(gamepad.right_stick_x, 3);
         double strafe = Math.pow(gamepad.left_stick_x, 3);
@@ -43,13 +56,20 @@ public class StormyMcNuggets extends StraferChassis implements ScissorLift, Claw
 
         // This ensures that the power values the motors are set to are in the range (-1, 1)
         double max = Math.max(Math.max(Math.abs(fLeft), Math.abs(fRight)), Math.max(Math.abs(bLeft), Math.abs(bRight)));
-        if (max > 1.0) {
+        if (max > 0.6) {
             fLeft /= max;
             fRight /= max;
             bLeft /= max;
             bRight /= max;
         }
-        this.setPower(fLeft, fRight, bRight, bLeft);
+        switch (state) {
+            case NORMAL:
+                this.setPower(fLeft, fRight, bRight, bLeft);
+                break;
+            case LOWPOWER:
+                this.setPower(fLeft/2, fRight/2, bRight/2, bLeft/2);
+        }
+
     }
 
     public void teleOpClaw(Gamepad gamepad) {
@@ -81,7 +101,7 @@ public class StormyMcNuggets extends StraferChassis implements ScissorLift, Claw
 
     @Override
     public void open() {
-        claw.setPosition(0.755);
+        claw.setPosition(0.705);
         position = Claw.Position.OPEN;
     }
 

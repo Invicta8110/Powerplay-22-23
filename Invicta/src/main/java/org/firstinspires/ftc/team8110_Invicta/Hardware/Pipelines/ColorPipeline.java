@@ -25,10 +25,7 @@ public class ColorPipeline extends OpenCvPipeline {
     public Mat processFrame(Mat input) {
         Imgproc.cvtColor(input, HSV, Imgproc.COLOR_RGB2HSV);
 
-        Region = HSV.submat(new Rect(BOTTOMLEFT, TOPRIGHT));
-
-        avg = Core.mean(Region);
-        hue = avg.val[0];
+        Region = input.submat(new Rect(BOTTOMLEFT, TOPRIGHT));
 
         Imgproc.rectangle(
                 input,
@@ -38,10 +35,15 @@ public class ColorPipeline extends OpenCvPipeline {
                 2
         );
 
-        return HSV;
+        avg = Core.mean(input);
+        hue = avg.val[0];
+
+        findColor();
+
+        return input;
     }
 
-    public Colors findColor() {
+    public static Colors findColor() {
         if ((hue >= 165 && hue <= 179) || (hue <= 7 && hue >= 0))
             return Colors.RED;
         else if (hue >= 41 && hue <= 65)
