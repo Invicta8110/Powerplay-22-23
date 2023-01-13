@@ -11,7 +11,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@Autonomous(name="Camera Stream")
+@Autonomous(name="SleeveScanTest")
 public class SleeveScanTest extends LinearOpMode {
     OpenCvWebcam camera;
     ColorPipeline pipeline ;
@@ -41,28 +41,29 @@ public class SleeveScanTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            telemetry.addData("Hue", pipeline.getHue());
             telemetry.addData("Color", pipeline.findColor());
+            telemetry.addData("Hue", pipeline.getHue());
+
             telemetry.update();
         }
 
-        Colors sleeve = pipeline.findColor();
+        //Colors sleeve = pipeline.findColor();
 
-        switch (sleeve) {
-            //TODO: fill this out
-            case RED:
-                //do red stuff
-                break;
-            case GREEN:
-                //do green stuff
-                break;
-            case BLUE:
-                //do blue stuff
-                break;
-            case UNKNOWN:
-                //do unknown stuff
-                break;
-        }
+//        switch (sleeve) {
+//            //TODO: fill this out
+//            case RED:
+//                //do red stuff
+//                break;
+//            case GREEN:
+//                //do green stuff
+//                break;
+//            case BLUE:
+//                //do blue stuff
+//                break;
+//            case UNKNOWN:
+//                //do unknown stuff
+//                break;
+//        }
 
 
     }

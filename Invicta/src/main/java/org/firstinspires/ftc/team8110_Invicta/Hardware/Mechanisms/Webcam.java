@@ -10,11 +10,15 @@ public class Webcam {
     private OpenCvCamera camera;
     private HardwareMap hardwareMap;
 
-    public Webcam() {
+    public Webcam(HardwareMap hardwareMap, String webcam) {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        WebcamName webcam = hardwareMap.get(WebcamName.class, "webcam");
+        WebcamName webcamName = hardwareMap.get(WebcamName.class, "webcam");
 
-        camera = OpenCvCameraFactory.getInstance().createWebcam(webcam, cameraMonitorViewId);
+        camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+    }
+
+    public Webcam(HardwareMap hardwareMap) {
+        this(hardwareMap, "webcam");
     }
 
     public OpenCvCamera getCamera() {

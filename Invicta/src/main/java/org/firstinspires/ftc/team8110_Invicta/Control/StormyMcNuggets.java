@@ -40,7 +40,7 @@ public class StormyMcNuggets extends StraferChassis implements ScissorLift, Claw
     public void teleOpDrive(Gamepad gamepad) {
         switch (state) {
             case NORMAL:
-                if (gamepad.x) { state = TeleOpState.LOWPOWER; }:
+                if (gamepad.x) { state = TeleOpState.LOWPOWER; }
 
         }
 
