@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.team8110_Invicta.Hardware;
+package org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -13,31 +13,26 @@ public class Motor {
 
     //Declare all the constants in the Motor class
     public double CPR;
-    public double WHEEL_DIAMETER;
+    public double WHEEL_DIAMETER = 1;
     public double MAX_RPM;
     public double TICKS_PER_INCH;
     public double ARM_COUNTS_PER_DEGREE;
     public double NANOSECONDS_PER_MIN = 6e+10;
     public double GearRatio;
 
-       /* Constructor for drive train motors
-       Parameter name : Pass in name of the motor on the RC phone config
-       Parameter hwmap : Pass in the hardwareMap from OpMode to initialize the motor */
-
-    /* Constructor for drive train motors
-       Parameter name : Pass in name of the motor on the RC phone config
-       Parameter hwmap : Pass in the hardwareMap from OpMode to initialize the motor */
-
+       /** Constructor for drive train motors
+       @param name Pass in name of the motor on the RC phone config
+       @param hwmap Pass in the hardwareMap from OpMode to initialize the motor */
     public Motor(String name, HardwareMap hwmap){
         dcMotorEx = hwmap.get(DcMotorEx.class, name);
     }
 
-    /* Constructor for dead wheel encoders
-       Parameter name : Name of the motor connected to the respective encoder port
-       Parameter cpr : Encoder ticks per one revolution
-       Parameter wheelDiameter : Diameter of the dead wheel
-       Parameter hwmap : Pass in the hardwareMap from OpMode to initialize the motor */
-
+    /** Constructor for dead wheel encoders
+       @param name Name of the motor connected to the respective encoder port
+       @param cpr Encoder ticks per one revolution
+       @param wheelDiameter Diameter of the dead wheel
+       @param hwmap Pass in the hardwareMap from OpMode to initialize the motor
+     */
     public Motor(String name , double cpr , double wheelDiameter, HardwareMap hwmap){
         dcMotorEx = hwmap.get(DcMotorEx.class, name);
         this.CPR = cpr;
@@ -73,6 +68,19 @@ public class Motor {
         reset();
     }
 
+    public void runToPosition(int target, double power){
+        dcMotorEx.setTargetPosition(target);
+        dcMotorEx.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        dcMotorEx.setPower(power);
+
+        while (dcMotorEx.isBusy()){
+
+        }
+
+        reset();
+    }
+
     // Testing
     public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior zeroPowerBehavior){
         dcMotorEx.setZeroPowerBehavior(zeroPowerBehavior);
@@ -95,7 +103,7 @@ public class Motor {
         return GearRatio*(dcMotorEx.getCurrentPosition()/ARM_COUNTS_PER_DEGREE);//0.23809
     }
 
-    public double getCurrentPosition(){
+    public int getCurrentPosition(){
         return dcMotorEx.getCurrentPosition();
     }
     public double getPositionTicks(){

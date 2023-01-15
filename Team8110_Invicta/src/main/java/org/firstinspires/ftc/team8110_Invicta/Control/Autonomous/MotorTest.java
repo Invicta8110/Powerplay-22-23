@@ -2,7 +2,7 @@ package org.firstinspires.ftc.team8110_Invicta.Control.Autonomous;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.team8110_Invicta.Hardware.Motor;
+import org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms.Motor;
 
 public class MotorTest {
     Motor testMotor;

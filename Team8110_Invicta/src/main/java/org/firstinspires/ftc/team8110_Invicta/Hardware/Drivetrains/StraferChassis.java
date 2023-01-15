@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.team8110_Invicta.Hardware.BotMechanisms.Drivetrains;
+package org.firstinspires.ftc.team8110_Invicta.Hardware.Drivetrains;
 
-import static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants.MAX_ACCEL;
+import     static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants.MAX_ACCEL;
 import static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants.MAX_ANG_ACCEL;
 import static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants.MAX_ANG_VEL;
 import static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants.MAX_VEL;
@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.drive.DriveSignal;
-import com.acmerobotics.roadrunner.drive.MecanumDrive;
 import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower;
 import com.acmerobotics.roadrunner.followers.TrajectoryFollower;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -33,7 +32,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
-import org.firstinspires.ftc.team8110_Invicta.Hardware.Motor;
+import org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms.Motor;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.InertialMeasurementUnit;
 import org.firstinspires.ftc.team8110_Invicta.Resources.RoadRunnerQuickstart.trajectorysequence.TrajectorySequence;
@@ -46,7 +45,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Config
-public class MecanumDriveTrain extends MecanumDrive {
+public class StraferChassis extends com.acmerobotics.roadrunner.drive.MecanumDrive {
     //Declare the variables for the mecanum drive train class
     /* Although the encoders aren't DcMotors, they can be initialized as one
     since they are connected to the drive train motor encoder ports on the rev hub.
@@ -80,7 +79,53 @@ public class MecanumDriveTrain extends MecanumDrive {
     public InertialMeasurementUnit InertialMeasurementUnit;
     private VoltageSensor batteryVoltageSensor;
 
-    public MecanumDriveTrain(String flName, String frName, String brName, String blName, HardwareMap hardwareMap) {
+    public StraferChassis(HardwareMap hardwareMap) {
+
+        super(DriveConstants.kV, DriveConstants.kA, DriveConstants.kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
+
+        InertialMeasurementUnit = new InertialMeasurementUnit(hardwareMap);
+        follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
+                new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
+
+        LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
+
+        batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
+
+        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
+            module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+        }
+
+        this.frontLeft = new Motor("frontLeft", 537.7, 3.77953, hardwareMap);
+        this.frontRight = new Motor("frontRight", 537.7, 3.77953, hardwareMap);
+        this.backRight = new Motor("backLeft", hardwareMap);
+        this.backLeft = new Motor("backRight", hardwareMap);
+
+                motors = Arrays.asList(frontLeft, frontRight, backRight, backLeft);
+
+        for (Motor motor : motors) {
+            motor.setBreakMode();
+            motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
+            motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
+            motor.setMotorType(motorConfigurationType);
+        }
+
+        if (RUN_USING_ENCODER && MOTOR_VELO_PID != null) {
+            setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, MOTOR_VELO_PID);
+        }
+
+        frontLeft.setDirectionReverse();
+        backLeft.setDirectionReverse();
+
+        // TODO: if desired, use setLocalizer() to change the localization method
+        // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
+
+        trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
+
+    }
+
+
+    public StraferChassis(String flName, String frName, String brName, String blName, HardwareMap hardwareMap) {
 
         super(DriveConstants.kV, DriveConstants.kA, DriveConstants.kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 

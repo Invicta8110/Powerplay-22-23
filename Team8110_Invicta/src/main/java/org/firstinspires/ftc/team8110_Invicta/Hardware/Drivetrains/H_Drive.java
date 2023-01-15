@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.team8110_Invicta.Hardware.BotMechanisms.Drivetrains;
+package org.firstinspires.ftc.team8110_Invicta.Hardware.Drivetrains;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.team8110_Invicta.Hardware.Motor;
+import org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms.Motor;
 
 public class H_Drive {
     Motor left;
