@@ -1,13 +1,10 @@
-package org.firstinspires.ftc.team8109_Rise.OldCode.Hardware;
+package org.firstinspires.ftc.team8109_Rise.Hardware.Drivetrains;
 
-import static org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.DriveConstants.MAX_ANG_ACCEL;
-import static org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.DriveConstants.MAX_ANG_VEL;
-import static org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.DriveConstants.MOTOR_VELO_PID;
-import static org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.DriveConstants.TRACK_WIDTH;
-import static org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.DriveConstants.encoderTicksToInches;
+import static org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.SlidesBot_DriveConstants.MAX_ANG_ACCEL;
+import static org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.SlidesBot_DriveConstants.MAX_ANG_VEL;
+import static org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.SlidesBot_DriveConstants.MOTOR_VELO_PID;
+import static org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.SlidesBot_DriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.SlidesBot_DriveConstants.encoderTicksToInches;
 
 import androidx.annotation.NonNull;
 
@@ -45,7 +42,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Config
-public class MecanumDriveTrain_Old extends MecanumDrive {
+public abstract class MecanumDriveTrain extends MecanumDrive {
     //Declare the variables for the mecanum drive train class
     /* Although the encoders aren't DcMotors, they can be initialized as one
     since they are connected to the drive train motor encoder ports on the rev hub.
@@ -58,19 +55,17 @@ public class MecanumDriveTrain_Old extends MecanumDrive {
     public Motor backRight;
     public Motor backLeft;
 
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
+//    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
+//    public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
 
-    public static double LATERAL_MULTIPLIER = 1.101399867722112;
-
-    public static double VX_WEIGHT = 1;
-    public static double VY_WEIGHT = 1;
-    public static double OMEGA_WEIGHT = 1;
+    double VX_WEIGHT;
+    double VY_WEIGHT;
+    double OMEGA_WEIGHT;
 
     private TrajectorySequenceRunner trajectorySequenceRunner;
 
-    private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH);
-    private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(MAX_ACCEL);
+    private TrajectoryVelocityConstraint VEL_CONSTRAINT;
+    private TrajectoryAccelerationConstraint ACCEL_CONSTRAINT;
 
     private TrajectoryFollower follower;
 
@@ -79,11 +74,21 @@ public class MecanumDriveTrain_Old extends MecanumDrive {
     public InertialMeasurementUnit InertialMeasurementUnit;
     private VoltageSensor batteryVoltageSensor;
 
-    public MecanumDriveTrain_Old(String flName, String frName, String brName, String blName, HardwareMap hardwareMap) {
 
-        super(DriveConstants.kV, DriveConstants.kA, DriveConstants.kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
+    //TODO: take out all thig of other drive constant files (parameter to input a DriveConstants class object?)
+    public MecanumDriveTrain(String flName, String frName, String brName, String blName,
+                             double kV, double kA, double kStatic,
+                             double TRACK_WIDTH, double WHEEL_BASE, double LATERAL_MULTIPLIER,
+                             PIDCoefficients TRANSLATIONAL_PID, PIDCoefficients HEADING_PID,
+                             double VX_WEIGHT, double VY_WEIGHT, double OMEGA_WEIGHT,
+                             TrajectoryVelocityConstraint VEL_CONSTRAINT, TrajectoryAccelerationConstraint ACCEL_CONSTRAINT,
+                             HardwareMap hardwareMap) {
 
-        InertialMeasurementUnit = new InertialMeasurementUnit(hardwareMap);
+        //TODO: Make it different files
+        super(kV, kA, kStatic, TRACK_WIDTH, WHEEL_BASE, LATERAL_MULTIPLIER);
+
+        //TODO: make imu usage for drive encoders easily toggleable
+//        InertialMeasurementUnit = new InertialMeasurementUnit(hardwareMap);
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
 
@@ -96,17 +101,16 @@ public class MecanumDriveTrain_Old extends MecanumDrive {
         }
 
         // TODO: adjust the names of the following hardware devices to match your configuration
-
-        this.frontLeft = new Motor(flName, hardwareMap);
-        this.frontRight = new Motor(frName, hardwareMap);
-        this.backRight = new Motor(brName, hardwareMap);
-        this.backLeft = new Motor(blName, hardwareMap);
+        frontLeft = new Motor(flName, hardwareMap);
+        frontRight = new Motor(frName, hardwareMap);
+        backRight = new Motor(brName, hardwareMap);
+        backLeft = new Motor(blName, hardwareMap);
 
         motors = Arrays.asList(frontLeft, frontRight, backRight, backLeft);
 
         for (Motor motor : motors) {
             motor.setBreakMode();
-            motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
             motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
             motor.setMotorType(motorConfigurationType);
@@ -118,14 +122,17 @@ public class MecanumDriveTrain_Old extends MecanumDrive {
 
         // TODO: reverse any motors using DcMotor.setDirection()
 
-        frontRight.setDirectionReverse();
-        backRight.setDirectionReverse();
-
         // TODO: if desired, use setLocalizer() to change the localization method
-        // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
+//        setLocalizer(new OdometryLocalizer(hardwareMap));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
 
+        this.VEL_CONSTRAINT = VEL_CONSTRAINT;
+        this.ACCEL_CONSTRAINT = ACCEL_CONSTRAINT;
+
+        this.VX_WEIGHT = VX_WEIGHT;
+        this.VY_WEIGHT = VY_WEIGHT;
+        this.OMEGA_WEIGHT = OMEGA_WEIGHT;
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
@@ -270,7 +277,7 @@ public class MecanumDriveTrain_Old extends MecanumDrive {
     }
 
     public double getRawExternalHeading() {
-        return InertialMeasurementUnit.imu.getAngularOrientation().firstAngle;
+        return 0;
     }
 
     public Double getExternalHeadingVelocity() {

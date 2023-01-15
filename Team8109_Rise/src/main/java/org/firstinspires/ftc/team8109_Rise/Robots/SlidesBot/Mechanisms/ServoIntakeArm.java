@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.team8109_Rise.Hardware.BotMechanisms.Arms.ServoArm;
+import org.firstinspires.ftc.team8109_Rise.Hardware.Arms.ServoArm;
 
 public class ServoIntakeArm extends ServoArm {
     static String[] name = {"armLeft", "armRight"};

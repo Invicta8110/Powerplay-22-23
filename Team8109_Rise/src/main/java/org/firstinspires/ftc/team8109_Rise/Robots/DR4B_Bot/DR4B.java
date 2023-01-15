@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.team8109_Rise.Control.PIDF_Controller;
-import org.firstinspires.ftc.team8109_Rise.Hardware.BotMechanisms.Lifts.DoubleReverse4Bar;
+import org.firstinspires.ftc.team8109_Rise.Hardware.Lifts.DoubleReverse4Bar;
 import org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.Claw;
 
 public class DR4B extends DoubleReverse4Bar {

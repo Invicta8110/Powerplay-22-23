@@ -32,8 +32,8 @@ public class SlidesBot_DriveConstants {
      * If using the built-in motor velocity PID, update MOTOR_VELO_PID with the tuned coefficients
      * from DriveVelocityPIDTuner.
      */
-    public static final boolean RUN_USING_ENCODER = true;
-    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(25, 0, 7, 12.87981936782902);
+    public static final boolean RUN_USING_ENCODER = false;
+    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(25, 0, 7, 10.16785);
 
     /*
      * These are physical constants that can be determined from your robot (including the track
@@ -54,7 +54,7 @@ public class SlidesBot_DriveConstants {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = 1.0 / rpmToVelocity(MAX_RPM);
+    public static double kV = 0.02;
     public static double kA = 0;
     public static double kStatic = 0;
 
@@ -65,7 +65,7 @@ public class SlidesBot_DriveConstants {
      * small and gradually increase them later after everything is working. All distance units are
      * inches.
      */
-    public static double MAX_VEL = 45;
+    public static double MAX_VEL = 70;
     public static double MAX_ACCEL = 30;
     public static double MAX_ANG_VEL = Math.toRadians(30);
     public static double MAX_ANG_ACCEL = Math.toRadians(60);

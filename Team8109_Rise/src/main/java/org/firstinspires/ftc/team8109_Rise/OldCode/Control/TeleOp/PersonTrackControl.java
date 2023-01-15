@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.team8109_Rise.Control.PIDF_Controller;
 import org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.MecanumDriveTrain_Old;
 import org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.Turret;
-import org.firstinspires.ftc.team8109_Rise.Hardware.Sensors.Camera.OpenCV.VisionPipelines.PersonTracker;
+import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.PersonTracker;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
