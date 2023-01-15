@@ -30,6 +30,13 @@ public class PIDF_Controller {
 
     public double errorChange;
 
+    public enum IntegralSetting{
+        BUILD_UP,
+        BOOSTER
+    }
+
+    IntegralSetting setting;
+
     public PIDF_Controller(double kp){
         this.kp = kp;
 
@@ -94,7 +101,16 @@ public class PIDF_Controller {
         deltaTime = runtime.seconds();
         runtime.reset();
 
-        if (Math.abs(error) > tolerance) area += ((error+previousError)*deltaTime)/2;
+        area += ((error+previousError)*deltaTime)/2;
+//
+//        if (Math.abs(error) > tolerance){
+//            area += ((error+previousError)*deltaTime)/2;
+//        } else
+//
+        if (Math.abs(error) < tolerance){
+            area = 0;
+        }
+
         if (targetPos != previousTarget) area = 0;
 
         I = area*ki;

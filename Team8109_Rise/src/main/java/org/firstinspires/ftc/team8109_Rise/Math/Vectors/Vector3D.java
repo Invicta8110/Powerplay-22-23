@@ -44,7 +44,6 @@ public class Vector3D {
     }
 
     public Vector3D add(double A, double B, double C) {
-
         return new Vector3D(this.A+A, this.B+B, this.C+C);
     }
 
@@ -66,6 +65,10 @@ public class Vector3D {
 
     public double getMagnitude(){
         return Math.sqrt((A * A) + (B * B) + (C * C));
+    }
+
+    public double findDistance(Vector3D v){
+        return Math.sqrt(Math.pow(A - v.A, 2) + Math.pow(B - v.B, 2) + Math.pow(C - v.C, 2));
     }
 
     public double DotProduct(Vector3D v){

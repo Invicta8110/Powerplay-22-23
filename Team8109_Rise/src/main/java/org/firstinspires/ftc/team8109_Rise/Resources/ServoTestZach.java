@@ -1,10 +1,12 @@
-package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.TeleOp_OpModes;
+package org.firstinspires.ftc.team8109_Rise.Resources;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name = "Five Turn Servo Test")
+@Disabled
 public class ServoTestZach extends LinearOpMode {
     Servo fiveturn;
 

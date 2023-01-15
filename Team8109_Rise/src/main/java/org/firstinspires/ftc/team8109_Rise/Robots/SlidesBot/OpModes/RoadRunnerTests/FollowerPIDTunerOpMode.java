@@ -12,6 +12,7 @@ import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Chassis;
 
 @Config
 @Autonomous(group = "drive")
+@Disabled
 public class FollowerPIDTunerOpMode extends LinearOpMode {
     public static double DISTANCE = 15; // in
 

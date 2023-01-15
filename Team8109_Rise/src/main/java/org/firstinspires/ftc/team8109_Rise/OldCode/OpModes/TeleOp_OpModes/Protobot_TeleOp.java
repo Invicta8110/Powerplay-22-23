@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.team8109_Rise.OldCode.Control.TeleOp.DRv4B_Test_Control;
 
-@TeleOp
+
 public class Protobot_TeleOp extends LinearOpMode {
 
     @Override

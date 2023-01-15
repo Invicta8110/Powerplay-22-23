@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.TeleOp_OpModes;
+package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.Testing;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -13,10 +13,10 @@ import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Wrist;
 public class ServoTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-//        ServoIntakeArm arm = new ServoIntakeArm(gamepad1, telemetry, hardwareMap);
+        ServoIntakeArm arm = new ServoIntakeArm(gamepad1, telemetry, hardwareMap);
 
-        Claw claw = new Claw(gamepad1, telemetry, hardwareMap);
-        Wrist wrist = new Wrist(gamepad1, hardwareMap);
+//        Claw claw = new Claw(gamepad1, telemetry, hardwareMap);
+//        Wrist wrist = new Wrist(gamepad1, hardwareMap);
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -27,14 +27,15 @@ public class ServoTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-//            arm.togglePosition();
-//            arm.setTelemetry();
+            arm.togglePosition();
+//            arm.setAngleIndividual();
+            arm.setTelemetry();
 
-            wrist.setPosition();
+//            wrist.setPosition();
 
-            claw.toggleClaw();
-            claw.setPosition();
-            claw.setTelemetry();
+//            claw.toggleClaw();
+//            claw.setPosition();
+//            claw.setTelemetry();
 
             telemetry.update();
         }

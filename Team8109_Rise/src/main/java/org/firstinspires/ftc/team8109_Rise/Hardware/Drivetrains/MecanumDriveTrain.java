@@ -31,6 +31,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.team8109_Rise.Hardware.Motor;
+import org.firstinspires.ftc.team8109_Rise.Math.Vectors.Vector3D;
 import org.firstinspires.ftc.team8109_Rise.Sensors.InertialMeasurementUnit;
 import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.trajectorysequence.TrajectorySequenceBuilder;
@@ -54,6 +55,8 @@ public abstract class MecanumDriveTrain extends MecanumDrive {
     public Motor frontRight;
     public Motor backRight;
     public Motor backLeft;
+
+    public Pose2d poseEstimate;
 
 //    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
 //    public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
@@ -162,6 +165,27 @@ public abstract class MecanumDriveTrain extends MecanumDrive {
                         .build()
         );
     }
+
+    public double angleWrap(double radians) {
+        if (radians > Math.PI) {
+            radians -= 2*Math.PI;
+        }
+
+        if (radians < -Math.PI) {
+            radians = radians - 2*Math.PI;
+        }
+
+        return radians;
+    }
+
+    public Vector3D getPoseVector(){
+        return new Vector3D(getPoseEstimate().getX(), getPoseEstimate().getY(), angleWrap(getPoseEstimate().getHeading()));
+    }
+//
+//    public Pose2d PoseEstimate(){
+//        poseEstimate = getPoseEstimate();
+//        return poseEstimate;
+//    }
 
     public void turn(double angle) {
         turnAsync(angle);

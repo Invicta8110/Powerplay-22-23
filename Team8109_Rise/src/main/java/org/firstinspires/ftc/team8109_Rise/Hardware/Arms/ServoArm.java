@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.team8109_Rise.Hardware.Arms;
 
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -52,4 +53,6 @@ public abstract class ServoArm {
             armServo2.setPosition(angle/((3*Math.PI)/2));
         }
     }
+
+
 }

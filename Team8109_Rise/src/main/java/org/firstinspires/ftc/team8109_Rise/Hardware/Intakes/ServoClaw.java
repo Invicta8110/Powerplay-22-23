@@ -43,4 +43,16 @@ public abstract class ServoClaw {
                 break;
         }
     }
+
+    public void setPositionTest(){
+        switch (clawState){
+            case OPEN:
+                setAngle(270);
+                break;
+
+            case CLOSED:
+                setAngle(250);
+                break;
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.RoadRunnerTests;
+package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.Testing;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -24,7 +24,7 @@ public class LocalizationTester extends LinearOpMode {
             Pose2d poseEstimate = drive.getPoseEstimate();
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
-            telemetry.addData("heading", poseEstimate.getHeading());
+            telemetry.addData("heading", drive.angleWrap(poseEstimate.getHeading()));
             telemetry.addData("Pod Positions", drive.odometry.getWheelPositions());
             telemetry.update();
         }

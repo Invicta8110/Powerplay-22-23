@@ -16,8 +16,8 @@ public class OdometryLocalizer extends StandardThreeWheelOdoLocalizer {
     public static double LATERAL_DISTANCE = 10.915; // in; distance between the left and right wheels
     public static double FORWARD_OFFSET = 4.5; // in; offset of the lateral wheel
 
-    static double X_MULTIPLIER = 0.9896; // Multiplier in the X direction
-    static double Y_MULTIPLIER = 0.94; // Multiplier in the Y direction  71
+    static double X_MULTIPLIER = 1.002435112; // Multiplier in the X direction
+    static double Y_MULTIPLIER = 1.012; // Multiplier in the Y direction  71
 
     static double[] DriveConstants = {TICKS_PER_REV, WHEEL_RADIUS, GEAR_RATIO, LATERAL_DISTANCE, FORWARD_OFFSET};
 

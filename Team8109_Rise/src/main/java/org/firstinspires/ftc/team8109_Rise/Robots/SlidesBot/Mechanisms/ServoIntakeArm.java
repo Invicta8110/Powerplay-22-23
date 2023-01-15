@@ -35,20 +35,18 @@ public class ServoIntakeArm extends ServoArm {
     public void setArmPosition(){
         switch (servoPosition){
             case INTAKE_POSITION:
-                setAngle(80);
+                setAngle(45);
                 break;
 
             case OUTTAKE_POSITION:
-                setAngle(260);
+                setAngle(230);
                 break;
         }
-        lastToggleX = gamepad1.x;
     }
     public void togglePosition(){
+        setArmPosition();
         switch (servoPosition){
             case INTAKE_POSITION:
-                setAngle(80);
-
                 if ((gamepad1.x != lastToggleX) && gamepad1.x && toggle1){
                     toggle1 = false;
                     toggle2 = true;
@@ -58,8 +56,6 @@ public class ServoIntakeArm extends ServoArm {
                 break;
 
             case OUTTAKE_POSITION:
-                setAngle(260);
-
                 if ((gamepad1.x != lastToggleX) && gamepad1.x && toggle2){
                     toggle2 = false;
                     toggle1 = true;
@@ -73,6 +69,8 @@ public class ServoIntakeArm extends ServoArm {
 
     public void setTelemetry(){
         telemetry.addData("Servo Angle", getPositionDegrees());
+        telemetry.addData("Arm State", servoPosition);
         telemetry.addData("Raw Position", armServo1.getPosition());
+        telemetry.addData("Raw Position", armServo2.getPosition());
     }
 }
