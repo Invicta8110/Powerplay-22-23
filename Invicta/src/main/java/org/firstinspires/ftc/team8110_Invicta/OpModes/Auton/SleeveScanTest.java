@@ -14,11 +14,11 @@ import org.openftc.easyopencv.OpenCvWebcam;
 @Autonomous(name="Camera Stream")
 public class SleeveScanTest extends LinearOpMode {
     OpenCvWebcam camera;
-    ColorPipeline pipeline ;
+    ColorPipeline pipeline;
 
     public void runOpMode() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam"), cameraMonitorViewId);
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
         camera.setPipeline(pipeline);
         pipeline = new ColorPipeline();
@@ -42,11 +42,11 @@ public class SleeveScanTest extends LinearOpMode {
 
         while (opModeIsActive()) {
             telemetry.addData("Hue", pipeline.getHue());
-            telemetry.addData("Color", pipeline.findColor());
+            telemetry.addData("Color", ColorPipeline.findColor());
             telemetry.update();
         }
 
-        Colors sleeve = pipeline.findColor();
+        Colors sleeve = ColorPipeline.findColor();
 
         switch (sleeve) {
             //TODO: fill this out
