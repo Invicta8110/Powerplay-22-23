@@ -49,7 +49,7 @@ public class ViperSlides extends Slides {
 
         // ki: 0.005
 //        slidesPID = new PIDF_Controller(0.04, 0.03, 0, 0.01); //0.01
-        slidesPID = new PIDF_Controller(0.05, 0.0035, 0, 0.01); //0.0175, 0.01
+        slidesPID = new PIDF_Controller(0.07, 0.0035, 0, 0.01); //0.0175, 0.01
 
         //slidesPID = new PIDF_Controller(0.05, 0.0035, 0, 0.005); //0.0175, 0.01
         slidesPID.tolerance = 0.25;
@@ -90,7 +90,7 @@ public class ViperSlides extends Slides {
                 /* PID controller calculates the power needed to be set to the motors
                 to stay at the target position (of 2 inches as my guess of what ground level is) */
 
-                slidesPower = slidesPID.PIDF_Power(getHeight(), 0.3);
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 0.6);
                 break;
 
             case HIGH_JUNCTION:
@@ -125,11 +125,11 @@ public class ViperSlides extends Slides {
                 break;
 
             case CONESTACK_TOP_MIDDLE:
-                slidesPower = slidesPID.PIDF_Power(getHeight(), 5.45);
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 5);
                 break;
 
             case CONESTACK_TOP:
-                slidesPower = slidesPID.PIDF_Power(getHeight(), 6.75);
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 6.25);
                 break;
         }
     }

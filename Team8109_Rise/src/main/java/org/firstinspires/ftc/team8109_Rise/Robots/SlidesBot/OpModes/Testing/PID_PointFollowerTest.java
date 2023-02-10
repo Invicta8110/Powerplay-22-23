@@ -5,12 +5,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.team8109_Rise.Math.Vectors.Vector3D;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Chassis;
+import org.opencv.core.Mat;
 
 @Autonomous
 public class PID_PointFollowerTest extends LinearOpMode {
 
     Chassis chassis;
-    Vector3D point = new Vector3D(0, 10, 0);
+    Vector3D point = new Vector3D(10, -10, Math.PI);
 
     // Forwards, left, and clockwise
 

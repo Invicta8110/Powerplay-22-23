@@ -13,10 +13,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.team8109_Rise.Control.PIDF_Controller;
 import org.firstinspires.ftc.team8109_Rise.Hardware.Drivetrains.MecanumDriveTrain;
+import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.Auton_Opmodes.CycleAuton_PID;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.Odometry.OdometryLocalizer;
 import org.firstinspires.ftc.team8109_Rise.Math.Vectors.Vector3D;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.SlidesBot_DriveConstants;
+import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.ConeTracker;
+import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.JunctionTracker;
 import org.firstinspires.ftc.team8109_Rise.Sensors.InertialMeasurementUnit;
+import org.openftc.easyopencv.OpenCvPipeline;
 
 @Config
 public class Chassis extends MecanumDriveTrain {
@@ -25,6 +29,19 @@ public class Chassis extends MecanumDriveTrain {
     Telemetry telemetry;
 
     ElapsedTime runtime = new ElapsedTime();
+
+    CycleAuton_PID auton = new CycleAuton_PID();
+
+    JunctionTracker junctionPipeline;
+    ConeTracker conePipeline;
+
+    public enum TrackingObject{
+        CONESTACK,
+        JUNCTION,
+        NONE
+    }
+
+    public TrackingObject trackingObject;
 
     public org.firstinspires.ftc.team8109_Rise.Sensors.InertialMeasurementUnit imu;
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 0);
@@ -41,9 +58,12 @@ public class Chassis extends MecanumDriveTrain {
     double bLeft;
     double bRight;
 
-    double drive;
-    double strafe;
-    double turn;
+    double odoDrive;
+    double odoStrafe;
+    double odoTurn;
+
+    double visionTurn;
+    double visionDrive;
 
     double max;
 
@@ -54,6 +74,9 @@ public class Chassis extends MecanumDriveTrain {
     static double translationalX_kp = 0.1;
     static double translationalY_kp = 0.12;
     static double heading_kp = 0.5;
+
+    static double visionX_kp = 0;
+    static double visionHeading_kp = 0;
 
     static double translationalX_ki = 0.002; //0.002
     static double translationalY_ki = 0.002;
@@ -74,11 +97,18 @@ public class Chassis extends MecanumDriveTrain {
     public PIDF_Controller TranslationalPID_Y;
     public PIDF_Controller HeadingPID;
 
+    public PIDF_Controller visionX_PID;
+    public PIDF_Controller visionHeading_PID;
+
+    Vector3D odoPID_Vector = new Vector3D(0, 0, 0);
+    Vector3D visionPID_Vector = new Vector3D(0, 0, 0);
     Vector3D PID_Vector = new Vector3D(0, 0, 0);
+
+    Vector3D[] inputArray;
 
     public OdometryLocalizer odometry;
 
-    public Chassis(Gamepad gamepad1, Telemetry telemetry, HardwareMap hardwareMap){
+    public Chassis(ConeTracker coneTracker, JunctionTracker junctionPipeline, Telemetry telemetry, HardwareMap hardwareMap){
         super("fLeft", "fRight", "bRight", "bLeft",
                 SlidesBot_DriveConstants.kV, SlidesBot_DriveConstants.kA, SlidesBot_DriveConstants.kStatic,
                 SlidesBot_DriveConstants.TRACK_WIDTH, SlidesBot_DriveConstants.WHEEL_BASE, LATERAL_MULTIPLIER,
@@ -91,6 +121,44 @@ public class Chassis extends MecanumDriveTrain {
         TranslationalPID_X = new PIDF_Controller(translationalX_kp, translationalX_kd, 0,translationalX_ki);
         TranslationalPID_Y = new PIDF_Controller(translationalY_kp, translationalY_kd, 0,translationalY_ki);
         HeadingPID = new PIDF_Controller(heading_kp, heading_kd, 0, heading_ki);
+
+        visionX_PID = new PIDF_Controller(visionX_kp);
+        visionHeading_PID = new PIDF_Controller(visionHeading_kp);
+
+        TranslationalPID_X.tolerance = 0.25;
+        TranslationalPID_Y.tolerance = 0.25;
+
+        odometry = new OdometryLocalizer(hardwareMap);
+
+        frontLeft.setDirectionReverse();
+        backLeft.setDirectionReverse();
+
+        setLocalizer(odometry);
+        imu = new InertialMeasurementUnit(hardwareMap);
+
+        this.junctionPipeline = junctionPipeline;
+        this.conePipeline = coneTracker;
+        this.telemetry = telemetry;
+
+        trackingObject = TrackingObject.NONE;
+    }
+
+    public Chassis(Gamepad gamepad1, Telemetry telemetry, HardwareMap hardwareMap){
+        super("fLeft", "fRight", "bRight", "bLeft",
+                SlidesBot_DriveConstants.kV, SlidesBot_DriveConstants.kA, SlidesBot_DriveConstants.kStatic,
+                SlidesBot_DriveConstants.TRACK_WIDTH, SlidesBot_DriveConstants.WHEEL_BASE, LATERAL_MULTIPLIER,
+                TRANSLATIONAL_PID, HEADING_PID, VX_WEIGHT, VY_WEIGHT, ω_WEIGHT,
+                VEL_CONSTRAINT, ACCEL_CONSTRAINT, hardwareMap);
+
+        reset();
+
+        // TODO: Tune properly (needs some derivative)
+        TranslationalPID_X = new PIDF_Controller(translationalX_kp, translationalX_kd, 0,translationalX_ki);
+        TranslationalPID_Y = new PIDF_Controller(translationalY_kp, translationalY_kd, 0,translationalY_ki);
+        HeadingPID = new PIDF_Controller(heading_kp, heading_kd, 0, heading_ki);
+
+        visionX_PID = new PIDF_Controller(visionX_kp);
+        visionHeading_PID = new PIDF_Controller(visionHeading_kp);
 
         TranslationalPID_X.tolerance = 0.25;
         TranslationalPID_Y.tolerance = 0.25;
@@ -130,13 +198,13 @@ public class Chassis extends MecanumDriveTrain {
     //TODO: Tune heading a bit more
     public void setDriveVectorsFieldCentric(Vector3D input){
         //TODO: Use IMU possibly
-        x_rotated = input.A * Math.cos(getPoseEstimate().getHeading()) - input.B * Math.sin(getPoseEstimate().getHeading());
-        y_rotated = input.A * Math.sin(getPoseEstimate().getHeading()) + input.B * Math.cos(getPoseEstimate().getHeading());
+        x_rotated = input.A * Math.cos(getPoseEstimate().getHeading()) + input.B * Math.sin(getPoseEstimate().getHeading());
+        y_rotated = input.A * Math.sin(getPoseEstimate().getHeading()) - input.B * Math.cos(getPoseEstimate().getHeading());
 
-        fLeft = VX_WEIGHT * x_rotated + VY_WEIGHT * y_rotated + ω_WEIGHT * input.C;
-        fRight = VX_WEIGHT * x_rotated - VY_WEIGHT * y_rotated - ω_WEIGHT * input.C;
-        bRight = VX_WEIGHT * x_rotated + VY_WEIGHT * y_rotated - ω_WEIGHT * input.C;
-        bLeft = VX_WEIGHT * x_rotated - VY_WEIGHT * y_rotated + ω_WEIGHT * input.C;
+        fLeft = VX_WEIGHT * x_rotated + VY_WEIGHT * y_rotated + /*ω_WEIGHT*/ 1 * input.C;
+        fRight = VX_WEIGHT * x_rotated - VY_WEIGHT * y_rotated - /*ω_WEIGHT*/ 1 * input.C;
+        bRight = VX_WEIGHT * x_rotated + VY_WEIGHT * y_rotated - /*ω_WEIGHT*/ 1 * input.C;
+        bLeft = VX_WEIGHT * x_rotated - VY_WEIGHT * y_rotated + /*ω_WEIGHT*/ 1 * input.C;
 
         max = Math.max(Math.max(Math.abs(fLeft), Math.abs(fRight)), Math.max(Math.abs(bLeft), Math.abs(bRight)));
         if (max > 1.0) {
@@ -149,11 +217,10 @@ public class Chassis extends MecanumDriveTrain {
         setPower(fLeft, fRight, bRight, bLeft);
     }
 
-    //TODO: Have kevin teach odo inverse kinematics
-
     public void  robotRelative(Pose2d powers) {
         setWeightedDrivePower(powers);
     }
+
 //    public void fieldRelative(Pose2d powers) {
 //
 //        Vector2d vec = new Vector2d(powers.getX(),-powers.getY());
@@ -168,18 +235,6 @@ public class Chassis extends MecanumDriveTrain {
         Pose2d pose = new Pose2d(v.A, v.B, v.C);
 
         Vector2d vec = new Vector2d(pose.getX(),-pose.getY());
-//        pose = new Pose2d(vec.getX(),-vec.getY(),-pose.getHeading());
-
-//        vec = vec.rotated(getPoseEstimate().getHeading());
-//        pose = new Pose2d(vec.getX(),-vec.getY(), pose.getHeading());
-
-//        if (getPoseEstimate().getHeading() > Math.PI){
-//            vec = vec.rotated(-(getPoseEstimate().getHeading()-180));
-//            pose = new Pose2d(vec.getX(),-vec.getY(), -(getPoseEstimate().getHeading()-180));
-//        }else {
-//            vec = vec.rotated(getPoseEstimate().getHeading());
-//            pose = new Pose2d(vec.getX(),-vec.getY(), pose.getHeading());
-//        }
 
         vec = vec.rotated(angleWrap(getPoseEstimate().getHeading()));
         pose = new Pose2d(vec.getX(),-vec.getY(), -angleWrap(pose.getHeading()));
@@ -188,14 +243,61 @@ public class Chassis extends MecanumDriveTrain {
     }
 
     public void goToPose(Vector3D input){
-        drive = -TranslationalPID_X.PIDF_Power(getPoseEstimate().getX(), input.A);
-        strafe = -TranslationalPID_Y.PIDF_Power(getPoseEstimate().getY(), input.B);
-        turn = -HeadingPID.PIDF_Power(angleWrap(getPoseEstimate().getHeading()), input.C);
+        odoDrive = -TranslationalPID_X.PIDF_Power(getPoseEstimate().getX(), input.A);
+        odoStrafe = -TranslationalPID_Y.PIDF_Power(getPoseEstimate().getY(), input.B);
+        odoTurn = -HeadingPID.PIDF_Power(angleWrap(getPoseEstimate().getHeading()), input.C);
 
-        PID_Vector.set(drive, strafe, turn);
+        odoPID_Vector.set(odoDrive, odoStrafe, odoTurn);
 
-        fieldRelative(PID_Vector);
+        setDriveVectorsFieldCentric(odoPID_Vector);
+//        fieldRelative(PID_Vector);
     }
+
+//    public void goToPose(Vector3D input){
+//        inputArray = new Vector3D[]{odoCorrect(input), visionCorrect(input)};
+//
+//        for (Vector3D Input : inputArray){
+//            PID_Vector.add(Input);
+//        }
+//        setDriveVectorsFieldCentric(PID_Vector);
+//    }
+//
+//    public Vector3D odoCorrect(Vector3D input){
+//        odoDrive = -TranslationalPID_X.PIDF_Power(getPoseEstimate().getX(), input.A);
+//        odoStrafe = -TranslationalPID_Y.PIDF_Power(getPoseEstimate().getY(), input.B);
+//        odoTurn = -HeadingPID.PIDF_Power(angleWrap(getPoseEstimate().getHeading()), input.C);
+//
+//        return new Vector3D(odoDrive, odoStrafe, odoTurn);
+//    }
+//
+//    // TODO: Just use machine learning
+//    public Vector3D visionCorrect(Vector3D input){
+//        // conditions for each
+//        switch (auton.cycleState){
+//            case TO_CONE_STACK:
+//                if (!conePipeline.BlueRect.empty()){
+//
+//                    visionDrive = visionX_PID.PIDF_Power(junctionPipeline.YellowRect.y + (junctionPipeline.YellowRect.height/2), 220); //
+//                    visionTurn = -visionX_PID.PIDF_Power(junctionPipeline.YellowRect.y + (junctionPipeline.YellowRect.height/2), 160);
+//                }
+//
+//                if (!conePipeline.BlueRect.empty()){
+//
+//                    visionDrive = visionX_PID.PIDF_Power(junctionPipeline.YellowRect.y + (junctionPipeline.YellowRect.height/2), 220); //
+//                    visionTurn = -visionX_PID.PIDF_Power(junctionPipeline.YellowRect.y + (junctionPipeline.YellowRect.height/2), 160);
+//                }
+//                break;
+//
+//            case TO_HIGH_JUNCTION:
+//                if (!junctionPipeline.YellowRect.empty()){
+//
+//                    visionDrive = visionX_PID.PIDF_Power(junctionPipeline.YellowRect.y + (junctionPipeline.YellowRect.height/2), 220); //
+//                    visionTurn = -visionX_PID.PIDF_Power(junctionPipeline.YellowRect.y + (junctionPipeline.YellowRect.height/2), 160);
+//                }
+//                break;
+//        }
+//        return new Vector3D(visionDrive, 0, visionTurn);
+//    }
 
     //TODO: Test out field-centric
     public void ManualDrive(){
@@ -206,27 +308,26 @@ public class Chassis extends MecanumDriveTrain {
 
     public void DPad_Drive(){
         if (gamepad1.dpad_up){
-            drive = 0.25;
+            odoDrive = 0.25;
         } else if (gamepad1.dpad_down){
-            drive = -0.25;
-        } else drive = 0;
+            odoDrive = -0.25;
+        } else odoDrive = 0;
 
         if (gamepad1.dpad_left){
-            strafe = 0.25;
+            odoStrafe = 0.25;
         } else if (gamepad1.dpad_right){
-            strafe = -0.25;
+            odoStrafe = -0.25;
         } else {
-            strafe = 0;
+            odoStrafe = 0;
         }
 
-        controllerInput.set(drive, strafe, gamepad1.right_stick_x);
+        controllerInput.set(odoDrive, odoStrafe, gamepad1.right_stick_x);
 //        controllerInput.set(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
         setDriveVectorsFieldCentric(controllerInput);
     }
 
     public void fieldCentricTest(){
         controllerInput.set(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-//        setDriveVectorsFieldCentric(controllerInput);
-        fieldRelative(controllerInput);
+        setDriveVectorsFieldCentric(controllerInput);
     }
 }

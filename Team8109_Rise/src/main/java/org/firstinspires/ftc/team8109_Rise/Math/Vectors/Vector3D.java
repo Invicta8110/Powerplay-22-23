@@ -11,18 +11,18 @@ public class Vector3D {
         this.C = C;
     }
 
-    public void set_î(double A) {
+    public void set_A(double A) {
         this.A = A;
     }
 
-    public void set_Ĵ(double B) {
+    public void set_B(double B) {
         this.B = B;
     }
 
-    public void set_k̂(double C) {
+    public void set_C(double C) {
         this.C = C;
     }
-    
+
     public void set(double A, double B, double C) {
         this.A = A;
         this.B = B;
@@ -80,6 +80,7 @@ public class Vector3D {
     }
 
     // Figure out directions
+    // TODO: This is not a vector product
     public double CrossProduct(Vector3D v){
         return (A*v.B) - (B*v.A);
     }

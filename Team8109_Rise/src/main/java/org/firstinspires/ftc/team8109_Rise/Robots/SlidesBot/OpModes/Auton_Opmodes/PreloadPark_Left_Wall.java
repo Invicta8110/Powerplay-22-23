@@ -13,19 +13,13 @@ import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.OdoRetrac
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ServoIntakeArm;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ViperSlides;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Wrist;
-import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.AprilTagDetectionPipeline;
 import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.ColorPipeline;
-import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.Signal_Identifier;
-import org.firstinspires.ftc.team8109_Rise.UserInterface.AutonSelection;
-import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-import java.util.ArrayList;
-
 @Autonomous
-public class CycleAuton_PID extends LinearOpMode {
+public class PreloadPark_Left_Wall extends LinearOpMode {
     OpenCvCamera camera; //TODO: Improve tracking
     ColorPipeline pipeline;
 
@@ -63,10 +57,10 @@ public class CycleAuton_PID extends LinearOpMode {
         RIGHT
     }
 
-    AutonState autonState;
-    public CycleState cycleState;
-    ParkingStep parkingStep;
-    ParkingZone parkingZone;
+    CycleAuton_PID.AutonState autonState;
+    CycleAuton_PID.CycleState cycleState;
+    CycleAuton_PID.ParkingStep parkingStep;
+    CycleAuton_PID.ParkingZone parkingZone;
 
     Chassis chassis;
     ViperSlides slides;
@@ -81,9 +75,9 @@ public class CycleAuton_PID extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        autonState = AutonState.PUSH_CONE;
-        cycleState = CycleState.TO_CONE_STACK;
-        parkingStep = ParkingStep.STEP_ONE;
+        autonState = CycleAuton_PID.AutonState.PUSH_CONE;
+        cycleState = CycleAuton_PID.CycleState.TO_CONE_STACK;
+        parkingStep = CycleAuton_PID.ParkingStep.STEP_ONE;
 
         chassis = new Chassis(gamepad1, telemetry, hardwareMap);
         slides = new ViperSlides(gamepad1, telemetry, hardwareMap);
@@ -117,15 +111,15 @@ public class CycleAuton_PID extends LinearOpMode {
             odoRetract.podState = OdoRetract.PodState.GROUND;
 
             if (pipeline.findColor() == ColorPipeline.Colors.BLUE){
-                parkingZone = ParkingZone.LEFT;
+                parkingZone = CycleAuton_PID.ParkingZone.LEFT;
             }
 
             if (pipeline.findColor() == ColorPipeline.Colors.RED){
-                parkingZone = ParkingZone.RIGHT;
+                parkingZone = CycleAuton_PID.ParkingZone.RIGHT;
             }
 
             if (pipeline.findColor() == ColorPipeline.Colors.GREEN){
-                parkingZone = ParkingZone.MIDDLE;
+                parkingZone = CycleAuton_PID.ParkingZone.MIDDLE;
             }
 
             telemetry.addData("color", pipeline.findColor());
@@ -160,7 +154,7 @@ public class CycleAuton_PID extends LinearOpMode {
     public void autonLeftRed(){
         switch (autonState){
             case PUSH_CONE:
-                targetPose.set(60, 0, 0);
+                targetPose.set(61, 0, 0);
 //
 
                 claw.clawState = ServoClaw.ClawState.CLOSED;
@@ -168,16 +162,16 @@ public class CycleAuton_PID extends LinearOpMode {
                 chassis.goToPose(targetPose);
 
                 if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
-                    autonState = AutonState.RETURN_TO_POLE;
+                    autonState = CycleAuton_PID.AutonState.RETURN_TO_POLE;
                     runtime.reset();
                 }
                 break;
             case RETURN_TO_POLE:
-                targetPose.set(46, 0, -0.773);
+                targetPose.set(47, 0, -0.773);
                 chassis.goToPose(targetPose);
 
                 if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
-                    autonState = AutonState.GO_TO_SCORE_PRELOAD;
+                    autonState = CycleAuton_PID.AutonState.GO_TO_SCORE_PRELOAD;
                     runtime.reset();
                 }
                 break;
@@ -186,18 +180,18 @@ public class CycleAuton_PID extends LinearOpMode {
 
                 arm.servoPosition = ServoIntakeArm.ServoPosition.OUTTAKE_POSITION;
                 wrist.wristPosition = Wrist.WristPosition.OUTTAKE_POSITION;
-                targetPose.set(54.5, -3.5, -0.959);
+                targetPose.set(55.5, -3.5, -0.959);
 
                 chassis.goToPose(targetPose);
 
                 // could also vector sum all errors
                 if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
-                    autonState = AutonState.SCORE_PRELOAD;
+                    autonState = CycleAuton_PID.AutonState.SCORE_PRELOAD;
                     runtime.reset();
                 }
                 break;
             case SCORE_PRELOAD:
-                targetPose.set(54.5, -3.5, -0.959);
+                targetPose.set(55.5, -3.5, -0.959);
 
                 if (runtime.seconds() > 0.5){
                     claw.clawState = ServoClaw.ClawState.OPEN;
@@ -205,97 +199,7 @@ public class CycleAuton_PID extends LinearOpMode {
 
                 // if ((claw.getPositionDegrees() > 175) && runtime.seconds() > 2){
                 if ((claw.getPositionDegrees() > 140)){
-                    autonState = AutonState.CYCLE;
-                }
-                break;
-            case CYCLE:
-                switch (cycleState){
-                    case TO_CONE_STACK:
-                        targetPose.set(48.18, 27.1, -Math.toRadians(90));
-
-                        switch (cycleCounter){
-                            case 1:
-                                slides.slidesState = ViperSlides.SlidesState.CONESTACK_TOP;
-                                break;
-                            case 2:
-                                slides.slidesState = ViperSlides.SlidesState.CONESTACK_TOP_MIDDLE;
-                                break;
-                            case 3:
-                                slides.slidesState = ViperSlides.SlidesState.CONESTACK_MIDDLE;
-                                break;
-                            case 4:
-                                slides.slidesState = ViperSlides.SlidesState.CONESTACK_BOTTOM_MIDDLE;
-                                break;
-                            case 5:
-                                slides.slidesState = ViperSlides.SlidesState.GROUND;
-                                break;
-                        }
-
-                        arm.servoPosition = ServoIntakeArm.ServoPosition.INTAKE_POSITION;
-                        wrist.wristPosition = Wrist.WristPosition.INTAKE_POSITION;
-                        claw.clawState = ServoClaw.ClawState.OPEN;
-
-                        if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
-                            cycleState = CycleState.PICK_UP_CONE;
-                            runtime.reset();
-                        }
-                        break;
-
-                    case PICK_UP_CONE:
-
-                        //TODO: have arm and slide also move a certain amount before going to next state in order to
-                        targetPose.set(48.18, 27.1, -Math.toRadians(90));
-                        claw.clawState = ServoClaw.ClawState.CLOSED;
-
-                        // TODO: Note that the claw won't actually reach this position closing
-                        //runtime.seconds timer maybe needed
-                        if ((claw.getPositionDegrees() < 110) && runtime.seconds() > 0.5) {
-                            cycleState = CycleState.BOOST_UP;
-                            runtime.reset();
-                        }
-                        break;
-
-                    case BOOST_UP:
-                        slides.slidesState = ViperSlides.SlidesState.HIGH_JUNCTION;
-
-                        if (runtime.seconds() > 0.75) {
-                            cycleState = CycleState.TO_HIGH_JUNCTION;
-                            runtime.reset();
-                        }
-                        break;
-                    case TO_HIGH_JUNCTION:
-                        targetPose.set(48.18, 13, -Math.toRadians(90));
-
-                        targetPose.set(53, -2, -0.959);
-
-
-//                        targetPose.set(53, -2, -0.959);
-                        slides.slidesState = ViperSlides.SlidesState.HIGH_JUNCTION;
-
-                        arm.servoPosition = ServoIntakeArm.ServoPosition.OUTTAKE_POSITION;
-                        wrist.wristPosition = Wrist.WristPosition.OUTTAKE_POSITION;
-
-                        if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
-                            cycleState = CycleState.SCORE_CONE;
-                            runtime.reset();
-                        }
-                        break;
-                    case SCORE_CONE:
-                        targetPose.set(54.5, -3.5, -0.959);
-
-                        if (runtime.seconds() > 0.75){
-                            claw.clawState = ServoClaw.ClawState.OPEN;
-                        }
-
-                        if ((claw.getPositionDegrees() > 140)/* && runtime.seconds() > 0.5*/){
-                            cycleCounter++;
-
-                            cycleState = CycleState.TO_CONE_STACK;
-                        }
-                        break;
-                }
-                if ((globalTime.seconds() > 28) || cycleCounter > 5){
-                    autonState = AutonState.PARK;
+                    autonState = CycleAuton_PID.AutonState.PARK;
                 }
                 break;
             case PARK:
@@ -306,31 +210,31 @@ public class CycleAuton_PID extends LinearOpMode {
 
                 switch (parkingStep){
                     case STEP_ONE:
-                        targetPose.set(45, 0, 0);
+                        targetPose.set(46, 0, 0);
 
                         if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
-                            parkingStep = ParkingStep.STEP_TWO;
+                            parkingStep = CycleAuton_PID.ParkingStep.STEP_TWO;
                             runtime.reset();
                         }
                         break;
                     case STEP_TWO:
-                        targetPose.set(26, 0, 0);
+                        targetPose.set(27, 0, 0);
                         if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
-                            parkingStep = ParkingStep.STEP_THREE;
+                            parkingStep = CycleAuton_PID.ParkingStep.STEP_THREE;
                             runtime.reset();
                         }
                         break;
                     case STEP_THREE:
                         switch (parkingZone){
                             case LEFT:
-                                targetPose.set(26, 23, 0);
+                                targetPose.set(27, 23, 0);
                                 break;
                             case MIDDLE:
-                                targetPose.set(26, 0, 0);
+                                targetPose.set(27, 0, 0);
 
                                 break;
                             case RIGHT:
-                                targetPose.set(26, -23, 0);
+                                targetPose.set(27, -23, 0);
                                 break;
                         }
                 }

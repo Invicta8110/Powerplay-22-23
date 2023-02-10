@@ -1,46 +1,48 @@
 package org.firstinspires.ftc.team8109_Rise.Math;
 
+import org.firstinspires.ftc.team8109_Rise.Math.Vectors.Vector2D;
+
 public class MathUtils {
-//    public static boolean epsilonEquals(double val1, double val2){
-//        return Math.abs(val1 - val2) < 1e-6;
-//    }
+    public static boolean epsilonEquals(double val1, double val2){
+        return Math.abs(val1 - val2) < 1e-6;
+    }
+
+    public static Vector2D toPolar(double x, double y){
+        double r = Math.sqrt((x * x) + (y * y));
+        double theta = Math.atan2(y, x);
+        return new Vector2D(r, theta);
+    }
 //
-//    public static Vector2 toPolar(double x, double y){
-//        double r = Math.sqrt((x * x) + (y * y));
-//        double theta = Math.atan2(y, x);
-//        return new Vector2(r, theta);
-//    }
-//
-//    public static double getRadRotDist(double start, double end){
-//        double diff = (end - start + Math.PI) % (2 * Math.PI) - Math.PI;
-//        return diff < -Math.PI ? (diff + (Math.PI * 2)) : diff;
-//    }
+    public static double getRadRotDist(double start, double end){
+        double diff = (end - start + Math.PI) % (2 * Math.PI) - Math.PI;
+        return diff < -Math.PI ? (diff + (Math.PI * 2)) : diff;
+    }
 //
 //    public static Angle getRotDist(Angle start, Angle end){
 //        return Angle.radians(MathUtils.getRadRotDist(start.radians(), end.radians()));
 //    }
 //
-//    public static double sign(double in){
-//        if(epsilonEquals(in, 0.0)) {
-//            return 0;
-//        }
-//        return in/Math.abs(in);
-//    }
+    public static double sign(double in){
+        if(epsilonEquals(in, 0.0)) {
+            return 0;
+        }
+        return in/Math.abs(in);
+    }
 //
-//    public static double signedMax(double val, double compare){
-//        if(Math.abs(val) < Math.abs(compare)){
-//            return sign(val) * compare;
-//        }
-//        return val;
-//    }
+    public static double signedMax(double val, double compare){
+        if(Math.abs(val) < Math.abs(compare)){
+            return sign(val) * compare;
+        }
+        return val;
+    }
 //
-//    public static boolean inBetween(Vector2 start, Vector2 end, Vector2 point) {
-//        double minX = Math.min(start.getA(), end.getA());
-//        double minY = Math.min(start.getB(), end.getB());
-//        double maxX = Math.max(start.getA(), end.getA());
-//        double maxY = Math.max(start.getB(), end.getB());
-//        return (point.getA() < maxX) && (point.getA() > minX) && (point.getB() < maxY) && (point.getB() > minY);
-//    }
+    public static boolean inBetween(Vector2D start, Vector2D end, Vector2D point) {
+        double minX = Math.min(start.A, end.A);
+        double minY = Math.min(start.B, end.B);
+        double maxX = Math.max(start.A, end.A);
+        double maxY = Math.max(start.B, end.B);
+        return (point.A < maxX) && (point.A > minX) && (point.B < maxY) && (point.B > minY);
+    }
 //
 //    public static ArrayList<Vector2> approxCurve(Vector2 start, Vector2 end, Vector2 control, double numSegments){
 //        ArrayList<Vector2> coordinates = new ArrayList<Vector2>();

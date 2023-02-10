@@ -13,19 +13,13 @@ import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.OdoRetrac
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ServoIntakeArm;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ViperSlides;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Wrist;
-import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.AprilTagDetectionPipeline;
 import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.ColorPipeline;
-import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.Signal_Identifier;
-import org.firstinspires.ftc.team8109_Rise.UserInterface.AutonSelection;
-import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-import java.util.ArrayList;
-
 @Autonomous
-public class CycleAuton_PID extends LinearOpMode {
+public class CycleAutonThree extends LinearOpMode {
     OpenCvCamera camera; //TODO: Improve tracking
     ColorPipeline pipeline;
 
@@ -64,7 +58,7 @@ public class CycleAuton_PID extends LinearOpMode {
     }
 
     AutonState autonState;
-    public CycleState cycleState;
+    CycleState cycleState;
     ParkingStep parkingStep;
     ParkingZone parkingZone;
 
@@ -126,6 +120,8 @@ public class CycleAuton_PID extends LinearOpMode {
 
             if (pipeline.findColor() == ColorPipeline.Colors.GREEN){
                 parkingZone = ParkingZone.MIDDLE;
+            } else if (pipeline.findColor() == ColorPipeline.Colors.UNKNOWN){
+                parkingZone = ParkingZone.MIDDLE;
             }
 
             telemetry.addData("color", pipeline.findColor());
@@ -141,6 +137,13 @@ public class CycleAuton_PID extends LinearOpMode {
             chassis.updatePoseEstimate();
 
             autonLeftRed();
+
+            if (runtime.seconds() > 15) {
+                arm.servoPosition = ServoIntakeArm.ServoPosition.INTAKE_POSITION;
+                wrist.wristPosition = Wrist.WristPosition.INTAKE_POSITION;
+                slides.slidesState = ViperSlides.SlidesState.GROUND;
+                chassis.goToPose(chassis.getPoseVector());
+            }
 
             chassis.goToPose(targetPose);
 
@@ -162,7 +165,6 @@ public class CycleAuton_PID extends LinearOpMode {
             case PUSH_CONE:
                 targetPose.set(60, 0, 0);
 //
-
                 claw.clawState = ServoClaw.ClawState.CLOSED;
 
                 chassis.goToPose(targetPose);
@@ -206,12 +208,13 @@ public class CycleAuton_PID extends LinearOpMode {
                 // if ((claw.getPositionDegrees() > 175) && runtime.seconds() > 2){
                 if ((claw.getPositionDegrees() > 140)){
                     autonState = AutonState.CYCLE;
+                    runtime.reset();
                 }
                 break;
             case CYCLE:
                 switch (cycleState){
                     case TO_CONE_STACK:
-                        targetPose.set(48.18, 27.1, -Math.toRadians(90));
+                        targetPose.set(47.75, 26.8, -Math.toRadians(90));
 
                         switch (cycleCounter){
                             case 1:
@@ -244,7 +247,7 @@ public class CycleAuton_PID extends LinearOpMode {
                     case PICK_UP_CONE:
 
                         //TODO: have arm and slide also move a certain amount before going to next state in order to
-                        targetPose.set(48.18, 27.1, -Math.toRadians(90));
+                        targetPose.set(47.75, 26.8, -Math.toRadians(90));
                         claw.clawState = ServoClaw.ClawState.CLOSED;
 
                         // TODO: Note that the claw won't actually reach this position closing
@@ -291,10 +294,11 @@ public class CycleAuton_PID extends LinearOpMode {
                             cycleCounter++;
 
                             cycleState = CycleState.TO_CONE_STACK;
+                            runtime.reset();
                         }
                         break;
                 }
-                if ((globalTime.seconds() > 28) || cycleCounter > 5){
+                if ((globalTime.seconds() > 28) || cycleCounter > 3){
                     autonState = AutonState.PARK;
                 }
                 break;
