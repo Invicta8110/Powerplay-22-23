@@ -45,7 +45,7 @@ public class ViperSlides extends Slides {
     public PIDF_Controller slidesPID;
 
     public ViperSlides(Gamepad gamepad1, Telemetry telemetry, HardwareMap hardwareMap) {
-        super(2, name, pulleyDiameter, StringingMethod.CASCADE, 2, 0.15 , hardwareMap); //0.175
+        super(2, name, pulleyDiameter, StringingMethod.CONTINUOUS, 2, 0.1 , hardwareMap); //0.175
 
         // ki: 0.005
 //        slidesPID = new PIDF_Controller(0.04, 0.03, 0, 0.01); //0.01

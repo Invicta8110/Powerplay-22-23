@@ -12,7 +12,7 @@ import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Claw;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ServoIntakeArm;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ViperSlides;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Wrist;
-import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.ColorPipeline;
+//import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.ColorPipeline;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -20,7 +20,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 @Autonomous
 public class LegitRealParkAuton extends LinearOpMode {
     OpenCvCamera camera; //TODO: Improve tracking
-    ColorPipeline pipeline;
+//    ColorPipeline pipeline;
 
     ElapsedTime runtime = new ElapsedTime();
     ElapsedTime globalTime = new ElapsedTime();
@@ -88,9 +88,9 @@ public class LegitRealParkAuton extends LinearOpMode {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        pipeline = new ColorPipeline(telemetry);
-
-        camera.setPipeline(pipeline);
+//        pipeline = new ColorPipeline(telemetry);
+//
+//        camera.setPipeline(pipeline);
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened(){
@@ -107,21 +107,21 @@ public class LegitRealParkAuton extends LinearOpMode {
         while (opModeInInit()){
             claw.setPosition();
 //            odoRetract.podState = OdoRetract.PodState.GROUND;
-
-            if (pipeline.findColor() == ColorPipeline.Colors.BLUE){
-                parkingZone = ParkingZone.LEFT;
-            }
-
-            if (pipeline.findColor() == ColorPipeline.Colors.RED){
-                parkingZone = ParkingZone.RIGHT;
-            }
-
-            if (pipeline.findColor() == ColorPipeline.Colors.GREEN){
-                parkingZone = ParkingZone.MIDDLE;
-            }
-
-            telemetry.addData("color", pipeline.findColor());
-            telemetry.addData("color", pipeline.getHue());
+//
+//            if (pipeline.findColor() == ColorPipeline.Colors.BLUE){
+//                parkingZone = ParkingZone.LEFT;
+//            }
+//
+//            if (pipeline.findColor() == ColorPipeline.Colors.RED){
+//                parkingZone = ParkingZone.RIGHT;
+//            }
+//
+//            if (pipeline.findColor() == ColorPipeline.Colors.GREEN){
+//                parkingZone = ParkingZone.MIDDLE;
+//            }
+//
+//            telemetry.addData("color", pipeline.findColor());
+//            telemetry.addData("color", pipeline.getHue());
 
             telemetry.update();
         }

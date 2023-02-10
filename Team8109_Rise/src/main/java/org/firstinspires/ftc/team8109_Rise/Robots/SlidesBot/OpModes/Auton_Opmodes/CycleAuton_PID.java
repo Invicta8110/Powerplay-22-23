@@ -13,8 +13,8 @@ import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.OdoRetrac
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ServoIntakeArm;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ViperSlides;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Wrist;
-import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.AprilTagDetectionPipeline;
-import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.ColorPipeline;
+//import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.AprilTagDetectionPipeline;
+//import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.ColorPipeline;
 import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.Signal_Identifier;
 import org.firstinspires.ftc.team8109_Rise.UserInterface.AutonSelection;
 import org.openftc.apriltag.AprilTagDetection;
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 @Autonomous
 public class CycleAuton_PID extends LinearOpMode {
     OpenCvCamera camera; //TODO: Improve tracking
-    ColorPipeline pipeline;
+//    ColorPipeline pipeline;
 //
     static final double FEET_PER_METER = 3.28084;
 
@@ -113,9 +113,9 @@ public class CycleAuton_PID extends LinearOpMode {
         claw.clawState = ServoClaw.ClawState.CLOSED;
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        pipeline = new ColorPipeline(telemetry);
+//        pipeline = new ColorPipeline(telemetry);
 
-        camera.setPipeline(pipeline);
+//        camera.setPipeline(pipeline);
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened()
@@ -236,20 +236,20 @@ public class CycleAuton_PID extends LinearOpMode {
             claw.setPosition();
             odoRetract.podState = OdoRetract.PodState.GROUND;
 
-            if (pipeline.findColor() == ColorPipeline.Colors.BLUE){
-                parkingZone = ParkingZone.LEFT;
-            }
-
-            if (pipeline.findColor() == ColorPipeline.Colors.RED){
-                parkingZone = ParkingZone.RIGHT;
-            }
-
-            if (pipeline.findColor() == ColorPipeline.Colors.GREEN){
-                parkingZone = ParkingZone.MIDDLE;
-            }
-
-            telemetry.addData("color", pipeline.findColor());
-            telemetry.addData("color", pipeline.getHue());
+//            if (pipeline.findColor() == ColorPipeline.Colors.BLUE){
+//                parkingZone = ParkingZone.LEFT;
+//            }
+//
+//            if (pipeline.findColor() == ColorPipeline.Colors.RED){
+//                parkingZone = ParkingZone.RIGHT;
+//            }
+//
+//            if (pipeline.findColor() == ColorPipeline.Colors.GREEN){
+//                parkingZone = ParkingZone.MIDDLE;
+//            }
+//
+//            telemetry.addData("color", pipeline.findColor());
+//            telemetry.addData("color", pipeline.getHue());
 
             telemetry.update();
         }
