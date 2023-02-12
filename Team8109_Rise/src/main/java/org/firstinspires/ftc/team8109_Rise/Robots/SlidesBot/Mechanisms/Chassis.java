@@ -30,10 +30,10 @@ public class Chassis extends MecanumDriveTrain {
 
     ElapsedTime runtime = new ElapsedTime();
 
-    CycleAuton_PID auton = new CycleAuton_PID();
+//    CycleAuton_PID auton = new CycleAuton_PID();
 
-    JunctionTracker junctionPipeline;
-    ConeTracker conePipeline;
+//    JunctionTracker junctionPipeline;
+//    ConeTracker conePipeline;
 
     public enum TrackingObject{
         CONESTACK,
@@ -50,7 +50,7 @@ public class Chassis extends MecanumDriveTrain {
     public static double LATERAL_MULTIPLIER = 1.101399867722112;
 
     public static double VX_WEIGHT = 1;
-    public static double VY_WEIGHT = 1;
+    public static double VY_WEIGHT = 1.3;
     public static double ω_WEIGHT = 0.75; //0.75
 
     double fLeft;
@@ -71,17 +71,17 @@ public class Chassis extends MecanumDriveTrain {
     double y_rotated;
 
     // 0.06
-    static double translationalX_kp = 0.1;
-    static double translationalY_kp = 0.12;
-    static double heading_kp = 0.5;
+    static double translationalX_kp = 0.15;
+    static double translationalY_kp = 0.13;
+    static double heading_kp = 1;
 
     static double visionX_kp = 0;
     static double visionHeading_kp = 0;
 
-    static double translationalX_ki = 0.002; //0.002
+    static double translationalX_ki = 0.0025; //0.0075
     static double translationalY_ki = 0.002;
     //TODO: Slightly Decrease
-    static double heading_ki = 0; //0.05
+    static double heading_ki = 0.075; //0.05
 
     // 0.01
     static double translationalX_kd = 0.015;
@@ -125,8 +125,9 @@ public class Chassis extends MecanumDriveTrain {
         visionX_PID = new PIDF_Controller(visionX_kp);
         visionHeading_PID = new PIDF_Controller(visionHeading_kp);
 
-        TranslationalPID_X.tolerance = 0.25;
-        TranslationalPID_Y.tolerance = 0.25;
+        TranslationalPID_X.tolerance = 0.2;
+        TranslationalPID_Y.tolerance = 0.2;
+        HeadingPID.tolerance = 0.009;
 
         odometry = new OdometryLocalizer(hardwareMap);
 
@@ -135,9 +136,9 @@ public class Chassis extends MecanumDriveTrain {
 
         setLocalizer(odometry);
         imu = new InertialMeasurementUnit(hardwareMap);
-
-        this.junctionPipeline = junctionPipeline;
-        this.conePipeline = coneTracker;
+//
+//        this.junctionPipeline = junctionPipeline;
+//        this.conePipeline = coneTracker;
         this.telemetry = telemetry;
 
         trackingObject = TrackingObject.NONE;
@@ -165,8 +166,10 @@ public class Chassis extends MecanumDriveTrain {
 
         odometry = new OdometryLocalizer(hardwareMap);
 
-        frontLeft.setDirectionReverse();
-        backLeft.setDirectionReverse();
+        frontRight.setDirectionReverse();
+        backRight.setDirectionReverse();
+        frontLeft.setDirectionForward();
+        backLeft.setDirectionForward();
 
         setLocalizer(odometry);
         imu = new InertialMeasurementUnit(hardwareMap);
@@ -178,10 +181,10 @@ public class Chassis extends MecanumDriveTrain {
     public void setDriveVectorsRobotCentric(Vector3D input){
         //TODO: Test cube weighting
         // Inverse Kinematics Calculations
-        fLeft = VX_WEIGHT * input.A - VY_WEIGHT * input.B + ω_WEIGHT * input.C;
-        fRight = VX_WEIGHT * input.A + VY_WEIGHT * input.B - ω_WEIGHT * input.C;
-        bRight = VX_WEIGHT * input.A - VY_WEIGHT * input.B - ω_WEIGHT * input.C;
-        bLeft = VX_WEIGHT * input.A + VY_WEIGHT * input.B + ω_WEIGHT * input.C;
+        fLeft = VX_WEIGHT * input.A - VY_WEIGHT * input.B - ω_WEIGHT * input.C;
+        fRight = VX_WEIGHT * input.A + VY_WEIGHT * input.B + ω_WEIGHT * input.C;
+        bRight = VX_WEIGHT * input.A - VY_WEIGHT * input.B + ω_WEIGHT * input.C;
+        bLeft = VX_WEIGHT * input.A + VY_WEIGHT * input.B - ω_WEIGHT * input.C;
 
         max = Math.max(Math.max(Math.abs(fLeft), Math.abs(fRight)), Math.max(Math.abs(bLeft), Math.abs(bRight)));
         if (max > 1.0) {
@@ -201,10 +204,10 @@ public class Chassis extends MecanumDriveTrain {
         x_rotated = input.A * Math.cos(getPoseEstimate().getHeading()) + input.B * Math.sin(getPoseEstimate().getHeading());
         y_rotated = input.A * Math.sin(getPoseEstimate().getHeading()) - input.B * Math.cos(getPoseEstimate().getHeading());
 
-        fLeft = VX_WEIGHT * x_rotated + VY_WEIGHT * y_rotated + /*ω_WEIGHT*/ 1 * input.C;
-        fRight = VX_WEIGHT * x_rotated - VY_WEIGHT * y_rotated - /*ω_WEIGHT*/ 1 * input.C;
-        bRight = VX_WEIGHT * x_rotated + VY_WEIGHT * y_rotated - /*ω_WEIGHT*/ 1 * input.C;
-        bLeft = VX_WEIGHT * x_rotated - VY_WEIGHT * y_rotated + /*ω_WEIGHT*/ 1 * input.C;
+        fLeft = VX_WEIGHT * x_rotated + VY_WEIGHT * y_rotated - /*ω_WEIGHT*/ 1 * input.C;
+        fRight = VX_WEIGHT * x_rotated - VY_WEIGHT * y_rotated + /*ω_WEIGHT*/ 1 * input.C;
+        bRight = VX_WEIGHT * x_rotated + VY_WEIGHT * y_rotated + /*ω_WEIGHT*/ 1 * input.C;
+        bLeft = VX_WEIGHT * x_rotated - VY_WEIGHT * y_rotated - /*ω_WEIGHT*/ 1 * input.C;
 
         max = Math.max(Math.max(Math.abs(fLeft), Math.abs(fRight)), Math.max(Math.abs(bLeft), Math.abs(bRight)));
         if (max > 1.0) {
@@ -329,5 +332,9 @@ public class Chassis extends MecanumDriveTrain {
     public void fieldCentricTest(){
         controllerInput.set(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
         setDriveVectorsFieldCentric(controllerInput);
+    }
+
+    public void chassisTelemetry(){
+
     }
 }

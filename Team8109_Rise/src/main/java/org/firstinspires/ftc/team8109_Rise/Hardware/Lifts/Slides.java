@@ -25,7 +25,7 @@ public abstract class Slides {
         Motor motors[] = new Motor[motorCount];
 
         for (int i = 0; i <motors.length; i++){
-            motors[i] = new Motor(name[i], 537.7, hardwareMap);
+            motors[i] = new Motor(name[i], 384.5, hardwareMap);
 
             this.pulleyRadius = pulleyRadius;
         }
@@ -44,9 +44,9 @@ public abstract class Slides {
 
     public double getHeight(){
         if (method == StringingMethod.CONTINUOUS){
-            height = Math.toRadians(motors[0].getCurrPosDegrees()) * pulleyRadius;
+            height = Math.toRadians(motors[1].getCurrPosDegrees()) * pulleyRadius;
         } else if (method == StringingMethod.CASCADE){
-            height = stages*(motors[0].getCurrPosRadians() * pulleyRadius);
+            height = stages*(motors[1].getCurrPosRadians() * pulleyRadius);
           }
 
         return height;

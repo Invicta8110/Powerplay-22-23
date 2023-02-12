@@ -60,8 +60,8 @@ public abstract class StandardThreeWheelOdoLocalizer extends ThreeTrackingWheelL
         LATERAL_DISTANCE = DriveConstants[3]; // in; distance between the left and right wheels
         FORWARD_OFFSET = DriveConstants[4]; // in; offset of the lateral wheel
 
-        leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, configNames[1]));
-        rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, configNames[0]));
+        leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, configNames[0]));
+        rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, configNames[1]));
         middleEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, configNames[2]));
 
 //        leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftEncoder"));

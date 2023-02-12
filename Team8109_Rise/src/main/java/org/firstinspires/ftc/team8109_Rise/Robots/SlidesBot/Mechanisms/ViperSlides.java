@@ -15,7 +15,7 @@ public class ViperSlides extends Slides {
     // Names for the motors in configuration
     static String[] name = {"slidesLeft", "slidesRight"};
 
-    static double pulleyDiameter = 0.702;
+    static double pulleyRadius = 0.752;
 
     double slidesPower = 0;
 
@@ -45,20 +45,20 @@ public class ViperSlides extends Slides {
     public PIDF_Controller slidesPID;
 
     public ViperSlides(Gamepad gamepad1, Telemetry telemetry, HardwareMap hardwareMap) {
-        super(2, name, pulleyDiameter, StringingMethod.CONTINUOUS, 2, 0.1 , hardwareMap); //0.175
+        super(2, name, pulleyRadius, StringingMethod.CONTINUOUS, 2, 0.05, hardwareMap); //0.175
 
         // ki: 0.005
 //        slidesPID = new PIDF_Controller(0.04, 0.03, 0, 0.01); //0.01
-        slidesPID = new PIDF_Controller(0.07, 0.0035, 0, 0.01); //0.0175, 0.01
+        slidesPID = new PIDF_Controller(0.08, 0.008, 0, 0.015); //0.07, 0.0035, 0, 0.01
 
         //slidesPID = new PIDF_Controller(0.05, 0.0035, 0, 0.005); //0.0175, 0.01
-        slidesPID.tolerance = 0.25;
+        slidesPID.tolerance = 0.1;
 
         motors[0].reset();
         motors[1].reset();
 
         // One of the motors needs to be reversed since the motors face opposite directions
-        motors[1].setDirectionReverse();
+        motors[0].setDirectionReverse();
 
         // Need to use the instances of gamepad1 and telemetry from the class LinearOpmode because that's what the code runs
         this.gamepad1 = gamepad1;
@@ -99,7 +99,7 @@ public class ViperSlides extends Slides {
 
 //                slidesPower = slidesPID.PIDF_Power(getHeight(), 19.5); // 18.5
 
-                slidesPower = slidesPID.PIDF_Power(getHeight(), 19.3); // 18.5
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 19); // 18.5
 
                 if (gamepad1.dpad_up){
                     setPower(0.2);
@@ -117,19 +117,19 @@ public class ViperSlides extends Slides {
                 slidesPower = slidesPID.PIDF_Power(getHeight(), 6); // 18.5
                 break;
             case CONESTACK_BOTTOM_MIDDLE:
-                slidesPower = slidesPID.PIDF_Power(getHeight(), 2.75);
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 2.3);
                 break;
 
             case CONESTACK_MIDDLE:
-                slidesPower = slidesPID.PIDF_Power(getHeight(), 4);
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 3.4);
                 break;
 
             case CONESTACK_TOP_MIDDLE:
-                slidesPower = slidesPID.PIDF_Power(getHeight(), 5);
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 4.4);
                 break;
 
             case CONESTACK_TOP:
-                slidesPower = slidesPID.PIDF_Power(getHeight(), 6.25);
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 5.4);
                 break;
         }
     }
@@ -319,6 +319,7 @@ public class ViperSlides extends Slides {
         telemetry.addData("slides height", getHeight());
         telemetry.addData("Slide State", slidesState);
         telemetry.addData("Error", slidesPID.error);
+        telemetry.addData("Anti-Gravity", kGravity);
         telemetry.addData("PID Power", slidesPower);
         telemetry.addData("Proportion", slidesPID.P);
         telemetry.addData("Integral", slidesPID.I);

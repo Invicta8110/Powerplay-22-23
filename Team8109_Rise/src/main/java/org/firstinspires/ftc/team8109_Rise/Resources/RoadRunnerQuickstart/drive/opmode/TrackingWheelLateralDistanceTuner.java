@@ -8,8 +8,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.team8109_Rise.Hardware.Drivetrains.MecanumDriveTrain;
 import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.drive.StandardTrackingWheelLocalizer;
+import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Chassis;
 
 /**
  * Opmode designed to assist the user in tuning the `StandardTrackingWheelLocalizer`'s
@@ -64,20 +66,19 @@ import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.drive.
  */
 @Config
 @TeleOp(group = "drive")
-@Disabled
 
 public class TrackingWheelLateralDistanceTuner extends LinearOpMode {
     public static int NUM_TURNS = 10;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        Chassis drive = new Chassis(gamepad1, telemetry, hardwareMap);
 
-        if (!(drive.getLocalizer() instanceof StandardTrackingWheelLocalizer)) {
-            RobotLog.setGlobalErrorMsg("StandardTrackingWheelLocalizer is not being set in the "
-                    + "drive class. Ensure that \"setLocalizer(new StandardTrackingWheelLocalizer"
-                    + "(hardwareMap));\" is called in SampleMecanumDrive.java");
-        }
+//        if (!(drive.getLocalizer() instanceof StandardTrackingWheelLocalizer)) {
+//            RobotLog.setGlobalErrorMsg("StandardTrackingWheelLocalizer is not being set in the "
+//                    + "drive class. Ensure that \"setLocalizer(new StandardTrackingWheelLocalizer"
+//                    + "(hardwareMap));\" is called in SampleMecanumDrive.java");
+//        }
 
         telemetry.addLine("Prior to beginning the routine, please read the directions "
                 + "located in the comments of the opmode file.");

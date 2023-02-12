@@ -18,7 +18,8 @@ public class SlidesTesting extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()){
-//            slides.toggleStates();
+            slides.toggleStates();
+//            slides.setSlidePower();
             slides.slidesTelemetry();
 //            claw.toggleClaw();
 

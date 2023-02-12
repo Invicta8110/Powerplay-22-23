@@ -24,7 +24,7 @@ public abstract class ServoArm {
         armServo1 = hardwareMap.get(Servo.class, name[0]);
         armServo2 = hardwareMap.get(Servo.class, name[1]);
 
-        armServo1.setDirection(Servo.Direction.REVERSE);
+        armServo2.setDirection(Servo.Direction.REVERSE);
 
         this.servoArmType = servoArmType;
     }

@@ -19,7 +19,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @Autonomous
 public class LegitRealParkAuton extends LinearOpMode {
-    OpenCvCamera camera; //TODO: Improve tracking
+//    OpenCvCamera camera; //TODO: Improve tracking
 //    ColorPipeline pipeline;
 
     ElapsedTime runtime = new ElapsedTime();
@@ -70,7 +70,7 @@ public class LegitRealParkAuton extends LinearOpMode {
     ParkingZone parkingZone;
 
     Vector3D targetPose = new Vector3D(0, 0, 0);
-    double tolerance = 1;
+    double tolerance = 0.75;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -86,23 +86,27 @@ public class LegitRealParkAuton extends LinearOpMode {
         autonState = AutonState.PARK;
         parkingStep = ParkingStep.STEP_ONE;
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-//        pipeline = new ColorPipeline(telemetry);
+        parkingZone = ParkingZone.LEFT;
+
+//        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+//        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+////        pipeline = new ColorPipeline(telemetry);
+////
+////        camera.setPipeline(pipeline);
+//        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+//            @Override
+//            public void onOpened(){
+//                camera.startStreaming(320,240, OpenCvCameraRotation.UPRIGHT);
+//            }
 //
-//        camera.setPipeline(pipeline);
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-            @Override
-            public void onOpened(){
-                camera.startStreaming(320,240, OpenCvCameraRotation.UPRIGHT);
-            }
+//            @Override
+//            public void onError(int errorCode)
+//            {
+//
+//            }
+//        });
 
-            @Override
-            public void onError(int errorCode)
-            {
-
-            }
-        });
+        // Adjust 0.5 left
 
         while (opModeInInit()){
             claw.setPosition();
@@ -149,13 +153,13 @@ public class LegitRealParkAuton extends LinearOpMode {
         slides.slidesState = ViperSlides.SlidesState.GROUND;
         arm.servoPosition = ServoIntakeArm.ServoPosition.INTAKE_POSITION;
         wrist.wristPosition = Wrist.WristPosition.INTAKE_POSITION;
-        claw.clawState = ServoClaw.ClawState.OPEN;
+        claw.clawState = ServoClaw.ClawState.CLOSED;
 
         switch (parkingZone){
             case LEFT:
                 switch (parkingStep){
                     case STEP_ONE:
-                        targetPose.set(26, 0, 0);
+                        targetPose.set(24, 0, 0);
 
                         if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
                             parkingStep = ParkingStep.STEP_TWO;
@@ -163,14 +167,14 @@ public class LegitRealParkAuton extends LinearOpMode {
                         }
                         break;
                     case STEP_TWO:
-                        targetPose.set(26, 26, 0);
+                        targetPose.set(24, 24, 0);
                         break;
                 }
                 break;
             case MIDDLE:
                 switch (parkingStep){
                     case STEP_ONE:
-                        targetPose.set(26, 0, 0);
+                        targetPose.set(24, 0, 0);
 
                         if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
                             parkingStep = ParkingStep.STEP_TWO;
@@ -178,14 +182,14 @@ public class LegitRealParkAuton extends LinearOpMode {
                         }
                         break;
                     case STEP_TWO:
-                        targetPose.set(26, 0, 0);
+                        targetPose.set(24, 0, 0);
                         break;
                 }
                 break;
             case RIGHT:
                 switch (parkingStep){
                     case STEP_ONE:
-                        targetPose.set(26, 0, 0);
+                        targetPose.set(24, 0, 0);
 
                         if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
                             parkingStep = ParkingStep.STEP_TWO;
@@ -193,7 +197,7 @@ public class LegitRealParkAuton extends LinearOpMode {
                         }
                         break;
                     case STEP_TWO:
-                        targetPose.set(26, -26, 0);
+                        targetPose.set(24, -24, 0);
                         break;
                 }
                 break;

@@ -20,7 +20,7 @@ public class OdoRetract extends ServoOdoRetract {
 
     public PodState podState;
     public OdoRetract(Gamepad gamepad1, HardwareMap hardwareMap) {
-        super("fiveturn", hardwareMap);
+        super("odoRetract", hardwareMap);
 
         podState = PodState.GROUND;
 

@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Chassis;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.OdoRetract;
+import org.firstinspires.ftc.team8109_Rise.Sensors.Odometry.StandardThreeWheelOdoLocalizer;
 
 @TeleOp
 //@Disabled
@@ -21,22 +22,21 @@ public class DriveTesting extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        PhotonCore.enable();
+//        PhotonCore.enable();
 
         Chassis chassis = new Chassis(gamepad1, telemetry, hardwareMap);
         OdoRetract odoRetract = new OdoRetract(gamepad1, hardwareMap);
-
         telemetry.addLine("Waiting For Start");
         telemetry.update();
 
         waitForStart();
 
         while (opModeIsActive()){
-            chassis.fieldCentricTest();
+            chassis.ManualDrive();
             odoRetract.toggleState();
             chassis.update();
 
-            telemetry.addData("Pose Estimate", chassis.getPoseEstimate().getX());
+            telemetry.addData("Pose Estimate", chassis.getPoseEstimate());
             telemetry.addData("Getting Chassis Pose", chassis.getPoseVector());
             telemetry.addData("time", runtime.seconds()-previousTime);
             telemetry.update();
