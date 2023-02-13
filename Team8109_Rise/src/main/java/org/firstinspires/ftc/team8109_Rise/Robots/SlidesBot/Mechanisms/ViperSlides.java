@@ -45,11 +45,11 @@ public class ViperSlides extends Slides {
     public PIDF_Controller slidesPID;
 
     public ViperSlides(Gamepad gamepad1, Telemetry telemetry, HardwareMap hardwareMap) {
-        super(2, name, pulleyRadius, StringingMethod.CONTINUOUS, 2, 0.05, hardwareMap); //0.175
+        super(2, name, pulleyRadius, StringingMethod.CONTINUOUS, 2, 0.14, hardwareMap); //0.175
 
         // ki: 0.005
 //        slidesPID = new PIDF_Controller(0.04, 0.03, 0, 0.01); //0.01
-        slidesPID = new PIDF_Controller(0.08, 0.008, 0, 0.015); //0.07, 0.0035, 0, 0.01
+        slidesPID = new PIDF_Controller(0.13, 0.008, 0, 0.0175); //0.07, 0.0035, 0, 0.01
 
         //slidesPID = new PIDF_Controller(0.05, 0.0035, 0, 0.005); //0.0175, 0.01
         slidesPID.tolerance = 0.1;
@@ -90,7 +90,7 @@ public class ViperSlides extends Slides {
                 /* PID controller calculates the power needed to be set to the motors
                 to stay at the target position (of 2 inches as my guess of what ground level is) */
 
-                slidesPower = slidesPID.PIDF_Power(getHeight(), 0.6);
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 0);
                 break;
 
             case HIGH_JUNCTION:

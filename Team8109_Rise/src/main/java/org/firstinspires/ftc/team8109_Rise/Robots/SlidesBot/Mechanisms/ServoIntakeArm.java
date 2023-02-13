@@ -35,7 +35,7 @@ public class ServoIntakeArm extends ServoArm {
     public void setArmPosition(){
         switch (servoPosition){
             case INTAKE_POSITION:
-                setAngle(52);
+                setAngle(50);
                 break;
 
             case OUTTAKE_POSITION:

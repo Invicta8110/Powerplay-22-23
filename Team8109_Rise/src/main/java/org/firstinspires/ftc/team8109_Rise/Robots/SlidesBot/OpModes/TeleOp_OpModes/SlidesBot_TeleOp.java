@@ -34,7 +34,7 @@ public class SlidesBot_TeleOp extends LinearOpMode {
             // Setting methods from mechanism classes to be looped
             chassis.ManualDrive();
             chassis.chassisTelemetry();
-//            slides.slidesTelemetry();
+            slides.slidesTelemetry();
             slides.toggleStates();
 //
             arm.togglePosition();

@@ -71,9 +71,9 @@ public class Chassis extends MecanumDriveTrain {
     double y_rotated;
 
     // 0.06
-    static double translationalX_kp = 0.15;
+    static double translationalX_kp = 0.2;
     static double translationalY_kp = 0.13;
-    static double heading_kp = 1;
+    static double heading_kp = 2.3;
 
     static double visionX_kp = 0;
     static double visionHeading_kp = 0;
@@ -81,12 +81,12 @@ public class Chassis extends MecanumDriveTrain {
     static double translationalX_ki = 0.0025; //0.0075
     static double translationalY_ki = 0.002;
     //TODO: Slightly Decrease
-    static double heading_ki = 0.075; //0.05
+    static double heading_ki = 0.2; //0.05
 
     // 0.01
-    static double translationalX_kd = 0.015;
-    static double translationalY_kd = 0.015;
-    static double heading_kd = 0.025;
+    static double translationalX_kd = 0.02;
+    static double translationalY_kd = 0.025;
+    static double heading_kd = 0.045;
 
     private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(SlidesBot_DriveConstants.MAX_VEL, SlidesBot_DriveConstants.MAX_ANG_VEL, SlidesBot_DriveConstants.TRACK_WIDTH);
     private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(SlidesBot_DriveConstants.MAX_ACCEL);
@@ -119,7 +119,7 @@ public class Chassis extends MecanumDriveTrain {
 
         // TODO: Tune properly (needs some derivative
         TranslationalPID_X = new PIDF_Controller(translationalX_kp, translationalX_kd, 0,translationalX_ki);
-        TranslationalPID_Y = new PIDF_Controller(translationalY_kp, translationalY_kd, 0,translationalY_ki);
+        TranslationalPID_Y = new PIDF_Controller(translationalY_kp, translationalY_kd, 0.1,translationalY_ki);
         HeadingPID = new PIDF_Controller(heading_kp, heading_kd, 0, heading_ki);
 
         visionX_PID = new PIDF_Controller(visionX_kp);
@@ -154,8 +154,8 @@ public class Chassis extends MecanumDriveTrain {
         reset();
 
         // TODO: Tune properly (needs some derivative)
-        TranslationalPID_X = new PIDF_Controller(translationalX_kp, translationalX_kd, 0,translationalX_ki);
-        TranslationalPID_Y = new PIDF_Controller(translationalY_kp, translationalY_kd, 0,translationalY_ki);
+        TranslationalPID_X = new PIDF_Controller(translationalX_kp, translationalX_kd, 0.1, translationalX_ki);
+        TranslationalPID_Y = new PIDF_Controller(translationalY_kp, translationalY_kd, 0.1, translationalY_ki);
         HeadingPID = new PIDF_Controller(heading_kp, heading_kd, 0, heading_ki);
 
         visionX_PID = new PIDF_Controller(visionX_kp);

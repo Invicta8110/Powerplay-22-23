@@ -86,7 +86,7 @@ public class LegitRealParkAuton extends LinearOpMode {
         autonState = AutonState.PARK;
         parkingStep = ParkingStep.STEP_ONE;
 
-        parkingZone = ParkingZone.LEFT;
+        parkingZone = ParkingZone.RIGHT;
 
 //        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 //        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
@@ -189,7 +189,7 @@ public class LegitRealParkAuton extends LinearOpMode {
             case RIGHT:
                 switch (parkingStep){
                     case STEP_ONE:
-                        targetPose.set(24, 0, 0);
+                        targetPose.set(25, 0, 0);
 
                         if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
                             parkingStep = ParkingStep.STEP_TWO;
@@ -197,7 +197,7 @@ public class LegitRealParkAuton extends LinearOpMode {
                         }
                         break;
                     case STEP_TWO:
-                        targetPose.set(24, -24, 0);
+                        targetPose.set(25, -24, 0);
                         break;
                 }
                 break;
