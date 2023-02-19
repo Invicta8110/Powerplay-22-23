@@ -53,6 +53,7 @@ public class ServoIntakeArm extends ServoArm {
 
                     servoPosition = ServoPosition.OUTTAKE_POSITION;
                 }
+
                 break;
 
             case OUTTAKE_POSITION:

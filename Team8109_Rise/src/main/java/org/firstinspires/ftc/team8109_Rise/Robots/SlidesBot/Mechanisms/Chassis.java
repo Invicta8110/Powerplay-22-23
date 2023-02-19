@@ -13,14 +13,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.team8109_Rise.Control.PIDF_Controller;
 import org.firstinspires.ftc.team8109_Rise.Hardware.Drivetrains.MecanumDriveTrain;
-import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.Auton_Opmodes.CycleAuton_PID;
+import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.IMU;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.Odometry.OdometryLocalizer;
 import org.firstinspires.ftc.team8109_Rise.Math.Vectors.Vector3D;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.SlidesBot_DriveConstants;
 import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.ConeTracker;
 import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.JunctionTracker;
-import org.firstinspires.ftc.team8109_Rise.Sensors.InertialMeasurementUnit;
-import org.openftc.easyopencv.OpenCvPipeline;
+import org.firstinspires.ftc.team8109_Rise.OldCode.InertialMeasurementUnit;
 
 @Config
 public class Chassis extends MecanumDriveTrain {
@@ -35,6 +34,9 @@ public class Chassis extends MecanumDriveTrain {
 //    JunctionTracker junctionPipeline;
 //    ConeTracker conePipeline;
 
+    IMU imu;
+
+    public double kDrift = 0.1;
     public enum TrackingObject{
         CONESTACK,
         JUNCTION,
@@ -43,7 +45,6 @@ public class Chassis extends MecanumDriveTrain {
 
     public TrackingObject trackingObject;
 
-    public org.firstinspires.ftc.team8109_Rise.Sensors.InertialMeasurementUnit imu;
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
 
@@ -53,6 +54,9 @@ public class Chassis extends MecanumDriveTrain {
     public static double VY_WEIGHT = 1.3;
     public static double ω_WEIGHT = 0.75; //0.75
 
+    public double targetHeading;
+
+    public double driftCorrection;
     double fLeft;
     double fRight;
     double bLeft;
@@ -99,10 +103,13 @@ public class Chassis extends MecanumDriveTrain {
 
     public PIDF_Controller visionX_PID;
     public PIDF_Controller visionHeading_PID;
+    public PIDF_Controller IMU_PID;
 
     Vector3D odoPID_Vector = new Vector3D(0, 0, 0);
     Vector3D visionPID_Vector = new Vector3D(0, 0, 0);
     Vector3D PID_Vector = new Vector3D(0, 0, 0);
+
+    Vector3D powerInput = new Vector3D(0,0,0);
 
     Vector3D[] inputArray;
 
@@ -118,16 +125,20 @@ public class Chassis extends MecanumDriveTrain {
         reset();
 
         // TODO: Tune properly (needs some derivative
-        TranslationalPID_X = new PIDF_Controller(translationalX_kp, translationalX_kd, 0,translationalX_ki);
-        TranslationalPID_Y = new PIDF_Controller(translationalY_kp, translationalY_kd, 0.1,translationalY_ki);
+        TranslationalPID_X = new PIDF_Controller(translationalX_kp, translationalX_kd, 0, translationalX_ki);
+        TranslationalPID_Y = new PIDF_Controller(translationalY_kp, translationalY_kd, 0.1, translationalY_ki);
         HeadingPID = new PIDF_Controller(heading_kp, heading_kd, 0, heading_ki);
 
         visionX_PID = new PIDF_Controller(visionX_kp);
         visionHeading_PID = new PIDF_Controller(visionHeading_kp);
 
+        IMU_PID = new PIDF_Controller(2);
+
         TranslationalPID_X.tolerance = 0.2;
         TranslationalPID_Y.tolerance = 0.2;
         HeadingPID.tolerance = 0.009;
+
+        IMU_PID.tolerance = 0.009;
 
         odometry = new OdometryLocalizer(hardwareMap);
 
@@ -135,7 +146,7 @@ public class Chassis extends MecanumDriveTrain {
         backLeft.setDirectionReverse();
 
         setLocalizer(odometry);
-        imu = new InertialMeasurementUnit(hardwareMap);
+        imu = new IMU(hardwareMap);
 //
 //        this.junctionPipeline = junctionPipeline;
 //        this.conePipeline = coneTracker;
@@ -172,7 +183,7 @@ public class Chassis extends MecanumDriveTrain {
         backLeft.setDirectionForward();
 
         setLocalizer(odometry);
-        imu = new InertialMeasurementUnit(hardwareMap);
+        imu = new IMU(hardwareMap);
 
         this.gamepad1 = gamepad1;
         this.telemetry = telemetry;
@@ -195,6 +206,38 @@ public class Chassis extends MecanumDriveTrain {
         }
 
         setPower(fLeft, fRight, bRight, bLeft);
+    }
+
+    public void setCorrectedDriveVectorsRobotCentric(Vector3D input){
+        //TODO: Test cube weighting
+        // Inverse Kinematics Calculations
+
+        powerInput = input.add(IMU_Correction());
+        fLeft = VX_WEIGHT * powerInput.A - VY_WEIGHT * powerInput.B - ω_WEIGHT * powerInput.C;
+        fRight = VX_WEIGHT * powerInput.A + VY_WEIGHT * powerInput.B + ω_WEIGHT * powerInput.C;
+        bRight = VX_WEIGHT * powerInput.A - VY_WEIGHT * powerInput.B + ω_WEIGHT * powerInput.C;
+        bLeft = VX_WEIGHT * powerInput.A + VY_WEIGHT * powerInput.B - ω_WEIGHT * powerInput.C;
+
+        max = Math.max(Math.max(Math.abs(fLeft), Math.abs(fRight)), Math.max(Math.abs(bLeft), Math.abs(bRight)));
+        if (max > 1.0) {
+            fLeft /= max;
+            fRight /= max;
+            bLeft /= max;
+            bRight /= max;
+        }
+
+        setPower(fLeft, fRight, bRight, bLeft);
+    }
+
+    //TODO: May need to to negate drift and IMU PID
+    public Vector3D IMU_Correction(){
+        if (controllerInput.C == 0){
+            targetHeading = imu.Angle_FieldCentric();
+            driftCorrection = IMU_PID.PIDF_Power(imu.Angle_FieldCentric(), targetHeading) + controllerInput.B*kDrift;
+        }else {
+            driftCorrection = controllerInput.B*kDrift;
+        }
+        return new Vector3D(0,0,driftCorrection);
     }
 
     // Unrefined field centric code
@@ -307,6 +350,16 @@ public class Chassis extends MecanumDriveTrain {
         controllerInput.set(Math.pow(gamepad1.left_stick_y, 3), Math.pow(gamepad1.left_stick_x, 3), Math.pow(gamepad1.right_stick_x, 3));
 //        controllerInput.set(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
         setDriveVectorsRobotCentric(controllerInput);
+    }
+
+    public void CorrectedManualDrive(){
+        controllerInput.set(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+//        controllerInput.set(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+        setCorrectedDriveVectorsRobotCentric(controllerInput);
+    }
+
+    public void PID_Drive(){
+
     }
 
     public void DPad_Drive(){

@@ -13,16 +13,17 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.team8109_Rise.Hardware.Drivetrains.MecanumDriveTrain;
-import org.firstinspires.ftc.team8109_Rise.Sensors.InertialMeasurementUnit;
+import org.firstinspires.ftc.team8109_Rise.OldCode.InertialMeasurementUnit;
 import org.firstinspires.ftc.team8109_Rise.Math.Vectors.Vector3D;
 import org.firstinspires.ftc.team8109_Rise.Robots.DR4B_Bot.Sensors.DR4B_Bot_DriveConstants;
+import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.IMU;
 
 public class Chassis extends MecanumDriveTrain {
 
     Gamepad gamepad1;
     Telemetry telemetry;
 
-    public InertialMeasurementUnit imu;
+    public IMU imu;
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
 
@@ -53,7 +54,7 @@ public class Chassis extends MecanumDriveTrain {
                 TRANSLATIONAL_PID, HEADING_PID, VX_WEIGHT, VY_WEIGHT, ω_WEIGHT,
                 VEL_CONSTRAINT, ACCEL_CONSTRAINT, hardwareMap);
 
-        imu = new InertialMeasurementUnit(hardwareMap);
+        imu = new IMU(hardwareMap);
 
         this.gamepad1 = gamepad1;
         this.telemetry = telemetry;

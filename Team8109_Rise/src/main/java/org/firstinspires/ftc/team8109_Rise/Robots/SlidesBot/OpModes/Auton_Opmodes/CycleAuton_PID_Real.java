@@ -107,7 +107,7 @@ public class CycleAuton_PID_Real extends LinearOpMode {
 //            }
 //        });
 
-        parkingZone = ParkingZone.RIGHT;
+        parkingZone = ParkingZone.MIDDLE;
 
         while (opModeInInit()){
             claw.setPosition();
@@ -158,7 +158,6 @@ public class CycleAuton_PID_Real extends LinearOpMode {
         switch (autonState){
             case PUSH_CONE:
                 targetPose.set(60, 1, 0);
-//
 
                 claw.clawState = ServoClaw.ClawState.CLOSED;
 
@@ -183,7 +182,7 @@ public class CycleAuton_PID_Real extends LinearOpMode {
 
                 arm.servoPosition = ServoIntakeArm.ServoPosition.OUTTAKE_POSITION;
                 wrist.wristPosition = Wrist.WristPosition.OUTTAKE_POSITION;
-                targetPose.set(55.7, -3.8, -0.959);
+                targetPose.set(55.7, -4.3, -0.959);
 
                 chassis.goToPose(targetPose);
 
@@ -194,7 +193,7 @@ public class CycleAuton_PID_Real extends LinearOpMode {
                 }
                 break;
             case SCORE_PRELOAD:
-                targetPose.set(55.7, -3.8, -0.959);
+                targetPose.set(55.7, -4.3, -0.959);
 
                 if (runtime.seconds() > 0.5){
                     claw.clawState = ServoClaw.ClawState.OPEN;
@@ -208,7 +207,7 @@ public class CycleAuton_PID_Real extends LinearOpMode {
             case CYCLE:
                 switch (cycleState){
                     case TO_CONE_STACK:
-                        targetPose.set(47.5, 26.6, -Math.toRadians(90));
+                        targetPose.set(47.5, 27.5, -Math.toRadians(90));
 
                         switch (cycleCounter){
                             case 1:
@@ -240,7 +239,7 @@ public class CycleAuton_PID_Real extends LinearOpMode {
                     case PICK_UP_CONE:
 
                         //TODO: have arm and slide also move a certain amount before going to next state in order to
-                        targetPose.set(47.5, 26.6, -Math.toRadians(90));
+                        targetPose.set(47.5, 27.5, -Math.toRadians(90));
                         claw.clawState = ServoClaw.ClawState.CLOSED;
 
                         // TODO: Note that the claw won't actually reach this position closing
@@ -255,8 +254,9 @@ public class CycleAuton_PID_Real extends LinearOpMode {
                         slides.slidesState = ViperSlides.SlidesState.HIGH_JUNCTION;
 
                         if (runtime.seconds() > 0.75) {
-                            cycleState = CycleState.TO_HIGH_JUNCTION;
+                            cycleState = CycleState.MOVE_OUT;
                             runtime.reset();
+
                         }
                         break;
                     case MOVE_OUT:
@@ -269,13 +269,13 @@ public class CycleAuton_PID_Real extends LinearOpMode {
                         wrist.wristPosition = Wrist.WristPosition.OUTTAKE_POSITION;
 
                         if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
-//                            cycleState = CycleState.SCORE_CONE;
+                            cycleState = CycleState.TO_HIGH_JUNCTION;
                             runtime.reset();
                         }
                         break;
                     case TO_HIGH_JUNCTION:
 //                        targetPose.set(48.18, 13, -Math.toRadians(90));
-                        targetPose.set(55.7, -3.8, -0.959);
+                        targetPose.set(55.7, -4.3, -0.959);
 
 //                        targetPose.set(53, -2, -0.959);
                         slides.slidesState = ViperSlides.SlidesState.HIGH_JUNCTION;
@@ -284,12 +284,12 @@ public class CycleAuton_PID_Real extends LinearOpMode {
                         wrist.wristPosition = Wrist.WristPosition.OUTTAKE_POSITION;
 
                         if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
-//                            cycleState = CycleState.SCORE_CONE;
+                            cycleState = CycleState.SCORE_CONE;
                             runtime.reset();
                         }
                         break;
                     case SCORE_CONE:
-                        targetPose.set(54.5, -3.5, -0.959);
+                        targetPose.set(55.7, -4.3, -0.959);
 
                         if (runtime.seconds() > 0.75){
                             claw.clawState = ServoClaw.ClawState.OPEN;

@@ -32,7 +32,7 @@ public class DriveTesting extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()){
-            chassis.ManualDrive();
+            chassis.CorrectedManualDrive();
             odoRetract.toggleState();
             chassis.update();
 

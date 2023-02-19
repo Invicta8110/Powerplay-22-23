@@ -28,7 +28,7 @@ public class SlidesBot_TeleOp extends LinearOpMode {
 
         waitForStart();
 
-        odoRetract.podState = OdoRetract.PodState.RETRACTED;
+//        odoRetract.podState = OdoRetract.PodState.RETRACTED;
 
         while (opModeIsActive()){
             // Setting methods from mechanism classes to be looped
@@ -37,16 +37,23 @@ public class SlidesBot_TeleOp extends LinearOpMode {
             slides.slidesTelemetry();
             slides.toggleStates();
 //
-            arm.togglePosition();
+            arm.setArmPosition();
 //            arm.setTelemetry();
+            if (slides.slidesState == ViperSlides.SlidesState.GROUND){
+                arm.servoPosition = ServoIntakeArm.ServoPosition.INTAKE_POSITION;
+                wrist.wristPosition = Wrist.WristPosition.INTAKE_POSITION;
+            } else {
+                arm.servoPosition = ServoIntakeArm.ServoPosition.OUTTAKE_POSITION;
+                wrist.wristPosition = Wrist.WristPosition.OUTTAKE_POSITION;
+            }
 //
             claw.toggleClaw();
 //            claw.setPosition();
-//            claw.setTelemetry();
+            claw.setTelemetry();
 
             wrist.setPosition();
 
-            odoRetract.toggleState();
+//            odoRetract.toggleState();
 
             // Updating telemetry to display all of the telemetry in the telemetry queue on the driver station
             telemetry.update();

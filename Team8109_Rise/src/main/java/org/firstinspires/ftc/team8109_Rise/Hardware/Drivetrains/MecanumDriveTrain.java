@@ -32,7 +32,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 
 import org.firstinspires.ftc.team8109_Rise.Hardware.Motor;
 import org.firstinspires.ftc.team8109_Rise.Math.Vectors.Vector3D;
-import org.firstinspires.ftc.team8109_Rise.Sensors.InertialMeasurementUnit;
+import org.firstinspires.ftc.team8109_Rise.OldCode.InertialMeasurementUnit;
 import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.trajectorysequence.TrajectorySequenceRunner;

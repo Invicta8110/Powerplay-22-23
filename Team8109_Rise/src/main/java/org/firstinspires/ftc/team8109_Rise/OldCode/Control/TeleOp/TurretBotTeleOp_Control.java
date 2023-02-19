@@ -12,8 +12,9 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.team8109_Rise.Control.PIDF_Controller;
 import org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.MecanumDriveTrain_Old;
 import org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.Turret;
+import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.IMU;
 import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.BlockDetection;
-import org.firstinspires.ftc.team8109_Rise.Sensors.InertialMeasurementUnit;
+import org.firstinspires.ftc.team8109_Rise.OldCode.InertialMeasurementUnit;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -28,7 +29,7 @@ public class TurretBotTeleOp_Control {
 
     Turret turret;
     MecanumDriveTrain_Old driveTrain;
-    InertialMeasurementUnit inertialMeasurementUnit;
+    IMU inertialMeasurementUnit;
 
     Gamepad gamepad1;
 
@@ -81,7 +82,7 @@ public class TurretBotTeleOp_Control {
         TurretPID = new PIDF_Controller(1, 0.00001);
         TurretStationPID = new PIDF_Controller(0.8, 0);
 
-        inertialMeasurementUnit = new InertialMeasurementUnit(hardwareMap);
+        inertialMeasurementUnit = new IMU(hardwareMap);
 
         driveTrain = new MecanumDriveTrain_Old(flName, frName, brName, blName, hardwareMap);
 

@@ -1,14 +1,15 @@
-package org.firstinspires.ftc.team8109_Rise.Sensors;
+package org.firstinspires.ftc.team8109_Rise.OldCode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-public class InertialMeasurementUnit {
+public abstract class InertialMeasurementUnit {
 
     public BNO055IMU imu;
 

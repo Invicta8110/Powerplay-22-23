@@ -16,7 +16,7 @@ public class OdoRetract extends ServoOdoRetract {
     boolean toggle1 = true;
     boolean toggle2 = false;
 
-    boolean lastToggleCircle = false;
+    boolean lastToggleBumperRight = false;
 
     public PodState podState;
     public OdoRetract(Gamepad gamepad1, HardwareMap hardwareMap) {
@@ -30,10 +30,10 @@ public class OdoRetract extends ServoOdoRetract {
     public void setPodPosition(){
         switch (podState) {
             case GROUND:
-                retractionServo.setPosition(0.93);
+                retractionServo.setPosition(0);
                 break;
             case RETRACTED:
-                retractionServo.setPosition(0.99);
+                retractionServo.setPosition(1);
                 break;
         }
     }
@@ -42,7 +42,7 @@ public class OdoRetract extends ServoOdoRetract {
         setPodPosition();
         switch (podState){
             case GROUND:
-                if ((gamepad1.circle != lastToggleCircle) && gamepad1.circle && toggle1){
+                if ((gamepad1.right_bumper != lastToggleBumperRight) && gamepad1.right_bumper && toggle1){
                     toggle1 = false;
                     toggle2 = true;
 
@@ -50,7 +50,7 @@ public class OdoRetract extends ServoOdoRetract {
                 }
                 break;
             case RETRACTED:
-                if ((gamepad1.circle != lastToggleCircle) && gamepad1.circle && toggle2){
+                if ((gamepad1.right_bumper != lastToggleBumperRight) && gamepad1.right_bumper && toggle2){
                     toggle2 = false;
                     toggle1 = true;
 
@@ -58,6 +58,6 @@ public class OdoRetract extends ServoOdoRetract {
                 }
                 break;
         }
-        lastToggleCircle = gamepad1.circle;
+        lastToggleBumperRight = gamepad1.right_bumper;
     }
 }

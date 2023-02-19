@@ -34,11 +34,12 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.team8109_Rise.Hardware.Motor;
-import org.firstinspires.ftc.team8109_Rise.Sensors.InertialMeasurementUnit;
+import org.firstinspires.ftc.team8109_Rise.OldCode.InertialMeasurementUnit;
 import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.trajectorysequence.TrajectorySequenceRunner;
 import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.util.LynxModuleUtil;
+import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.IMU;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,14 +77,14 @@ public class MecanumDriveTrain_Old extends MecanumDrive {
 
     private List<Motor> motors;
 
-    public InertialMeasurementUnit InertialMeasurementUnit;
+    public IMU InertialMeasurementUnit;
     private VoltageSensor batteryVoltageSensor;
 
     public MecanumDriveTrain_Old(String flName, String frName, String brName, String blName, HardwareMap hardwareMap) {
 
         super(DriveConstants.kV, DriveConstants.kA, DriveConstants.kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
-        InertialMeasurementUnit = new InertialMeasurementUnit(hardwareMap);
+        InertialMeasurementUnit = new IMU(hardwareMap);
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
 
