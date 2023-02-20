@@ -30,10 +30,10 @@ public class OdoRetract extends ServoOdoRetract {
     public void setPodPosition(){
         switch (podState) {
             case GROUND:
-                retractionServo.setPosition(0);
+                retractionServo.setPosition(0.7);
                 break;
             case RETRACTED:
-                retractionServo.setPosition(1);
+                retractionServo.setPosition(0.95);
                 break;
         }
     }

@@ -23,12 +23,17 @@ public class SlidesBot_TeleOp extends LinearOpMode {
         ServoIntakeArm arm = new ServoIntakeArm(gamepad1, telemetry, hardwareMap);
         OdoRetract odoRetract = new OdoRetract(gamepad1, hardwareMap);
 
+        odoRetract.podState = OdoRetract.PodState.RETRACTED;
+
         telemetry.addLine("Waiting For Start");
         telemetry.update();
 
-        waitForStart();
-
-//        odoRetract.podState = OdoRetract.PodState.RETRACTED;
+        while (opModeInInit()){
+            odoRetract.setPodPosition();
+            arm.setArmPosition();
+            wrist.setPosition();
+//            slides.setSlidePower();
+        }
 
         while (opModeIsActive()){
             // Setting methods from mechanism classes to be looped
@@ -53,10 +58,20 @@ public class SlidesBot_TeleOp extends LinearOpMode {
 
             wrist.setPosition();
 
-//            odoRetract.toggleState();
+            odoRetract.toggleState();
+            telemetry.addData("FrontLeft", chassis.fLeft);
+            telemetry.addData("FrontRight", chassis.fRight);
+            telemetry.addData("BackRight", chassis.bRight);
+            telemetry.addData("BackLeft", chassis.bLeft);
 
             // Updating telemetry to display all of the telemetry in the telemetry queue on the driver station
             telemetry.update();
+        }
+
+        odoRetract.podState = OdoRetract.PodState.GROUND;
+
+        while (odoRetract.retractionServo.getPosition() > 0.775){
+            odoRetract.setPodPosition();
         }
     }
 }

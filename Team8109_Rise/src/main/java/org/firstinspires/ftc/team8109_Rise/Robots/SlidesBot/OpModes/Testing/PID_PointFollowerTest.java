@@ -11,7 +11,7 @@ import org.opencv.core.Mat;
 public class PID_PointFollowerTest extends LinearOpMode {
 
     Chassis chassis;
-    Vector3D point = new Vector3D(20, 0, Math.PI/2);
+    Vector3D point = new Vector3D(40, 40, Math.PI/2);
 
     @Override
     public void runOpMode() throws InterruptedException {

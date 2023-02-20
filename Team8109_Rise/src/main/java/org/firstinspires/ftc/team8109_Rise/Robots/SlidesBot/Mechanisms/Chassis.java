@@ -51,16 +51,16 @@ public class Chassis extends MecanumDriveTrain {
     public static double LATERAL_MULTIPLIER = 1.101399867722112;
 
     public static double VX_WEIGHT = 1;
-    public static double VY_WEIGHT = 1.3;
-    public static double ω_WEIGHT = 0.75; //0.75
+    public static double VY_WEIGHT = 1.15;
+    public static double ω_WEIGHT = 1; //0.75
 
     public double targetHeading;
 
     public double driftCorrection;
-    double fLeft;
-    double fRight;
-    double bLeft;
-    double bRight;
+    public double fLeft;
+    public double fRight;
+    public double bLeft;
+    public double bRight;
 
     double odoDrive;
     double odoStrafe;
@@ -75,22 +75,40 @@ public class Chassis extends MecanumDriveTrain {
     double y_rotated;
 
     // 0.06
-    static double translationalX_kp = 0.2;
-    static double translationalY_kp = 0.13;
-    static double heading_kp = 2.3;
+//    static double translationalX_kp = 0.2;
+//    static double translationalY_kp = 0.13;
+//    static double heading_kp = 2.5;
+//
+//    static double visionX_kp = 0;
+//    static double visionHeading_kp = 0;
+//
+//    static double translationalX_ki = 0.002; //0.0075
+//    static double translationalY_ki = 0.002;
+//    //TODO: Slightly Decrease
+//    static double heading_ki = 0.1; //0.05
+//
+//    // 0.01
+//    static double translationalX_kd = 0.02;
+//    static double translationalY_kd = 0.025;
+//    static double heading_kd = 0.045;
+
+
+    static double translationalX_kp = 0.275;
+    static double translationalY_kp = 0.25;
+    static double heading_kp = 4;
 
     static double visionX_kp = 0;
     static double visionHeading_kp = 0;
 
-    static double translationalX_ki = 0.0025; //0.0075
-    static double translationalY_ki = 0.002;
+    static double translationalX_ki = 0.003; //0.0075
+    static double translationalY_ki = 0.0025;
     //TODO: Slightly Decrease
-    static double heading_ki = 0.2; //0.05
+    static double heading_ki = 0; //0.05
 
     // 0.01
-    static double translationalX_kd = 0.02;
-    static double translationalY_kd = 0.025;
-    static double heading_kd = 0.045;
+    static double translationalX_kd = 0.04;
+    static double translationalY_kd = 0.04;
+    static double heading_kd = 0.04;
 
     private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(SlidesBot_DriveConstants.MAX_VEL, SlidesBot_DriveConstants.MAX_ANG_VEL, SlidesBot_DriveConstants.TRACK_WIDTH);
     private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(SlidesBot_DriveConstants.MAX_ACCEL);
@@ -144,6 +162,11 @@ public class Chassis extends MecanumDriveTrain {
 
         frontLeft.setDirectionReverse();
         backLeft.setDirectionReverse();
+
+        frontLeft.setBreakMode();
+        frontRight.setBreakMode();
+        backRight.setBreakMode();
+        backLeft.setBreakMode();
 
         setLocalizer(odometry);
         imu = new IMU(hardwareMap);
