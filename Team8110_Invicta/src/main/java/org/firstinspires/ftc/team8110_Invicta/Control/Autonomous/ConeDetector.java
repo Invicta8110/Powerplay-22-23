@@ -1,27 +1,19 @@
 package org.firstinspires.ftc.team8110_Invicta.Control.Autonomous;
 
-import org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms.Webcam;
-import org.firstinspires.ftc.team8110_Invicta.Hardware.Pipelines.ColorPipeline;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
 import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvPipeline;
 
-public class ConeDetector {
-    Webcam webcam;
-    OpenCvCamera camera;
+public class ConeDetector extends OpenCvPipeline {
+    public ConeDetector() {}
 
-    public ConeDetector(Webcam webcam) {
+    Point MIDDLE_POINT;
+    int middleWidth = 106;
+    int middleHeight = 106;
 
-        this.webcam = webcam;
-        camera = webcam.getCamera();
-
-        // Set up pipeline
-        ColorPipeline pipeline = new ColorPipeline();
-        camera.setPipeline(pipeline);
-    }
-
-    public void closeCamera(){
-        camera.closeCameraDeviceAsync(() -> {
-            camera.closeCameraDevice();
-            camera.stopStreaming();
-        });
+    @Override
+    public Mat processFrame(Mat input) {
+        return null;
     }
 }

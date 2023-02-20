@@ -33,11 +33,11 @@ public class InertialMeasurementUnit {
 
         imu.initialize(parameters);
 
-        straight = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        straight = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
     }
 
     public double Angle_FieldCentric(){
-        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
         globalAngle = angles.firstAngle - straight.firstAngle;
 
         return -globalAngle;
