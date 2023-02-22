@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors;
+package org.firstinspires.ftc.team8110_Invicta.Hardware.Pipelines;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -8,7 +8,7 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-public class Colordetector extends OpenCvPipeline {
+public class ColorDetector extends OpenCvPipeline {
 
     //colors
     static final Scalar GOLD = new Scalar(255,215,0);
@@ -16,7 +16,7 @@ public class Colordetector extends OpenCvPipeline {
     //Telemetry telemetry;
     Mat mat = new Mat();
     // Mat input;
-    public Colordetector(){
+    public ColorDetector(){
     }
 
     //initializing the dimensions

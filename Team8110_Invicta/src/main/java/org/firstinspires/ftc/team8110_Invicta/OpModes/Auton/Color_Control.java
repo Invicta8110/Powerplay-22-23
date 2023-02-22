@@ -4,8 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-//import org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.Camera.OpenCV.VisionPipelines.Colordetector;
-import org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.Colordetector;
+import org.firstinspires.ftc.team8110_Invicta.Hardware.Pipelines.ColorDetector;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -17,7 +16,7 @@ public class Color_Control extends LinearOpMode {
     OpenCvCamera camera;
 
     //initialize & create Pipeline
-    Colordetector pipeline;
+    ColorDetector pipeline;
 //
 //    @Override
     public void runOpMode() {
@@ -27,7 +26,7 @@ public class Color_Control extends LinearOpMode {
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Camera1"), cameraMonitorViewId);
 
         //set up pipeline
-        pipeline = new Colordetector();
+        pipeline = new ColorDetector();
         camera.setPipeline(pipeline);
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
