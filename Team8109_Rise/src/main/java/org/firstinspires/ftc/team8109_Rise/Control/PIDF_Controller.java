@@ -68,22 +68,10 @@ public class PIDF_Controller {
         this.ki = ki;
     }
 
-    /***
-     * How to tune PID controller:
-     * - Start with tuning kp
-     *      - This can be done roughly mathematically and then fine-tuned for more stable/predictable systems
-     * - Next tune ki or kd
-     *      - If your mechanism is accelerating too fast, tune kd and if it's not reaching the target then tune ki
-     * - For tuning either ki or kd, first set it to a very small number and record the telemetry data of what Integral and Derivative
-     *   outputs are (the I and D variables) and then increase it the proper amount of decimal places to have a meaningful effect on the
-     *   system. Then fine-tune it until it more or less performs how you would like it to.
-     */
-
     public double PIDF_Power(double currPos, double targetPos){
         error = targetPos - currPos;
         errorChange = error - previousError;
 
-        // Proportional term : KP constant * the error of the system
         P = kp*error;
 
         deltaTime = runtime.seconds();
