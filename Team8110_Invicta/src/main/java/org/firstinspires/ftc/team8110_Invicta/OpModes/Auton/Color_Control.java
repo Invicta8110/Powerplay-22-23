@@ -4,7 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.Camera.OpenCV.VisionPipelines.Colordetector;
+//import org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.Camera.OpenCV.VisionPipelines.Colordetector;
+import org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.Colordetector;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
