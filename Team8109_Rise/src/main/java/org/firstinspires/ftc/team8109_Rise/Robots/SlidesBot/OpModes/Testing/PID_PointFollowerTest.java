@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.team8109_Rise.Math.Vectors.Vector3D;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Chassis;
-import org.opencv.core.Mat;
 
 @Autonomous
 public class PID_PointFollowerTest extends LinearOpMode {
@@ -21,7 +20,7 @@ public class PID_PointFollowerTest extends LinearOpMode {
         while (opModeIsActive()){
             chassis.update();
             chassis.updatePoseEstimate();
-            chassis.goToPose(point);
+            chassis.goToPosePID(point);
 
             telemetry.addData("Pose", chassis.getPoseEstimate());
 

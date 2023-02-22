@@ -11,15 +11,14 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.team8109_Rise.Control.MotionProfiling.TrapezoidalMotionProfile;
 import org.firstinspires.ftc.team8109_Rise.Control.PIDF_Controller;
 import org.firstinspires.ftc.team8109_Rise.Hardware.Drivetrains.MecanumDriveTrain;
+import org.firstinspires.ftc.team8109_Rise.Math.Vectors.Vector2D;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.IMU;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.Odometry.OdometryLocalizer;
 import org.firstinspires.ftc.team8109_Rise.Math.Vectors.Vector3D;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.SlidesBot_DriveConstants;
-import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.ConeTracker;
-import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.JunctionTracker;
-import org.firstinspires.ftc.team8109_Rise.OldCode.InertialMeasurementUnit;
 
 @Config
 public class Chassis extends MecanumDriveTrain {
@@ -92,23 +91,150 @@ public class Chassis extends MecanumDriveTrain {
 //    static double translationalY_kd = 0.025;
 //    static double heading_kd = 0.045;
 
+//
+//    static double translationalX_kp = 0.275;
+//    static double translationalY_kp = 0.25;
+//    static double heading_kp = 4;
+//
+//    static double visionX_kp = 0;
+//    static double visionHeading_kp = 0;
+//
+//    static double translationalX_ki = 0.003; //0.0075
+//    static double translationalY_ki = 0.0025;
+//    //TODO: Slightly Decrease
+//    static double heading_ki = 0; //0.05
+//
+//    // 0.01
+//    static double translationalX_kd = 0.04;
+//    static double translationalY_kd = 0.04;
+//    static double heading_kd = 0.05;
 
-    static double translationalX_kp = 0.275;
-    static double translationalY_kp = 0.25;
-    static double heading_kp = 4;
+//    static double translationalX_kp = 0.2;
+//    static double translationalY_kp = 0.2;
+//    static double heading_kp = 2.5;
+//
+//    static double visionX_kp = 0;
+//    static double visionHeading_kp = 0;
+//
+//    static double translationalX_ki = 0.002; //0.0075
+//    static double translationalY_ki = 0.002;
+//    //TODO: Slightly Decrease
+//    static double heading_ki = 0.1; //0.05
+//
+//    // 0.01
+//    static double translationalX_kd = 0.05;
+//    static double translationalY_kd = 0.05;
+//    static double heading_kd = 0.045;
+
+
+    // W tunings
+//    static double translationalX_kp = 0.325;
+//    static double translationalY_kp = 0.325;
+//    static double heading_kp = 2.5;
+//
+//    static double visionX_kp = 0;
+//    static double visionHeading_kp = 0;
+//
+//    static double translationalX_ki = 0.002; //0.0075
+//    static double translationalY_ki = 0.002;
+//    //TODO: Slightly Decrease
+//    static double heading_ki = 0.1; //0.05
+//
+//    // 0.01
+//    static double translationalX_kd = 0.05;
+//    static double translationalY_kd = 0.05;
+//    static double heading_kd = 0.03;
+
+    //static double translationalX_kp = 0.325;
+    //    static double translationalY_kp = 0.325;
+    //    static double heading_kp = 2.5;
+    //
+    //    static double visionX_kp = 0;
+    //    static double visionHeading_kp = 0;
+    //
+    //    static double translationalX_ki = 0; //0.0075
+    //    static double translationalY_ki = 0;
+    //    //TODO: Slightly Decrease
+    //    static double heading_ki = 0.1; //0.05
+    //
+    //    // 0.01
+    //    static double translationalX_kd = 0.04;
+    //    static double translationalY_kd = 0.04;
+    //    static double heading_kd = 0.03;
+
+    //12.5 volt tunings
+//    static double translationalX_kp = 0.325;
+//    static double translationalY_kp = 0.325;
+//    static double heading_kp = 2.5;
+//
+//    static double visionX_kp = 0;
+//    static double visionHeading_kp = 0;
+//
+//    static double translationalX_ki = 0; //0.0075
+//    static double translationalY_ki = 0;
+//    //TODO: Slightly Decrease
+//    static double heading_ki = 0.1; //0.05
+//
+//    // 0.01
+//    static double translationalX_kd = 0.045;
+//    static double translationalY_kd = 0.045;
+//    static double heading_kd = 0.03;
+//
+//    static double translationalX_a = 0;
+//    static double translationalY_a = 0;
+//    static double Heading_a = 0.1;
+    //_________________________________________
+
+//    static double translationalX_kp = 0.315;
+//    static double translationalY_kp = 0.315;
+//    static double heading_kp = 2.5;
+//
+//    static double visionX_kp = 0;
+//    static double visionHeading_kp = 0;
+//
+//    static double translationalX_ki = 0.001; //0.0075
+//    static double translationalY_ki = 0.001;
+//    //TODO: Slightly Decrease
+//    static double heading_ki = 0.1; //0.05
+//
+//    // 0.01
+//    static double translationalX_kd = 0.045;
+//    static double translationalY_kd = 0.045;
+//    static double heading_kd = 0.03;
+//
+//    static double translationalX_a = 0;
+//    static double translationalY_a = 0;
+//    static double Heading_a = 0.1;
+
+    static double PID_TranslationalX_kp = 0.3;
+    static double PID_TranslationalY_kp = 0.3;
+    static double PID_Heading_kp = 2.5;
 
     static double visionX_kp = 0;
     static double visionHeading_kp = 0;
 
-    static double translationalX_ki = 0.003; //0.0075
-    static double translationalY_ki = 0.0025;
+    static double PID_TranslationalX_ki = 0.0015; //0.0075
+    static double PID_TranslationalY_ki = 0.0015;
     //TODO: Slightly Decrease
-    static double heading_ki = 0; //0.05
+    static double PID_Heading_ki = 0.1; //0.05
 
     // 0.01
-    static double translationalX_kd = 0.04;
-    static double translationalY_kd = 0.04;
-    static double heading_kd = 0.04;
+    static double PID_TranslationalX_kd = 0.045;
+    static double PID_TranslationalY_kd = 0.045;
+    static double PID_Heading_kd = 0.03;
+
+    static double PID_TranslationalX_a = 0;
+    static double PID_TranslationalY_a = 0;
+    static double PID_Heading_a = 0.1;
+
+    static double TrapezoidalX_kp = 0;
+    static double TrapezoidalX_kv = 0;
+    static double TrapezoidalX_ka = 0;
+
+    static double TrapezoidalY_kp = 0;
+    static double TrapezoidalY_kv = 0;
+    static double TrapezoidalY_ka = 0;
+
 
     private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(SlidesBot_DriveConstants.MAX_VEL, SlidesBot_DriveConstants.MAX_ANG_VEL, SlidesBot_DriveConstants.TRACK_WIDTH);
     private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(SlidesBot_DriveConstants.MAX_ACCEL);
@@ -123,6 +249,9 @@ public class Chassis extends MecanumDriveTrain {
     public PIDF_Controller visionHeading_PID;
     public PIDF_Controller IMU_PID;
 
+    public TrapezoidalMotionProfile TranslationalProfile_X;
+    public TrapezoidalMotionProfile TranslationalProfile_Y;
+
     Vector3D odoPID_Vector = new Vector3D(0, 0, 0);
     Vector3D visionPID_Vector = new Vector3D(0, 0, 0);
     Vector3D PID_Vector = new Vector3D(0, 0, 0);
@@ -133,50 +262,54 @@ public class Chassis extends MecanumDriveTrain {
 
     public OdometryLocalizer odometry;
 
-    public Chassis(ConeTracker coneTracker, JunctionTracker junctionPipeline, Telemetry telemetry, HardwareMap hardwareMap){
-        super("fLeft", "fRight", "bRight", "bLeft",
-                SlidesBot_DriveConstants.kV, SlidesBot_DriveConstants.kA, SlidesBot_DriveConstants.kStatic,
-                SlidesBot_DriveConstants.TRACK_WIDTH, SlidesBot_DriveConstants.WHEEL_BASE, LATERAL_MULTIPLIER,
-                TRANSLATIONAL_PID, HEADING_PID, VX_WEIGHT, VY_WEIGHT, ω_WEIGHT,
-                VEL_CONSTRAINT, ACCEL_CONSTRAINT, hardwareMap);
-
-        reset();
-
-        // TODO: Tune properly (needs some derivative
-        TranslationalPID_X = new PIDF_Controller(translationalX_kp, translationalX_kd, 0, translationalX_ki);
-        TranslationalPID_Y = new PIDF_Controller(translationalY_kp, translationalY_kd, 0.1, translationalY_ki);
-        HeadingPID = new PIDF_Controller(heading_kp, heading_kd, 0, heading_ki);
-
-        visionX_PID = new PIDF_Controller(visionX_kp);
-        visionHeading_PID = new PIDF_Controller(visionHeading_kp);
-
-        IMU_PID = new PIDF_Controller(2);
-
-        TranslationalPID_X.tolerance = 0.2;
-        TranslationalPID_Y.tolerance = 0.2;
-        HeadingPID.tolerance = 0.009;
-
-        IMU_PID.tolerance = 0.009;
-
-        odometry = new OdometryLocalizer(hardwareMap);
-
-        frontLeft.setDirectionReverse();
-        backLeft.setDirectionReverse();
-
-        frontLeft.setBreakMode();
-        frontRight.setBreakMode();
-        backRight.setBreakMode();
-        backLeft.setBreakMode();
-
-        setLocalizer(odometry);
-        imu = new IMU(hardwareMap);
+//    public Chassis(ConeTracker coneTracker, JunctionTracker junctionPipeline, Telemetry telemetry, HardwareMap hardwareMap){
+//        super("fLeft", "fRight", "bRight", "bLeft",
+//                SlidesBot_DriveConstants.kV, SlidesBot_DriveConstants.kA, SlidesBot_DriveConstants.kStatic,
+//                SlidesBot_DriveConstants.TRACK_WIDTH, SlidesBot_DriveConstants.WHEEL_BASE, LATERAL_MULTIPLIER,
+//                TRANSLATIONAL_PID, HEADING_PID, VX_WEIGHT, VY_WEIGHT, ω_WEIGHT,
+//                VEL_CONSTRAINT, ACCEL_CONSTRAINT, hardwareMap);
 //
-//        this.junctionPipeline = junctionPipeline;
-//        this.conePipeline = coneTracker;
-        this.telemetry = telemetry;
-
-        trackingObject = TrackingObject.NONE;
-    }
+//        reset();
+//
+//        // TODO: Tune properly (needs some derivative
+////        TranslationalPID_X = new PIDF_Controller(translationalX_kp, translationalX_kd, 0.8, translationalX_ki);
+////        TranslationalPID_Y = new PIDF_Controller(translationalY_kp, translationalY_kd, 0.8, translationalY_ki);
+////        HeadingPID = new PIDF_Controller(heading_kp, heading_kd, 0, heading_ki);
+//
+//        TranslationalPID_X = new PIDF_Controller(translationalX_kp, translationalX_kd, 0.95, translationalX_ki);
+//        TranslationalPID_Y = new PIDF_Controller(translationalY_kp, translationalY_kd, 0.95, translationalY_ki);
+//        HeadingPID = new PIDF_Controller(heading_kp, heading_kd, 0, heading_ki);
+//
+//        visionX_PID = new PIDF_Controller(visionX_kp);
+//        visionHeading_PID = new PIDF_Controller(visionHeading_kp);
+//
+//        IMU_PID = new PIDF_Controller(2);
+//
+//        TranslationalPID_X.tolerance = 0.2;
+//        TranslationalPID_Y.tolerance = 0.2;
+//        HeadingPID.tolerance = 0.009;
+//
+//        IMU_PID.tolerance = 0.009;
+//
+//        odometry = new OdometryLocalizer(hardwareMap);
+//
+//        frontLeft.setDirectionReverse();
+//        backLeft.setDirectionReverse();
+//
+//        frontLeft.setBreakMode();
+//        frontRight.setBreakMode();
+//        backRight.setBreakMode();
+//        backLeft.setBreakMode();
+//
+//        setLocalizer(odometry);
+//        imu = new IMU(hardwareMap);
+////
+////        this.junctionPipeline = junctionPipeline;
+////        this.conePipeline = coneTracker;
+//        this.telemetry = telemetry;
+//
+//        trackingObject = TrackingObject.NONE;
+//    }
 
     public Chassis(Gamepad gamepad1, Telemetry telemetry, HardwareMap hardwareMap){
         super("fLeft", "fRight", "bRight", "bLeft",
@@ -188,15 +321,21 @@ public class Chassis extends MecanumDriveTrain {
         reset();
 
         // TODO: Tune properly (needs some derivative)
-        TranslationalPID_X = new PIDF_Controller(translationalX_kp, translationalX_kd, 0.1, translationalX_ki);
-        TranslationalPID_Y = new PIDF_Controller(translationalY_kp, translationalY_kd, 0.1, translationalY_ki);
-        HeadingPID = new PIDF_Controller(heading_kp, heading_kd, 0, heading_ki);
+        TranslationalPID_X = new PIDF_Controller(PID_TranslationalX_kp, PID_TranslationalX_kd, PID_TranslationalX_a, PID_TranslationalX_ki);//12.5 volts, a = 0
+        TranslationalPID_Y = new PIDF_Controller(PID_TranslationalY_kp, PID_TranslationalY_kd, PID_TranslationalY_a, PID_TranslationalY_ki);
+        HeadingPID = new PIDF_Controller(PID_Heading_kp, PID_Heading_kd, PID_Heading_a, PID_Heading_ki);
+
+        TranslationalProfile_X = new TrapezoidalMotionProfile(SlidesBot_DriveConstants.MAX_VEL, SlidesBot_DriveConstants.MAX_ACCEL, TrapezoidalX_kp, TrapezoidalX_kv, TrapezoidalX_ka);
+        TranslationalProfile_Y = new TrapezoidalMotionProfile(SlidesBot_DriveConstants.MAX_VEL, SlidesBot_DriveConstants.MAX_ACCEL, TrapezoidalY_kp, TrapezoidalY_kv, TrapezoidalY_ka);
 
         visionX_PID = new PIDF_Controller(visionX_kp);
         visionHeading_PID = new PIDF_Controller(visionHeading_kp);
 
         TranslationalPID_X.tolerance = 0.25;
         TranslationalPID_Y.tolerance = 0.25;
+
+        TranslationalProfile_X.tolerance = 0.25;
+        TranslationalProfile_Y.tolerance = 0.25;
 
         odometry = new OdometryLocalizer(hardwareMap);
 
@@ -260,7 +399,7 @@ public class Chassis extends MecanumDriveTrain {
         }else {
             driftCorrection = controllerInput.B*kDrift;
         }
-        return new Vector3D(0,0,driftCorrection);
+        return new Vector3D(0,0, driftCorrection);
     }
 
     // Unrefined field centric code
@@ -311,17 +450,35 @@ public class Chassis extends MecanumDriveTrain {
         robotRelative(pose);
     }
 
-    public void goToPose(Vector3D input){
+    public void goToPosePID(Vector3D input){
         odoDrive = -TranslationalPID_X.PIDF_Power(getPoseEstimate().getX(), input.A);
         odoStrafe = -TranslationalPID_Y.PIDF_Power(getPoseEstimate().getY(), input.B);
         odoTurn = -HeadingPID.PIDF_Power(angleWrap(getPoseEstimate().getHeading()), input.C);
 
         odoPID_Vector.set(odoDrive, odoStrafe, odoTurn);
+        // Vector fields vector sum
+        // Add odo vector and vector fields resultant vector
 
         setDriveVectorsFieldCentric(odoPID_Vector);
 //        fieldRelative(PID_Vector);
     }
 
+    public void goToPoseTrapezoidal(Vector3D input){
+        odoDrive = -TranslationalProfile_X.getProfilePower(getPoseEstimate().getX(), input.A);
+        odoStrafe = -TranslationalProfile_Y.getProfilePower(getPoseEstimate().getY(), input.B);
+        odoTurn = -HeadingPID.PIDF_Power(angleWrap(getPoseEstimate().getHeading()), input.C);
+
+        odoPID_Vector.set(odoDrive, odoStrafe, odoTurn);
+        // Vector fields vector sum
+        // Add odo vector and vector fields resultant vector
+
+        setDriveVectorsFieldCentric(odoPID_Vector);
+//        fieldRelative(PID_Vector);
+    }
+
+    public void vectorFieldSum(){
+        
+    }
 //    public void goToPose(Vector3D input){
 //        inputArray = new Vector3D[]{odoCorrect(input), visionCorrect(input)};
 //
@@ -383,6 +540,10 @@ public class Chassis extends MecanumDriveTrain {
 
     public void PID_Drive(){
 
+    }
+
+    public Vector2D vectorFieldsSum(){
+        return null;
     }
 
     public void DPad_Drive(){

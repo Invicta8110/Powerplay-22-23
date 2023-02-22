@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.Auton_Opmodes;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -14,7 +13,6 @@ import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ServoInta
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ViperSlides;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Wrist;
 //import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.ColorPipeline;
-import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -133,7 +131,7 @@ public class ParkAutonRedLeft extends LinearOpMode {
             chassis.update();
             chassis.updatePoseEstimate();
 
-            chassis.goToPose(targetPose);
+            chassis.goToPosePID(targetPose);
 
             autonLeftRed();
 

@@ -13,6 +13,7 @@ import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.OdoRetrac
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ServoIntakeArm;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ViperSlides;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Wrist;
+import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.Auton_Opmodes.SavedCycleAutonPID.CycleAuton_PID;
 import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.ColorPipeline;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -136,7 +137,7 @@ public class PreloadPark_Left_Wall extends LinearOpMode {
 
             autonLeftRed();
 
-            chassis.goToPose(targetPose);
+            chassis.goToPosePID(targetPose);
 
             slides.setSlidePower();
             claw.setPosition();
@@ -159,7 +160,7 @@ public class PreloadPark_Left_Wall extends LinearOpMode {
 
                 claw.clawState = ServoClaw.ClawState.CLOSED;
 
-                chassis.goToPose(targetPose);
+                chassis.goToPosePID(targetPose);
 
                 if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
                     autonState = CycleAuton_PID.AutonState.RETURN_TO_POLE;
@@ -168,7 +169,7 @@ public class PreloadPark_Left_Wall extends LinearOpMode {
                 break;
             case RETURN_TO_POLE:
                 targetPose.set(47, 0, -0.773);
-                chassis.goToPose(targetPose);
+                chassis.goToPosePID(targetPose);
 
                 if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
                     autonState = CycleAuton_PID.AutonState.GO_TO_SCORE_PRELOAD;
@@ -182,7 +183,7 @@ public class PreloadPark_Left_Wall extends LinearOpMode {
                 wrist.wristPosition = Wrist.WristPosition.OUTTAKE_POSITION;
                 targetPose.set(55.5, -3.5, -0.959);
 
-                chassis.goToPose(targetPose);
+                chassis.goToPosePID(targetPose);
 
                 // could also vector sum all errors
                 if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){

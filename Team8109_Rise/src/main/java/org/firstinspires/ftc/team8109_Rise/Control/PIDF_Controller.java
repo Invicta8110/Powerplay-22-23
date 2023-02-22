@@ -8,11 +8,11 @@ public class PIDF_Controller {
 
     public double tolerance;
 
-    double kp;
-    double kd;
-    double ki;
-    double a;
-    double F;
+    public double kp;
+    public double kd;
+    public double ki;
+    public double a;
+
     public double error;
 
     public double area;
@@ -43,7 +43,6 @@ public class PIDF_Controller {
         a = 0;
         kd = 0;
         ki = 0;
-        F = 0;
     }
 
     public PIDF_Controller(double kp, double kd){
@@ -52,7 +51,6 @@ public class PIDF_Controller {
 
         a = 0;
         ki = 0;
-        F = 0;
     }
 
     public PIDF_Controller(double kp, double kd, double a){
@@ -61,7 +59,6 @@ public class PIDF_Controller {
         this.a = a;
 
         ki = 0;
-        F = 0;
     }
 
     public PIDF_Controller(double kp, double kd, double a, double ki){
@@ -69,16 +66,6 @@ public class PIDF_Controller {
         this.kd = kd;
         this.a = a;
         this.ki = ki;
-
-        F = 0;
-    }
-
-    public PIDF_Controller(double kp, double kd, double a, double ki, double F){
-        this.kp = kp;
-        this.kd = kd;
-        this.a = a;
-        this.ki = ki;
-        this.F = F;
     }
 
     /***
@@ -91,6 +78,7 @@ public class PIDF_Controller {
      *   outputs are (the I and D variables) and then increase it the proper amount of decimal places to have a meaningful effect on the
      *   system. Then fine-tune it until it more or less performs how you would like it to.
      */
+
     public double PIDF_Power(double currPos, double targetPos){
         error = targetPos - currPos;
         errorChange = error - previousError;
@@ -102,11 +90,7 @@ public class PIDF_Controller {
         runtime.reset();
 
         area += ((error+previousError)*deltaTime)/2;
-//
-//        if (Math.abs(error) > tolerance){
-//            area += ((error+previousError)*deltaTime)/2;
-//        } else
-//
+
         if (Math.abs(error) < tolerance){
             area = 0;
         }
@@ -123,6 +107,28 @@ public class PIDF_Controller {
         previousFilterEstimate = currentFilterEstimate;
         previousTarget = targetPos;
 
-        return P + I + D + F;
+        return P + I + D;
+    }
+
+    public void setPIDCoefficents(double kp){
+        this.kp = kp;
+    }
+
+    public void setPIDCoefficents(double kp, double kd){
+        this.kp = kp;
+        this.kd = kd;
+    }
+
+    public void setPIDCoefficents(double kp, double kd, double a){
+        this.kp = kp;
+        this.kd = kd;
+        this.a = a;
+    }
+
+    public void setPIDCoefficents(double kp, double kd, double a, double ki){
+        this.kp = kp;
+        this.kd = kd;
+        this.a = a;
+        this.ki = ki;
     }
 }

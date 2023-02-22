@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.team8109_Rise.Hardware.Intakes.ServoClaw;
 import org.firstinspires.ftc.team8109_Rise.Math.Vectors.Vector3D;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Chassis;
@@ -13,9 +12,7 @@ import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ServoInta
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ViperSlides;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Wrist;
 //import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.ColorPipeline;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
+
 
 @Autonomous
 public class LegitRealParkAuton extends LinearOpMode {
@@ -133,7 +130,7 @@ public class LegitRealParkAuton extends LinearOpMode {
         while (opModeIsActive()){
             chassis.update();
             chassis.updatePoseEstimate();
-            chassis.goToPose(targetPose);
+            chassis.goToPosePID(targetPose);
 
             autonLeftRed();
             slides.setSlidePower();

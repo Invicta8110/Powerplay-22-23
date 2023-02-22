@@ -50,7 +50,10 @@ public class Vector2D {
 
     //TODO: add a dot product and cross product method
 
-    //
+    public double findDistance(Vector2D v){
+        return Math.sqrt(Math.pow(A - v.A, 2) + Math.pow(B - v.B, 2));
+    }
+
     public Vector2D scale(double scalar){
         return new Vector2D(A*scalar, B*scalar);
     }

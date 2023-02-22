@@ -1,10 +1,8 @@
-package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.Auton_Opmodes;
+package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.Auton_Opmodes.SavedCycleAutonPID;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.team8109_Rise.Hardware.Intakes.ServoClaw;
 import org.firstinspires.ftc.team8109_Rise.Math.Vectors.Vector3D;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Chassis;
@@ -13,19 +11,33 @@ import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.OdoRetrac
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ServoIntakeArm;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ViperSlides;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Wrist;
-import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.ColorPipeline;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous
-public class CycleAutonThree extends LinearOpMode {
-    OpenCvCamera camera; //TODO: Improve tracking
-    ColorPipeline pipeline;
+//@Autonomous
+public class CycleAuton_PID_Real_Legit_Twenty extends LinearOpMode {
+//    OpenCvCamera camera; //TODO: Improve tracking
+////    ColorPipeline pipeline;
+//    AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
     ElapsedTime runtime = new ElapsedTime();
     ElapsedTime globalTime = new ElapsedTime();
-
+    // Lens intrinsics
+    // UNITS ARE PIXELS
+    // NOTE: this calibration is for the C920 webcam at 800x448.
+    // You will need to do your own calibration for other configurations!
+//    double fx = 578.272;
+//    double fy = 578.272;
+//    double cx = 402.145;
+//    double cy = 221.506;
+//
+//    static final double FEET_PER_METER = 3.28084;
+//
+//
+//    // UNITS ARE METERS
+//    double tagsize = 0.166;
+//
+//    int ID_TAG_OF_INTEREST = 18; // Tag ID 18 from the 36h11 family
+//
+//    AprilTagDetection tagOfInterest = null;
     int cycleCounter = 1;
 
     public enum AutonState {
@@ -38,10 +50,15 @@ public class CycleAutonThree extends LinearOpMode {
     }
 
     public enum CycleState{
+        LINE_UP,
+        WAIT_ONE,
         TO_CONE_STACK,
         PICK_UP_CONE,
         BOOST_UP,
+        MOVE_OUT,
+        WAIT_TWO,
         TO_HIGH_JUNCTION,
+        WAIT_THREE,
         SCORE_CONE
     }
 
@@ -58,7 +75,7 @@ public class CycleAutonThree extends LinearOpMode {
     }
 
     AutonState autonState;
-    CycleState cycleState;
+    public CycleState cycleState;
     ParkingStep parkingStep;
     ParkingZone parkingZone;
 
@@ -87,47 +104,138 @@ public class CycleAutonThree extends LinearOpMode {
         odoRetract = new OdoRetract(gamepad1, hardwareMap);
 
         claw.clawState = ServoClaw.ClawState.CLOSED;
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        pipeline = new ColorPipeline(telemetry);
+//        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+//        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+//        pipeline = new ColorPipeline(telemetry);
+//
+//        camera.setPipeline(pipeline);
+//        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+//            @Override
+//            public void onOpened()
+//            {
+//                camera.startStreaming(320,240, OpenCvCameraRotation.UPRIGHT);
+//            }
+//
+//            @Override
+//            public void onError(int errorCode)
+//            {
+//
+//            }
+//        });
 
-        camera.setPipeline(pipeline);
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-            @Override
-            public void onOpened()
-            {
-                camera.startStreaming(320,240, OpenCvCameraRotation.UPRIGHT);
-            }
+        parkingZone = ParkingZone.MIDDLE;
+        odoRetract.podState = OdoRetract.PodState.GROUND;
 
-            @Override
-            public void onError(int errorCode)
-            {
+        // Set up webcam
+//        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+//        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+//        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
+//
+//        camera.setPipeline(aprilTagDetectionPipeline);
+//        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+//            @Override
+//            public void onOpened()
+//            {
+//                camera.startStreaming(800,448, OpenCvCameraRotation.UPRIGHT);
+//            }
+//
+//            @Override
+//            public void onError(int errorCode)
+//            {
+//
+//            }
+//        });
+//
+//        telemetry.setMsTransmissionInterval(50);
 
-            }
-        });
+//        ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
+//
+        parkingZone = ParkingZone.LEFT;
 
         while (opModeInInit()){
             claw.setPosition();
-            odoRetract.podState = OdoRetract.PodState.GROUND;
+            odoRetract.setPodPosition();
+            slides.setSlidePower();
+            arm.setArmPosition();
+            wrist.setPosition();
 
-            if (pipeline.findColor() == ColorPipeline.Colors.BLUE){
-                parkingZone = ParkingZone.LEFT;
-            }
+//            if(currentDetections.size() != 0) {
+//                boolean tagFound = false;
+//
+//                for(AprilTagDetection tag : currentDetections) {
+//                    if(tag.id == 14) {
+//                        tagOfInterest = tag;
+//                        parkingZone = ParkingZone.LEFT;
+//                        tagFound = true;
+//                        break;
+//                    }else if (tag.id == 4){
+//                        tagOfInterest = tag;
+//                        parkingZone = ParkingZone.MIDDLE;
+//                        tagFound = true;
+//                        break;
+//                    } else if (tag.id == 8){
+//                        tagOfInterest = tag;
+//                        parkingZone = ParkingZone.RIGHT;
+//                        tagFound = true;
+//                        break;
+//                    }
+//                }
+//
+//                if(tagFound) {
+//                    telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
+//                    tagToTelemetry(tagOfInterest);
+//                } else {
+//                    telemetry.addLine("Don't see tag of interest :(");
+//
+//                    if(tagOfInterest == null) {
+//                        telemetry.addLine("(The tag has never been seen)");
+//                    } else {
+//                        telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
+//                        tagToTelemetry(tagOfInterest);
+//                    }
+//                }
+//            } else {
+//                telemetry.addLine("Don't see tag of interest :(");
+//
+//                if(tagOfInterest == null) {
+//                    telemetry.addLine("(The tag has never been seen)");
+//                } else {
+//                    telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
+//                    tagToTelemetry(tagOfInterest);
+//                }
+//            }
+//
+//            telemetry.update();
+//            sleep(20);
+//        }
+//
+//
+//        while (opModeInInit()){
+//            claw.setPosition();
+//
+//            odoRetract.setPodPosition();
+//
+//            slides.setSlidePower();
+//            claw.setPosition();
+//            arm.setArmPosition();
+//            wrist.setPosition();
 
-            if (pipeline.findColor() == ColorPipeline.Colors.RED){
-                parkingZone = ParkingZone.RIGHT;
-            }
+//            if (pipeline.findColor() == ColorPipeline.Colors.BLUE){
+//                parkingZone = ParkingZone.LEFT;
+//            }
+//
+//            if (pipeline.findColor() == ColorPipeline.Colors.RED){
+//                parkingZone = ParkingZone.RIGHT;
+//            }
+//
+//            if (pipeline.findColor() == ColorPipeline.Colors.GREEN){
+//                parkingZone = ParkingZone.MIDDLE;
+//            }
+//
+//            telemetry.addData("color", pipeline.findColor());
+//            telemetry.addData("color", pipeline.getHue());
 
-            if (pipeline.findColor() == ColorPipeline.Colors.GREEN){
-                parkingZone = ParkingZone.MIDDLE;
-            } else if (pipeline.findColor() == ColorPipeline.Colors.UNKNOWN){
-                parkingZone = ParkingZone.MIDDLE;
-            }
-
-            telemetry.addData("color", pipeline.findColor());
-            telemetry.addData("color", pipeline.getHue());
-
-            telemetry.update();
+//            telemetry.update();
         }
 
         globalTime.reset();
@@ -137,13 +245,6 @@ public class CycleAutonThree extends LinearOpMode {
             chassis.updatePoseEstimate();
 
             autonLeftRed();
-
-            if (runtime.seconds() > 15) {
-                arm.servoPosition = ServoIntakeArm.ServoPosition.INTAKE_POSITION;
-                wrist.wristPosition = Wrist.WristPosition.INTAKE_POSITION;
-                slides.slidesState = ViperSlides.SlidesState.GROUND;
-                chassis.goToPosePID(chassis.getPoseVector());
-            }
 
             chassis.goToPosePID(targetPose);
 
@@ -164,7 +265,7 @@ public class CycleAutonThree extends LinearOpMode {
         switch (autonState){
             case PUSH_CONE:
                 targetPose.set(60, 0, 0);
-//
+
                 claw.clawState = ServoClaw.ClawState.CLOSED;
 
                 chassis.goToPosePID(targetPose);
@@ -172,14 +273,19 @@ public class CycleAutonThree extends LinearOpMode {
                 if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
                     autonState = AutonState.RETURN_TO_POLE;
                     runtime.reset();
+//                    if (runtime.seconds() > 0.5){
+//                        autonState = AutonState.RETURN_TO_POLE;
+//                        runtime.reset();
+//                    }
                 }
                 break;
             case RETURN_TO_POLE:
-                targetPose.set(46, 0, -0.773);
+                targetPose.set(48, 0.47, -0.394);
                 chassis.goToPosePID(targetPose);
 
                 if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
                     autonState = AutonState.GO_TO_SCORE_PRELOAD;
+
                     runtime.reset();
                 }
                 break;
@@ -188,7 +294,7 @@ public class CycleAutonThree extends LinearOpMode {
 
                 arm.servoPosition = ServoIntakeArm.ServoPosition.OUTTAKE_POSITION;
                 wrist.wristPosition = Wrist.WristPosition.OUTTAKE_POSITION;
-                targetPose.set(54.5, -3.5, -0.959);
+                targetPose.set(55.7, -4.3, -0.959);
 
                 chassis.goToPosePID(targetPose);
 
@@ -199,7 +305,7 @@ public class CycleAutonThree extends LinearOpMode {
                 }
                 break;
             case SCORE_PRELOAD:
-                targetPose.set(54.5, -3.5, -0.959);
+                targetPose.set(54.275, -6.47, -0.6362);
 
                 if (runtime.seconds() > 0.5){
                     claw.clawState = ServoClaw.ClawState.OPEN;
@@ -208,13 +314,12 @@ public class CycleAutonThree extends LinearOpMode {
                 // if ((claw.getPositionDegrees() > 175) && runtime.seconds() > 2){
                 if ((claw.getPositionDegrees() > 140)){
                     autonState = AutonState.CYCLE;
-                    runtime.reset();
                 }
                 break;
             case CYCLE:
                 switch (cycleState){
-                    case TO_CONE_STACK:
-                        targetPose.set(47.75, 26.8, -Math.toRadians(90));
+                    case LINE_UP:
+                        targetPose.set(50, 12.724, -1.6166);
 
                         switch (cycleCounter){
                             case 1:
@@ -236,7 +341,41 @@ public class CycleAutonThree extends LinearOpMode {
 
                         arm.servoPosition = ServoIntakeArm.ServoPosition.INTAKE_POSITION;
                         wrist.wristPosition = Wrist.WristPosition.INTAKE_POSITION;
-                        claw.clawState = ServoClaw.ClawState.OPEN;
+
+                        if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
+                            cycleState = CycleState.WAIT_ONE;
+                            runtime.reset();
+                        }
+                        break;
+                    case WAIT_ONE:
+                        if (runtime.seconds() > 0.25){
+                            cycleState = CycleState.TO_CONE_STACK;
+                            runtime.reset();
+                        }
+                        break;
+                    case TO_CONE_STACK:
+                        targetPose.set(50.3, 26.3, -1.6166);
+
+                        switch (cycleCounter){
+                            case 1:
+                                slides.slidesState = ViperSlides.SlidesState.CONESTACK_TOP;
+                                break;
+                            case 2:
+                                slides.slidesState = ViperSlides.SlidesState.CONESTACK_TOP_MIDDLE;
+                                break;
+                            case 3:
+                                slides.slidesState = ViperSlides.SlidesState.CONESTACK_MIDDLE;
+                                break;
+                            case 4:
+                                slides.slidesState = ViperSlides.SlidesState.CONESTACK_BOTTOM_MIDDLE;
+                                break;
+                            case 5:
+                                slides.slidesState = ViperSlides.SlidesState.GROUND;
+                                break;
+                        }
+
+                        arm.servoPosition = ServoIntakeArm.ServoPosition.INTAKE_POSITION;
+                        wrist.wristPosition = Wrist.WristPosition.INTAKE_POSITION;
 
                         if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
                             cycleState = CycleState.PICK_UP_CONE;
@@ -247,7 +386,7 @@ public class CycleAutonThree extends LinearOpMode {
                     case PICK_UP_CONE:
 
                         //TODO: have arm and slide also move a certain amount before going to next state in order to
-                        targetPose.set(47.75, 26.8, -Math.toRadians(90));
+                        targetPose.set(50.3, 26.3, -1.6166); //targetPose.set(50.3, 25.6444, -1.6166);
                         claw.clawState = ServoClaw.ClawState.CLOSED;
 
                         // TODO: Note that the claw won't actually reach this position closing
@@ -260,18 +399,17 @@ public class CycleAutonThree extends LinearOpMode {
 
                     case BOOST_UP:
                         slides.slidesState = ViperSlides.SlidesState.HIGH_JUNCTION;
+                        targetPose.set(50.3, 26.3, -1.6166);
+                        claw.clawState = ServoClaw.ClawState.CLOSED;
 
                         if (runtime.seconds() > 0.75) {
-                            cycleState = CycleState.TO_HIGH_JUNCTION;
+                            cycleState = CycleState.MOVE_OUT;
                             runtime.reset();
+
                         }
                         break;
-                    case TO_HIGH_JUNCTION:
-                        targetPose.set(48.18, 13, -Math.toRadians(90));
-
-                        targetPose.set(53, -2, -0.959);
-
-
+                    case MOVE_OUT:
+                        targetPose.set(50.3, 16.24, -1.609);
 //                        targetPose.set(53, -2, -0.959);
                         slides.slidesState = ViperSlides.SlidesState.HIGH_JUNCTION;
 
@@ -279,14 +417,41 @@ public class CycleAutonThree extends LinearOpMode {
                         wrist.wristPosition = Wrist.WristPosition.OUTTAKE_POSITION;
 
                         if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
+                            cycleState = CycleState.WAIT_TWO;
+                            runtime.reset();
+                        }
+                        break;
+                    case WAIT_TWO:
+                        if (runtime.seconds() > 0.25){
+                            cycleState = CycleState.TO_HIGH_JUNCTION;
+                            runtime.reset();
+                        }
+                        break;
+                    case TO_HIGH_JUNCTION:
+//                        targetPose.set(48.18, 13, -Math.toRadians(90));
+//                        targetPose.set(54.775, -5.77, -0.58);
+                        targetPose.set(56, -4.5, -0.959);
+//                        targetPose.set(53, -2, -0.959);
+                        slides.slidesState = ViperSlides.SlidesState.HIGH_JUNCTION;
+
+                        arm.servoPosition = ServoIntakeArm.ServoPosition.OUTTAKE_POSITION;
+                        wrist.wristPosition = Wrist.WristPosition.OUTTAKE_POSITION;
+
+                        if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
+                            cycleState = CycleState.WAIT_THREE;
+                            runtime.reset();
+                        }
+                        break;
+                    case WAIT_THREE:
+                        if (runtime.seconds() > 0.25){
                             cycleState = CycleState.SCORE_CONE;
                             runtime.reset();
                         }
                         break;
                     case SCORE_CONE:
-                        targetPose.set(54.5, -3.5, -0.959);
-
-                        if (runtime.seconds() > 0.75){
+//                        targetPose.set(54.775, -5.77,-0.58);
+                        targetPose.set(56, -4.5, -0.959);
+                        if (runtime.seconds() > 1){
                             claw.clawState = ServoClaw.ClawState.OPEN;
                         }
 
@@ -294,11 +459,10 @@ public class CycleAutonThree extends LinearOpMode {
                             cycleCounter++;
 
                             cycleState = CycleState.TO_CONE_STACK;
-                            runtime.reset();
                         }
                         break;
                 }
-                if ((globalTime.seconds() > 28) || cycleCounter > 3){
+                if ((globalTime.seconds() > 35) || cycleCounter > 5){
                     autonState = AutonState.PARK;
                 }
                 break;
@@ -371,4 +535,14 @@ public class CycleAutonThree extends LinearOpMode {
         telemetry.addData("TranslationalY error",chassis.TranslationalPID_Y.error);
         telemetry.addData("Distance to Pose", targetPose.findDistance(chassis.getPoseVector()));
     }
+
+//    void tagToTelemetry(AprilTagDetection detection) {
+//        telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
+//        telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x*FEET_PER_METER));
+//        telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y*FEET_PER_METER));
+//        telemetry.addLine(String.format("Translation Z: %.2f feet", detection.pose.z*FEET_PER_METER));
+//        telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
+//        telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
+//        telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
+//    }
 }

@@ -35,6 +35,8 @@ public class Vector3D {
         C = v.C;
     }
 
+
+
     public Vector3D clone(){
         return new Vector3D(A, B, C);
     }
@@ -97,10 +99,10 @@ public class Vector3D {
         this.C = C;
     }
 
-//    public Vector2 getVector2(){
-//        return new Vector2(a, b);
-//    }
-//
+    public Vector2D getVector2D(){
+        return new Vector2D(A, B);
+    }
+
 
 //
 //    public boolean equals(Vector3 vector3){

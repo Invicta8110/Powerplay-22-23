@@ -34,12 +34,12 @@ public class BackAndForthTest extends LinearOpMode {
 
             switch (driveState){
                 case FORWARDS:
-                    chassis.goToPose(point);
+                    chassis.goToPosePID(point);
                     break;
                 case BACKWARDS:
-                    chassis.goToPose(point2);
+                    chassis.goToPosePID(point2);
             }
-            chassis.goToPose(point);
+            chassis.goToPosePID(point);
 
             telemetry.addData("Pose", chassis.getPoseEstimate());
 
