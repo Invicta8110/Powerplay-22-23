@@ -30,13 +30,6 @@ public class PIDF_Controller {
 
     public double errorChange;
 
-    public enum IntegralSetting{
-        BUILD_UP,
-        BOOSTER
-    }
-
-    IntegralSetting setting;
-
     public PIDF_Controller(double kp){
         this.kp = kp;
 

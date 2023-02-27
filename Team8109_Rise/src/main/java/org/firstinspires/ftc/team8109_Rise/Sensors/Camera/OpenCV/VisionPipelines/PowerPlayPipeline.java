@@ -15,31 +15,34 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ConeTracker extends OpenCvPipeline {
-    Telemetry telemetry;
-
+public class PowerPlayPipeline extends OpenCvPipeline {
     static final Scalar GREEN = new Scalar(0, 255, 0);
 
     boolean RED = true;
     boolean BLUE = true;
+    boolean YELLOW = true;
 
     public int redContourCount = 0;
     public int blueContourCount = 0;
+    public int yellowContourCount = 0;
 
     public List<Rect> redRect;
     public List<Rect> blueRect;
+    public List<Rect> yellowRect;
 
     public Rect RedRect;
     public Rect BlueRect;
+    public Rect YellowRect;
 
     public List<MatOfPoint> redContours;
     public List<MatOfPoint> blueContours;
-    public List<MatOfPoint> circleContours;
+    public List<MatOfPoint> yellowContours;
 
     public MatOfPoint biggestRedContour;
     public MatOfPoint biggestBlueContour;
+    public MatOfPoint biggestYellowContour;
 
-    public ConeTracker(Telemetry telemetry) {
+    public PowerPlayPipeline() {
         redContours = new ArrayList<MatOfPoint>();
         redRect = new ArrayList<Rect>();
         RedRect = new Rect();
@@ -50,28 +53,38 @@ public class ConeTracker extends OpenCvPipeline {
         BlueRect = new Rect();
         biggestBlueContour = new MatOfPoint();
 
-        this.telemetry = telemetry;
+        yellowContours = new ArrayList<MatOfPoint>();
+        yellowRect = new ArrayList<Rect>();
+        YellowRect = new Rect();
+        biggestYellowContour = new MatOfPoint();
     }
 
     // Filters the contours to be greater than a specific area in order to be tracked
     public boolean filterContours(MatOfPoint contour) {
-        return Imgproc.contourArea(contour) > 50;
+        return Imgproc.contourArea(contour) > 10;
     }
 
     // Red masking thresholding values:
-    Scalar lowRed = new Scalar(0, 200, 0); //10, 100, 50
+    Scalar lowRed = new Scalar(0, 165, 0); //10, 100, 50
     Scalar highRed = new Scalar(255, 255, 255); //35, 255, 255
 
     // Blue masking thresholding values:
     Scalar lowBlue = new Scalar(0, 0, 140); //10, 100, 50
     Scalar highBlue = new Scalar(255, 255, 255); //35, 255, 255
 
+    // Yellow masking thresholding values:
+    Scalar lowYellow = new Scalar(10, 50, 100); //10, 100, 50
+    Scalar highYellow = new Scalar(50, 255, 255); //35, 255, 255
+
     // Mat object for the red and blue mask
     Mat maskRed = new Mat();
     Mat maskBlue = new Mat();
+    Mat maskYellow = new Mat();
 
     // Mat object for YCrCb color space
     Mat YCrCb = new Mat();
+
+    Mat HSV = new Mat();
 
     // Kernel size for blurring
     Size kSize = new Size(5, 5);
@@ -82,6 +95,10 @@ public class ConeTracker extends OpenCvPipeline {
         Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
         Imgproc.erode(YCrCb, YCrCb, kernel);
         Imgproc.GaussianBlur(YCrCb, YCrCb, kSize, 0);
+
+        Imgproc.cvtColor(input, HSV, Imgproc.COLOR_RGB2HSV);
+        Imgproc.erode(HSV, HSV, kernel);
+        Imgproc.GaussianBlur(HSV, HSV, kSize, 0);
 
         if (RED) {
             // Finds the pixels within the thresholds and puts them in the mat object "maskRed"
@@ -113,10 +130,6 @@ public class ConeTracker extends OpenCvPipeline {
                     Imgproc.rectangle(input, RedRect, GREEN, 2);
                 }
             }
-
-            // Displays the position of the center of each bounding rect (rect.x/y returns the top left position)
-            telemetry.addData("Red Contour ", "%7d,%7d", RedRect.x + (RedRect.width/2), RedRect.y + (RedRect.height/2));
-
             maskRed.release();
         }
 
@@ -147,20 +160,47 @@ public class ConeTracker extends OpenCvPipeline {
                     Imgproc.rectangle(input, BlueRect, GREEN, 2);
                 }
             }
-
-            // Displays the position of the center of each bounding rect (rect.x/y returns the top left position)
-            telemetry.addData("Blue Contour ", "%7d,%7d", BlueRect.x + (BlueRect.width/2), BlueRect.y + (BlueRect.height/2));
-
             maskBlue.release();
         }
 
+        if (YELLOW) {
+            // Finds the pixels within the thresholds and puts them in the mat object "maskYellow"
+            inRange(HSV, lowYellow, highYellow, maskYellow);
+
+            // Clears the arraylists
+            yellowContours.clear();
+            yellowRect.clear();
+
+            // Finds the contours and draws them on the screen
+            Imgproc.findContours(maskYellow, yellowContours, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+            Imgproc.drawContours(input, yellowContours, -1, GREEN); //input
+
+            // Iterates through each contour
+            for (int i = 0; i < yellowContours.size(); i++) {
+                // Filters out contours with an area less than 50 (defined in the filter contours method)
+//                if (filterContours(yellowContours.get(i))) {
+                    // Creates a bounding rect around each contourand the draws it
+
+                    biggestYellowContour = Collections.max(yellowContours, (t0, t1) -> {
+                        return Double.compare(Imgproc.boundingRect(t0).width, Imgproc.boundingRect(t1).width);
+                    });
+
+                    YellowRect = Imgproc.boundingRect(biggestYellowContour);
+//                    yellowRect.add(Imgproc.boundingRect(yellowContours.get(i)));
+                    Imgproc.rectangle(input, YellowRect, GREEN, 2);
+                    // Creates a count for the amount of yellow contours on the the screen
+                    yellowContourCount++;
+//                }
+            }
+            maskYellow.release();
+        }
         redContourCount = 0;
         blueContourCount = 0;
+        yellowContourCount = 0;
 
         YCrCb.release();
 
         //TODO: move this when actually using code (this is just for EasyOpenCV sim)
-        telemetry.update();
 
         return input;
     }

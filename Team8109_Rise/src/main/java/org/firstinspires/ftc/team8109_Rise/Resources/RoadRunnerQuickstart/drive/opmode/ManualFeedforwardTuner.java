@@ -10,9 +10,11 @@ import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.team8109_Rise.Math.Vectors.Vector3D;
 import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.drive.SampleMecanumDrive;
 
 import java.util.Objects;
@@ -41,6 +43,7 @@ import static org.firstinspires.ftc.team8109_Rise.OldCode.Hardware.DriveConstant
  */
 @Config
 @Autonomous(group = "drive")
+@Disabled
 
 public class ManualFeedforwardTuner extends LinearOpMode {
     public static double DISTANCE = 60; // in

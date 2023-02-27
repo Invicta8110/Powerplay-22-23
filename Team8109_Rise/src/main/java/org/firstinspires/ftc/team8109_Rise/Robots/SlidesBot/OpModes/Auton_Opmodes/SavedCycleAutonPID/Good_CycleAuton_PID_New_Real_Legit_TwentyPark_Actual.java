@@ -1,9 +1,10 @@
-package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.Auton_Opmodes;
+package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.Auton_Opmodes.SavedCycleAutonPID;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.team8109_Rise.Hardware.Intakes.ServoClaw;
 import org.firstinspires.ftc.team8109_Rise.Math.Vectors.Vector3D;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Chassis;
@@ -12,10 +13,13 @@ import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.OdoRetrac
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ServoIntakeArm;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ViperSlides;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Wrist;
-import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.Auton_Opmodes.SavedCycleAutonPID.CycleAuton_PID_Real_Legit_Twenty;
+import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.ColorPipeline;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous
-public class CycleAuton_PID_Real_Legit_TwentyPark_Actual extends LinearOpMode {
+//@Autonomous
+public class Good_CycleAuton_PID_New_Real_Legit_TwentyPark_Actual extends LinearOpMode {
 
     /*
     TODO:
@@ -29,7 +33,8 @@ public class CycleAuton_PID_Real_Legit_TwentyPark_Actual extends LinearOpMode {
     - heading error and translational error separation
      */
 
-
+    OpenCvCamera camera; //TODO: Improve tracking
+    ColorPipeline pipeline;
     ElapsedTime runtime = new ElapsedTime();
     ElapsedTime globalTime = new ElapsedTime();
     // Lens intrinsics
@@ -86,10 +91,10 @@ public class CycleAuton_PID_Real_Legit_TwentyPark_Actual extends LinearOpMode {
         RIGHT
     }
 
-    CycleAuton_PID_Real_Legit_Twenty.AutonState autonState;
-    public CycleAuton_PID_Real_Legit_Twenty.CycleState cycleState;
-    CycleAuton_PID_Real_Legit_Twenty.ParkingStep parkingStep;
-    CycleAuton_PID_Real_Legit_Twenty.ParkingZone parkingZone;
+    AutonState autonState;
+    public CycleState cycleState;
+    ParkingStep parkingStep;
+    ParkingZone parkingZone;
 
     Chassis chassis;
     ViperSlides slides;
@@ -101,14 +106,14 @@ public class CycleAuton_PID_Real_Legit_TwentyPark_Actual extends LinearOpMode {
     boolean stop = false;
     Vector3D targetPose = new Vector3D(0, 0, 0);
     double translationalTolerance = 1;
-    double headingTolerance = 0.02;
+    double headingTolerance = 0.04;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        autonState = CycleAuton_PID_Real_Legit_Twenty.AutonState.PUSH_CONE;
-        cycleState = CycleAuton_PID_Real_Legit_Twenty.CycleState.TO_CONE_STACK;
-        parkingStep = CycleAuton_PID_Real_Legit_Twenty.ParkingStep.STEP_ONE;
+        autonState = AutonState.PUSH_CONE;
+        cycleState = CycleState.TO_CONE_STACK;
+        parkingStep = ParkingStep.STEP_ONE;
 
         chassis = new Chassis(gamepad1, telemetry, hardwareMap);
         slides = new ViperSlides(gamepad1, telemetry, hardwareMap);
@@ -118,27 +123,26 @@ public class CycleAuton_PID_Real_Legit_TwentyPark_Actual extends LinearOpMode {
         odoRetract = new OdoRetract(gamepad1, hardwareMap);
 
         claw.clawState = ServoClaw.ClawState.CLOSED;
-//        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-//        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-//        pipeline = new ColorPipeline(telemetry);
-//
-//        camera.setPipeline(pipeline);
-//        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-//            @Override
-//            public void onOpened()
-//            {
-//                camera.startStreaming(320,240, OpenCvCameraRotation.UPRIGHT);
-//            }
-//
-//            @Override
-//            public void onError(int errorCode)
-//            {
-//
-//            }
-//        });
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        pipeline = new ColorPipeline(telemetry);
 
-        parkingZone = CycleAuton_PID_Real_Legit_Twenty.ParkingZone.MIDDLE;
-        odoRetract.podState = OdoRetract.PodState.GROUND;
+        camera.setPipeline(pipeline);
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened()
+            {
+                camera.startStreaming(320,240, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode)
+            {
+
+            }
+        });
+
+//        odoRetract.podState = OdoRetract.PodState.GROUND;
 
         // Set up webcam
 //        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -164,14 +168,14 @@ public class CycleAuton_PID_Real_Legit_TwentyPark_Actual extends LinearOpMode {
 
 //        ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
 //
-        parkingZone = CycleAuton_PID_Real_Legit_Twenty.ParkingZone.LEFT;
+//        parkingZone = ParkingZone.MIDDLE;
 
-        while (opModeInInit()){
-            claw.setPosition();
-            odoRetract.setPodPosition();
-            slides.setSlidePower();
-            arm.setArmPosition();
-            wrist.setPosition();
+//        while (opModeInInit()){
+//            claw.setPosition();
+////            odoRetract.setPodPosition();
+//            slides.setSlidePower();
+//            arm.setArmPosition();
+//            wrist.setPosition();
 
 //            if(currentDetections.size() != 0) {
 //                boolean tagFound = false;
@@ -224,32 +228,36 @@ public class CycleAuton_PID_Real_Legit_TwentyPark_Actual extends LinearOpMode {
 //        }
 //
 //
-//        while (opModeInInit()){
-//            claw.setPosition();
-//
+        while (opModeInInit()){
+            claw.setPosition();
+
 //            odoRetract.setPodPosition();
-//
-//            slides.setSlidePower();
-//            claw.setPosition();
-//            arm.setArmPosition();
-//            wrist.setPosition();
 
-//            if (pipeline.findColor() == ColorPipeline.Colors.BLUE){
-//                parkingZone = ParkingZone.LEFT;
-//            }
-//
-//            if (pipeline.findColor() == ColorPipeline.Colors.RED){
-//                parkingZone = ParkingZone.RIGHT;
-//            }
-//
-//            if (pipeline.findColor() == ColorPipeline.Colors.GREEN){
-//                parkingZone = ParkingZone.MIDDLE;
-//            }
-//
-//            telemetry.addData("color", pipeline.findColor());
-//            telemetry.addData("color", pipeline.getHue());
+            slides.setSlidePower();
+            claw.setPosition();
+            arm.setArmPosition();
+            wrist.setPosition();
 
-//            telemetry.update();
+            if (pipeline.findColor() == ColorPipeline.Colors.BLUE){
+                parkingZone = ParkingZone.LEFT;
+            }
+
+            if (pipeline.findColor() == ColorPipeline.Colors.RED){
+                parkingZone = ParkingZone.RIGHT;
+            }
+
+            if (pipeline.findColor() == ColorPipeline.Colors.GREEN){
+                parkingZone = ParkingZone.MIDDLE;
+            }
+
+            if (pipeline.findColor() == ColorPipeline.Colors.UNKNOWN){
+                parkingZone = ParkingZone.MIDDLE;
+            }
+
+            telemetry.addData("color", pipeline.findColor());
+            telemetry.addData("color", pipeline.getHue());
+
+            telemetry.update();
         }
 
         globalTime.reset();
@@ -266,7 +274,7 @@ public class CycleAuton_PID_Real_Legit_TwentyPark_Actual extends LinearOpMode {
             claw.setPosition();
             arm.setArmPosition();
             wrist.setPosition();
-            odoRetract.setPodPosition();
+//            odoRetract.setPodPosition();
 
 //            if (stop){
 //                chassis.setPower(0);
@@ -286,17 +294,23 @@ public class CycleAuton_PID_Real_Legit_TwentyPark_Actual extends LinearOpMode {
     public void autonLeftRed(){
         switch (autonState){
             case PUSH_CONE:
+                chassis.TranslationalPID_X.setPIDCoefficents(0.2, 0.01, 0, 0);
+                chassis.TranslationalPID_Y.setPIDCoefficents(0.2, 0.01, 0, 0);
+                chassis.HeadingPID.setPIDCoefficents(2, 0.02, 0, 0); // 0.03 0.1 0.001
                 targetPose.set(60, 0, 0);
 
                 claw.clawState = ServoClaw.ClawState.CLOSED;
 
                 chassis.goToPosePID(targetPose);
 
+
                 if (withinPoseTolerance()){
-                    autonState = CycleAuton_PID_Real_Legit_Twenty.AutonState.RETURN_TO_POLE;
-                    chassis.TranslationalPID_X.area = 0;
-                    chassis.TranslationalPID_Y.area = 0;
-                    chassis.HeadingPID.area = 0;
+                    autonState = AutonState.RETURN_TO_POLE;
+
+                    chassis.TranslationalPID_X.setPIDCoefficents(0.1, 0.01, 0, 0);//0.03 0.001
+                    chassis.TranslationalPID_Y.setPIDCoefficents(0.1, 0.01, 0, 0);
+                    chassis.HeadingPID.setPIDCoefficents(2, 0.02, 0, 0); // 0.03 0.1 0.001
+
 
                     runtime.reset();
 //                    if (runtime.seconds() > 0.5){
@@ -306,14 +320,14 @@ public class CycleAuton_PID_Real_Legit_TwentyPark_Actual extends LinearOpMode {
                 }
                 break;
             case RETURN_TO_POLE:
-                targetPose.set(48, 0.47, -0.394);
+                targetPose.set(47.1, 0.47, -0.394);
                 chassis.goToPosePID(targetPose);
 
                 if (withinPoseTolerance()){
-                    autonState = CycleAuton_PID_Real_Legit_Twenty.AutonState.GO_TO_SCORE_PRELOAD;
-                    chassis.TranslationalPID_X.area = 0;
-                    chassis.TranslationalPID_Y.area = 0;
-                    chassis.HeadingPID.area = 0;
+                    autonState = AutonState.GO_TO_SCORE_PRELOAD;
+                    chassis.TranslationalPID_X.setPIDCoefficents(0.35, 0.035, 0, 0.002);//0.03 0.001
+                    chassis.TranslationalPID_Y.setPIDCoefficents(0.35, 0.035, 0, 0.002);
+                    chassis.HeadingPID.setPIDCoefficents(2, 0.02, 0, 0.001); // 0.03 0.1 0.001
                     runtime.reset();
                 }
                 break;
@@ -322,41 +336,40 @@ public class CycleAuton_PID_Real_Legit_TwentyPark_Actual extends LinearOpMode {
 
                 arm.servoPosition = ServoIntakeArm.ServoPosition.OUTTAKE_POSITION;
                 wrist.wristPosition = Wrist.WristPosition.OUTTAKE_POSITION;
-                targetPose.set(55.7, -4.3, -0.959);
+                targetPose.set(53.2, -7.2, -0.6362);
 
                 chassis.goToPosePID(targetPose);
 
                 // could also vector sum all errors
-                if (withinPoseTolerance()){
-                    autonState = CycleAuton_PID_Real_Legit_Twenty.AutonState.SCORE_PRELOAD;
-                    chassis.TranslationalPID_X.area = 0;
-                    chassis.TranslationalPID_Y.area = 0;
-                    chassis.HeadingPID.area = 0;
+                if (withinPoseTolerance() && (Math.abs(slides.slidesPID.error) < slides.slidesPID.tolerance)){
+                    autonState = AutonState.SCORE_PRELOAD;
                     runtime.reset();
                 }
                 break;
             case SCORE_PRELOAD:
-                targetPose.set(54.275, -6.47, -0.6362);
+                targetPose.set(53.2, -7.2, -0.6362);
 
-                if (runtime.seconds() > 0.5){
+                if (runtime.seconds() > 0.2){
                     claw.clawState = ServoClaw.ClawState.OPEN;
+                    runtime.reset();
                 }
 
                 // if ((claw.getPositionDegrees() > 175) && runtime.seconds() > 2){
-                if ((claw.getPositionDegrees() > 140)){
-                    autonState = CycleAuton_PID_Real_Legit_Twenty.AutonState.CYCLE;
-                    chassis.TranslationalPID_X.area = 0;
-                    chassis.TranslationalPID_Y.area = 0;
-                    chassis.HeadingPID.area = 0;
+                if ((claw.getPositionDegrees() > 140)) {
+                    autonState = AutonState.CYCLE;
+                    runtime.reset();
                 }
 
                 break;
             case CYCLE:
                 switch (cycleState){
                     case LINE_UP:
-                        targetPose.set(50, 12.724, -1.6166);
+                        chassis.TranslationalPID_X.setPIDCoefficents(0.25, 0.03, 0.2, 0.001);//0.03 0.001
+                        chassis.TranslationalPID_Y.setPIDCoefficents(0.25, 0.03, 0.2, 0.001);
+                        chassis.HeadingPID.setPIDCoefficents(2.5, 0.03, 0.2, 0.002);
+                        targetPose.set(49.5, 12, -1.606);//-1.606
+                        // 1.6166
 
-                        translationalTolerance = 0.25;
                         switch (cycleCounter){
                             case 1:
                                 slides.slidesState = ViperSlides.SlidesState.CONESTACK_TOP;
@@ -367,31 +380,33 @@ public class CycleAuton_PID_Real_Legit_TwentyPark_Actual extends LinearOpMode {
                             case 3:
                                 slides.slidesState = ViperSlides.SlidesState.CONESTACK_MIDDLE;
                                 break;
+                            case 4:
+                                slides.slidesState = ViperSlides.SlidesState.CONESTACK_BOTTOM_MIDDLE;
+                                break;
+                            case 5:
+                                slides.slidesState = ViperSlides.SlidesState.GROUND;
+                                break;
                         }
 
                         arm.servoPosition = ServoIntakeArm.ServoPosition.INTAKE_POSITION;
                         wrist.wristPosition = Wrist.WristPosition.INTAKE_POSITION;
 
                         if (withinPoseTolerance()){
-                            cycleState = CycleAuton_PID_Real_Legit_Twenty.CycleState.WAIT_ONE;
+                            cycleState = CycleState.TO_CONE_STACK;
                             runtime.reset();
-                            translationalTolerance = 1;
-                            chassis.TranslationalPID_X.area = 0;
-                            chassis.TranslationalPID_Y.area = 0;
-                            chassis.HeadingPID.area = 0;
                         }
                         break;
                     case WAIT_ONE:
                         if (runtime.seconds() > 0.2){
-                            cycleState = CycleAuton_PID_Real_Legit_Twenty.CycleState.TO_CONE_STACK;
+//                            cycleState = CycleAuton_PID_Real_Legit_Twenty.CycleState.TO_CONE_STACK;
                             runtime.reset();
-                            chassis.TranslationalPID_X.area = 0;
-                            chassis.TranslationalPID_Y.area = 0;
-                            chassis.HeadingPID.area = 0;
                         }
                         break;
                     case TO_CONE_STACK:
-                        targetPose.set(50.3, 26.3, -1.6166);
+                        chassis.TranslationalPID_X.setPIDCoefficents(0.3, 0.03, 0, 0.001);//0.03 0.001
+                        chassis.TranslationalPID_Y.setPIDCoefficents(0.2, 0.035, 0.1, 0);
+                        chassis.HeadingPID.setPIDCoefficents(2.5, 0.03, 0.2, 0.002);
+                        targetPose.set(50, 25.4, -1.606);
 
                         switch (cycleCounter){
                             case 1:
@@ -403,13 +418,19 @@ public class CycleAuton_PID_Real_Legit_TwentyPark_Actual extends LinearOpMode {
                             case 3:
                                 slides.slidesState = ViperSlides.SlidesState.CONESTACK_MIDDLE;
                                 break;
+                            case 4:
+                                slides.slidesState = ViperSlides.SlidesState.CONESTACK_BOTTOM_MIDDLE;
+                                break;
+                            case 5:
+                                slides.slidesState = ViperSlides.SlidesState.GROUND;
+                                break;
                         }
 
                         arm.servoPosition = ServoIntakeArm.ServoPosition.INTAKE_POSITION;
                         wrist.wristPosition = Wrist.WristPosition.INTAKE_POSITION;
 
                         if (withinPoseTolerance()){
-                            cycleState = CycleAuton_PID_Real_Legit_Twenty.CycleState.PICK_UP_CONE;
+                            cycleState = CycleState.PICK_UP_CONE;
                             runtime.reset();
                             chassis.TranslationalPID_X.area = 0;
                             chassis.TranslationalPID_Y.area = 0;
@@ -420,103 +441,92 @@ public class CycleAuton_PID_Real_Legit_TwentyPark_Actual extends LinearOpMode {
                     case PICK_UP_CONE:
 
                         //TODO: have arm and slide also move a certain amount before going to next state in order to
-                        targetPose.set(50.3, 26.3, -1.6166); //targetPose.set(50.3, 25.6444, -1.6166);
+                        targetPose.set(50, 25.3, -1.606); //targetPose.set(50.3, 25.6444, -1.6166);
                         claw.clawState = ServoClaw.ClawState.CLOSED;
 
                         // TODO: Note that the claw won't actually reach this position closing
                         //runtime.seconds timer maybe needed
                         if ((claw.getPositionDegrees() < 110) && runtime.seconds() > 0.5) {
-                            cycleState = CycleAuton_PID_Real_Legit_Twenty.CycleState.BOOST_UP;
+                            cycleState = CycleState.BOOST_UP;
                             runtime.reset();
-                            chassis.TranslationalPID_X.area = 0;
-                            chassis.TranslationalPID_Y.area = 0;
-                            chassis.HeadingPID.area = 0;
                         }
                         break;
 
                     case BOOST_UP:
                         slides.slidesState = ViperSlides.SlidesState.HIGH_JUNCTION;
-                        targetPose.set(50.3, 26.3, -1.6166);
+                        targetPose.set(50, 25.3, -1.606);
                         claw.clawState = ServoClaw.ClawState.CLOSED;
 
                         if (runtime.seconds() > 0.75) {
-                            cycleState = CycleAuton_PID_Real_Legit_Twenty.CycleState.TO_HIGH_JUNCTION;
-                            runtime.reset();
+                            chassis.TranslationalPID_X.setPIDCoefficents(0.2, 0.035, 0, 0.001);//0.03 0.001
+                            chassis.TranslationalPID_Y.setPIDCoefficents(0.2, 0.035, 0, 0.001);
+                            chassis.HeadingPID.setPIDCoefficents(1.25, 0.04, 0, 0.001); // 0.03 0.1 0.001
+
+                            cycleState = CycleState.TO_HIGH_JUNCTION;
                             translationalTolerance = 1;
-                            chassis.TranslationalPID_X.area = 0;
-                            chassis.TranslationalPID_Y.area = 0;
-                            chassis.HeadingPID.area = 0;
+                            runtime.reset();
                         }
                         break;
                     case MOVE_OUT:
 //                        targetPose.set(50.3, 10, -1.609);
-                        targetPose.set(48, 0.47, -0.394);
+//                        targetPose.set(50, -4, -1.606);
 //                        targetPose.set(53, -2, -0.959);
+//                        chassis.setPower(-0.4);
                         slides.slidesState = ViperSlides.SlidesState.HIGH_JUNCTION;
 
-                        arm.servoPosition = ServoIntakeArm.ServoPosition.OUTTAKE_POSITION;
-                        wrist.wristPosition = Wrist.WristPosition.OUTTAKE_POSITION;
+//                        arm.servoPosition = ServoIntakeArm.ServoPosition.OUTTAKE_POSITION;
+//                        wrist.wristPosition = Wrist.WristPosition.OUTTAKE_POSITION;
 
-                        if (withinPoseTolerance()){
-                            cycleState = CycleAuton_PID_Real_Legit_Twenty.CycleState.TO_HIGH_JUNCTION;
+                        if (/*withinPoseTolerance()*/ runtime.seconds() > 0.5){
+                            cycleState = CycleState.TO_HIGH_JUNCTION;
+                            chassis.TranslationalPID_X.setPIDCoefficents(0.2, 0.035, 0, 0.001);//0.03 0.001
+                            chassis.TranslationalPID_Y.setPIDCoefficents(0.2, 0.035, 0, 0.001);
+                            chassis.HeadingPID.setPIDCoefficents(1.25, 0.04, 0, 0.001); // 0.03 0.1 0.001
+
                             translationalTolerance = 1;
                             runtime.reset();
-
-                            chassis.TranslationalPID_X.area = 0;
-                            chassis.TranslationalPID_Y.area = 0;
-                            chassis.HeadingPID.area = 0;
                         }
                         break;
 
                     case TO_HIGH_JUNCTION:
-//                        targetPose.set(48.18, 13, -Math.toRadians(90));
-//                        targetPose.set(54.775, -5.77, -0.58);
-                        targetPose.set(56, -4.5, -0.959);
-//                        targetPose.set(53, -2, -0.959);
+
+                        targetPose.set(53.3, -6.85, -0.6362);
+
                         slides.slidesState = ViperSlides.SlidesState.HIGH_JUNCTION;
 
                         arm.servoPosition = ServoIntakeArm.ServoPosition.OUTTAKE_POSITION;
                         wrist.wristPosition = Wrist.WristPosition.OUTTAKE_POSITION;
 
                         if (withinPoseTolerance()){
-                            cycleState = CycleAuton_PID_Real_Legit_Twenty.CycleState.WAIT_THREE;
+                            cycleState = CycleState.SCORE_CONE;
                             runtime.reset();
-
-                            chassis.TranslationalPID_X.area = 0;
-                            chassis.TranslationalPID_Y.area = 0;
-                            chassis.HeadingPID.area = 0;
-                        }
-                        break;
-                    case WAIT_THREE:
-                        if (runtime.seconds() > 0.4){
-                            cycleState = CycleAuton_PID_Real_Legit_Twenty.CycleState.SCORE_CONE;
-                            runtime.reset();
-
-                            chassis.TranslationalPID_X.area = 0;
-                            chassis.TranslationalPID_Y.area = 0;
-                            chassis.HeadingPID.area = 0;
                         }
                         break;
                     case SCORE_CONE:
 //                        targetPose.set(54.775, -5.77,-0.58);
-                        targetPose.set(56, -4.5, -0.959);
-                        if (runtime.seconds() > 1){
+                        targetPose.set(53.2, -6.85, -0.6362);
+                        if (runtime.seconds() > 0.6){
                             claw.clawState = ServoClaw.ClawState.OPEN;
+                            runtime.reset();
                         }
 
                         if ((claw.getPositionDegrees() > 140)/* && runtime.seconds() > 0.5*/){
+                            cycleState = CycleState.WAIT_THREE;
+                            runtime.reset();
+                        }
+                        break;
+                    case WAIT_THREE:
+                        if (runtime.seconds() > 1){
                             cycleCounter++;
-
-                            cycleState = CycleAuton_PID_Real_Legit_Twenty.CycleState.TO_CONE_STACK;
-
-                            chassis.TranslationalPID_X.area = 0;
-                            chassis.TranslationalPID_Y.area = 0;
-                            chassis.HeadingPID.area = 0;
+                            cycleState = CycleState.TO_CONE_STACK;
+                            runtime.reset();
                         }
                         break;
                 }
-                if ((globalTime.seconds() > 35) || cycleCounter > 3){
-                    autonState = CycleAuton_PID_Real_Legit_Twenty.AutonState.PARK;
+
+                //TODO: Autopark
+                if ((globalTime.seconds() > 35) || cycleCounter > 4){
+                    autonState = AutonState.PARK;
                 }
                 break;
             case PARK:
@@ -530,14 +540,14 @@ public class CycleAuton_PID_Real_Legit_TwentyPark_Actual extends LinearOpMode {
                         targetPose.set(45, 0, 0);
 
                         if (withinPoseTolerance()){
-                            parkingStep = CycleAuton_PID_Real_Legit_Twenty.ParkingStep.STEP_TWO;
+                            parkingStep = ParkingStep.STEP_TWO;
                             runtime.reset();
                         }
                         break;
                     case STEP_TWO:
                         targetPose.set(26, 0, 0);
                         if (withinPoseTolerance()){
-                            parkingStep = CycleAuton_PID_Real_Legit_Twenty.ParkingStep.STEP_THREE;
+                            parkingStep = ParkingStep.STEP_THREE;
                             runtime.reset();
                         }
                         break;
@@ -580,6 +590,7 @@ public class CycleAuton_PID_Real_Legit_TwentyPark_Actual extends LinearOpMode {
         telemetry.addData("Auton State", autonState);
         telemetry.addData("Cycle State", cycleState);
         telemetry.addData("cycle count", cycleCounter);
+        telemetry.addData("Slides error", slides.slidesPID.error);
 
         telemetry.addData("runtime", runtime.seconds());
         telemetry.addData("claw position", claw.getPositionDegrees());
@@ -594,7 +605,7 @@ public class CycleAuton_PID_Real_Legit_TwentyPark_Actual extends LinearOpMode {
     }
 
     public boolean withinPoseTolerance(){
-        return (targetPose.getVector2D().findDistance(chassis.getPoseVector().getVector2D()) < translationalTolerance) && (chassis.HeadingPID.error > headingTolerance);
+        return (Math.abs(targetPose.getVector2D().findDistance(chassis.getPoseVector().getVector2D())) < translationalTolerance) && (Math.abs(chassis.HeadingPID.error) < headingTolerance);
     }
 
 //    void tagToTelemetry(AprilTagDetection detection) {

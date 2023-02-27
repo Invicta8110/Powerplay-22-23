@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import java.util.List;
 
 public class TensorFlowModel {
-    String TFOD_MODEL_ASSET;
+    static String TFOD_MODEL_FILE;
     String[] LABELS;
 
     HardwareMap hardwareMap;
@@ -38,17 +38,17 @@ public class TensorFlowModel {
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
      * localization engine.
      */
-    private VuforiaLocalizer vuforia;
+    public VuforiaLocalizer vuforia;
 
     /**
      * {@link #tfod} is the variable we will use to store our instance of the TensorFlow Object
      * Detection engine.
      */
-    private TFObjectDetector tfod;
+    public TFObjectDetector tfod;
 
     //TODO: add more parameters in overloaded constructor later
     public TensorFlowModel(String TFOD_MODEL_ASSET, String[] LABELS, Telemetry telemetry, HardwareMap hardwareMap){
-        this.TFOD_MODEL_ASSET = TFOD_MODEL_ASSET;
+        TensorFlowModel.TFOD_MODEL_FILE = TFOD_MODEL_ASSET;
         this.LABELS = LABELS;
 
         initVuforia();
@@ -131,7 +131,7 @@ public class TensorFlowModel {
 
         // Use loadModelFromAsset() if the TF Model is built in as an asset by Android Studio
         // Use loadModelFromFile() if you have downloaded a custom team model to the Robot Controller's FLASH.
-        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
-        // tfod.loadModelFromFile(TFOD_MODEL_FILE, LABELS);
+//        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
+         tfod.loadModelFromFile(TFOD_MODEL_FILE, LABELS);
     }
 }

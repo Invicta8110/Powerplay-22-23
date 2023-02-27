@@ -14,11 +14,11 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.team8109_Rise.Control.MotionProfiling.TrapezoidalMotionProfile;
 import org.firstinspires.ftc.team8109_Rise.Control.PIDF_Controller;
 import org.firstinspires.ftc.team8109_Rise.Hardware.Drivetrains.MecanumDriveTrain;
-import org.firstinspires.ftc.team8109_Rise.Math.Vectors.Vector2D;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.IMU;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.Odometry.OdometryLocalizer;
 import org.firstinspires.ftc.team8109_Rise.Math.Vectors.Vector3D;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.SlidesBot_DriveConstants;
+import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.PowerPlayPipeline;
 
 @Config
 public class Chassis extends MecanumDriveTrain {
@@ -28,13 +28,9 @@ public class Chassis extends MecanumDriveTrain {
 
     ElapsedTime runtime = new ElapsedTime();
 
-//    CycleAuton_PID auton = new CycleAuton_PID();
-
-//    JunctionTracker junctionPipeline;
-//    ConeTracker conePipeline;
-
     IMU imu;
 
+    public static PowerPlayPipeline pipeline = new PowerPlayPipeline();
     public double kDrift = 0.1;
     public enum TrackingObject{
         CONESTACK,
@@ -42,8 +38,12 @@ public class Chassis extends MecanumDriveTrain {
         NONE
     }
 
+    public enum Alliance{
+        RED,
+        BLUE
+    }
     public TrackingObject trackingObject;
-
+    public Alliance alliance;
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
 
@@ -61,9 +61,9 @@ public class Chassis extends MecanumDriveTrain {
     public double bLeft;
     public double bRight;
 
-    double odoDrive;
-    double odoStrafe;
-    double odoTurn;
+    public double odoDrive;
+    public double odoStrafe;
+    public double odoTurn;
 
     double visionTurn;
     double visionDrive;
@@ -72,6 +72,8 @@ public class Chassis extends MecanumDriveTrain {
 
     double x_rotated;
     double y_rotated;
+
+    public double trapezoidalTranslationalError = 0;
 
     // 0.06
 //    static double translationalX_kp = 0.2;
@@ -228,13 +230,12 @@ public class Chassis extends MecanumDriveTrain {
     static double PID_Heading_a = 0.1;
 
     static double TrapezoidalX_kp = 0;
-    static double TrapezoidalX_kv = 0;
+    static double TrapezoidalX_kv = 0.005;
     static double TrapezoidalX_ka = 0;
 
     static double TrapezoidalY_kp = 0;
     static double TrapezoidalY_kv = 0;
     static double TrapezoidalY_ka = 0;
-
 
     private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(SlidesBot_DriveConstants.MAX_VEL, SlidesBot_DriveConstants.MAX_ANG_VEL, SlidesBot_DriveConstants.TRACK_WIDTH);
     private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(SlidesBot_DriveConstants.MAX_ACCEL);
@@ -255,12 +256,15 @@ public class Chassis extends MecanumDriveTrain {
     Vector3D odoPID_Vector = new Vector3D(0, 0, 0);
     Vector3D visionPID_Vector = new Vector3D(0, 0, 0);
     Vector3D PID_Vector = new Vector3D(0, 0, 0);
-
     Vector3D powerInput = new Vector3D(0,0,0);
 
     Vector3D[] inputArray;
 
+    Vector3D VisionAlignPID_Vector = new Vector3D(0, 0, 0);
+
     public OdometryLocalizer odometry;
+
+    public Vector3D RobotPose;
 
 //    public Chassis(ConeTracker coneTracker, JunctionTracker junctionPipeline, Telemetry telemetry, HardwareMap hardwareMap){
 //        super("fLeft", "fRight", "bRight", "bLeft",
@@ -346,6 +350,8 @@ public class Chassis extends MecanumDriveTrain {
 
         setLocalizer(odometry);
         imu = new IMU(hardwareMap);
+
+        RobotPose = new Vector3D(getPoseEstimate().getX(), getPoseEstimate().getY(), getPoseEstimate().getHeading());
 
         this.gamepad1 = gamepad1;
         this.telemetry = telemetry;
@@ -472,10 +478,10 @@ public class Chassis extends MecanumDriveTrain {
         // Vector fields vector sum
         // Add odo vector and vector fields resultant vector
 
+        trapezoidalTranslationalError = input.getVector2D().findDistance(getPoseVector().getVector2D());
         setDriveVectorsFieldCentric(odoPID_Vector);
 //        fieldRelative(PID_Vector);
     }
-
     public void vectorFieldSum(){
         
     }
@@ -497,33 +503,35 @@ public class Chassis extends MecanumDriveTrain {
 //    }
 //
 //    // TODO: Just use machine learning
-//    public Vector3D visionCorrect(Vector3D input){
-//        // conditions for each
-//        switch (auton.cycleState){
-//            case TO_CONE_STACK:
-//                if (!conePipeline.BlueRect.empty()){
-//
-//                    visionDrive = visionX_PID.PIDF_Power(junctionPipeline.YellowRect.y + (junctionPipeline.YellowRect.height/2), 220); //
-//                    visionTurn = -visionX_PID.PIDF_Power(junctionPipeline.YellowRect.y + (junctionPipeline.YellowRect.height/2), 160);
-//                }
-//
-//                if (!conePipeline.BlueRect.empty()){
-//
-//                    visionDrive = visionX_PID.PIDF_Power(junctionPipeline.YellowRect.y + (junctionPipeline.YellowRect.height/2), 220); //
-//                    visionTurn = -visionX_PID.PIDF_Power(junctionPipeline.YellowRect.y + (junctionPipeline.YellowRect.height/2), 160);
-//                }
-//                break;
-//
-//            case TO_HIGH_JUNCTION:
-//                if (!junctionPipeline.YellowRect.empty()){
-//
-//                    visionDrive = visionX_PID.PIDF_Power(junctionPipeline.YellowRect.y + (junctionPipeline.YellowRect.height/2), 220); //
-//                    visionTurn = -visionX_PID.PIDF_Power(junctionPipeline.YellowRect.y + (junctionPipeline.YellowRect.height/2), 160);
-//                }
-//                break;
-//        }
-//        return new Vector3D(visionDrive, 0, visionTurn);
-//    }
+    public void visionAlign(Vector3D input){
+        // conditions for each
+        switch (trackingObject){
+            case CONESTACK:
+//                switch () TODO: switch based on alliance
+                if (!pipeline.BlueRect.empty()){
+                    visionDrive = visionX_PID.PIDF_Power(pipeline.YellowRect.y + (pipeline.BlueRect.height/2), 220); //
+                    visionTurn = -visionX_PID.PIDF_Power(pipeline.YellowRect.x + (pipeline.BlueRect.width/2), 160);
+                }
+
+                if (!pipeline.RedRect.empty()){
+                    visionDrive = visionX_PID.PIDF_Power(pipeline.YellowRect.y + (pipeline.RedRect.height/2), 220); //
+                    visionTurn = -visionX_PID.PIDF_Power(pipeline.YellowRect.y + (pipeline.RedRect.height/2), 160);
+                }
+                break;
+
+            case JUNCTION:
+                if (!pipeline.YellowRect.empty()){
+                    visionDrive = visionX_PID.PIDF_Power(pipeline.YellowRect.y + (pipeline.YellowRect.height/2), 220); //
+                    visionTurn = -visionX_PID.PIDF_Power(pipeline.YellowRect.y + (pipeline.YellowRect.height/2), 160);
+                }
+                break;
+            case NONE:
+                break;
+        }
+
+        VisionAlignPID_Vector.set(visionDrive, 0, visionTurn);
+        setDriveVectorsFieldCentric(VisionAlignPID_Vector);
+    }
 
     //TODO: Test out field-centric
     public void ManualDrive(){
@@ -540,10 +548,6 @@ public class Chassis extends MecanumDriveTrain {
 
     public void PID_Drive(){
 
-    }
-
-    public Vector2D vectorFieldsSum(){
-        return null;
     }
 
     public void DPad_Drive(){

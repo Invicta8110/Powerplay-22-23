@@ -42,10 +42,11 @@ public class ColorPipeline extends OpenCvPipeline {
     public Mat processFrame(Mat input) {
 
         // Define the dimensions and location of each region
-        Point REGION_TOPLEFT_ANCHOR_POINT = new Point(input.cols()/2  + 5,input.rows()/2 + 70);
+        Point REGION_TOPLEFT_ANCHOR_POINT = new Point((input.cols()/2)-10,(input.rows()/2) + 30);
         int REGION_WIDTH = 10;
         int REGION_HEIGHT = 3;
 
+        //TODO: -5
         // Create the points that will be used to make the rectangles for the region
         Point region_pointA = new Point(REGION_TOPLEFT_ANCHOR_POINT.x, REGION_TOPLEFT_ANCHOR_POINT.y);
         Point region_pointB = new Point(REGION_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH, REGION_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);

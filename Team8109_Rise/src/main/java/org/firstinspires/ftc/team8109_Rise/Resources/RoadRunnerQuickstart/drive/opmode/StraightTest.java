@@ -16,7 +16,7 @@ import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.drive.
  */
 @Config
 @Autonomous(group = "drive")
-
+@Disabled
 public class StraightTest extends LinearOpMode {
     public static double DISTANCE = 30; // in
 

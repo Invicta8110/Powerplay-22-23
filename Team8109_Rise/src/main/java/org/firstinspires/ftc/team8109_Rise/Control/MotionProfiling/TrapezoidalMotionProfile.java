@@ -4,37 +4,38 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class TrapezoidalMotionProfile {
 
-    double max_acceleration;
-    double max_velocity;
+    public double max_acceleration;
+    public double max_velocity;
 
-    double current_dt = 0;
-    double entire_dt = 0;
-    double cruise_current_dt = 0;
-    double acceleration_dt = 0;
-    double deacceleration_dt = 0;
-    double cruise_dt = 0;
+    public double current_dt = 0;
+    public double entire_dt = 0;
+    public double cruise_current_dt = 0;
+    public double acceleration_dt = 0;
+    public double deacceleration_dt = 0;
+    public double cruise_dt = 0;
 
-    double distance = 0;
-    double halfway_distance = 0;
-    double acceleration_distance = 0;
-    double cruise_distance = 0;
+    public double distance = 0;
+    public double halfway_distance = 0;
+    public double acceleration_distance = 0.1;
+    public double cruise_distance = 0;
 
-    double deacceleration_time = 0;
+    public double deacceleration_time = 0;
 
-    double previousTargetPos = 0;
-    double x = 0;
-    double v = 0;
-    double a = 0;
+    public double previousTargetPos = 0;
 
-    double positionError = 0;
-    double error = 0;
+    public double x = 0;
+    public double v = 0;
+    public double a = 0;
 
-    double trajectoryPos = 0;
-    double initialPos = 0;
+    public double positionError = 0;
+    public double error = 0;
 
-    double kp;
-    double kv;
-    double ka;
+    public double trajectoryPos = 0;
+    public double initialPos = 0;
+
+    public double kp;
+    public double kv;
+    public double ka;
 
     public double tolerance;
 
@@ -46,7 +47,7 @@ public class TrapezoidalMotionProfile {
     }
     ElapsedTime runtime = new ElapsedTime();
 
-    profileState ProfileState;
+    public profileState ProfileState;
     public TrapezoidalMotionProfile(double max_velocity, double max_acceleration, double kp, double kv, double ka){
         this.max_velocity = max_velocity;
         this.max_acceleration = max_acceleration;
@@ -55,13 +56,15 @@ public class TrapezoidalMotionProfile {
         this.kv = kv;
         this.ka = ka;
 
+        acceleration_dt = max_velocity / max_acceleration;
+
         ProfileState = profileState.ACCELERATING;
+        runtime.reset();
     }
 
     // Distance and target pos are not the same
     // TODO: add current dt (time from the beginning of trajectory
-    public double getProfilePower(double targetPos, double currPos){
-        setProfileState();
+    public double getProfilePower(double currPos, double targetPos){
         error = targetPos - currPos;
 
         if (previousTargetPos != targetPos){
@@ -71,6 +74,7 @@ public class TrapezoidalMotionProfile {
         }
 
         initialCalculations();
+        setProfileState();
 
         x = motion_profile_position(distance);
         v = motion_profile_velocity();
@@ -94,8 +98,8 @@ public class TrapezoidalMotionProfile {
         halfway_distance = distance / 2;
         acceleration_distance = 0.5 * max_acceleration * Math.pow(acceleration_dt,2);
 
-        if (acceleration_distance > halfway_distance){
-            acceleration_dt = Math.sqrt(halfway_distance / (0.5 * max_acceleration));
+        if (acceleration_distance > Math.abs(halfway_distance)){
+            acceleration_dt = Math.sqrt(Math.abs(halfway_distance) / (0.5 * max_acceleration));
             acceleration_distance = 0.5 * max_acceleration * Math.pow(acceleration_dt,2);
 
             // recalculate max velocity based on the time we have to accelerate and decelerate

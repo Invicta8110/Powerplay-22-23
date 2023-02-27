@@ -19,7 +19,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous
+//@Autonomous
 public class PreloadPark_Left extends LinearOpMode {
     OpenCvCamera camera; //TODO: Improve tracking
     ColorPipeline pipeline;

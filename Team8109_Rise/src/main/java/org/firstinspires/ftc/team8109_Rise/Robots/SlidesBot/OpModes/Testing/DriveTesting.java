@@ -25,15 +25,16 @@ public class DriveTesting extends LinearOpMode {
 //        PhotonCore.enable();
 
         Chassis chassis = new Chassis(gamepad1, telemetry, hardwareMap);
-        OdoRetract odoRetract = new OdoRetract(gamepad1, hardwareMap);
+//        OdoRetract odoRetract = new OdoRetract(gamepad1, hardwareMap);
         telemetry.addLine("Waiting For Start");
         telemetry.update();
 
+//        odoRetract.podState = OdoRetract.PodState.GROUND;
         waitForStart();
 
         while (opModeIsActive()){
             chassis.ManualDrive();
-            odoRetract.toggleState();
+//            odoRetract.toggleState();
             chassis.update();
 
             telemetry.addData("Pose Estimate", chassis.getPoseEstimate());

@@ -11,7 +11,6 @@ import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.drive.
 /*
  * This is an example of a more complex path to really test the tuning.
  */
-@Autonomous(group = "drive")
 public class SplineTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

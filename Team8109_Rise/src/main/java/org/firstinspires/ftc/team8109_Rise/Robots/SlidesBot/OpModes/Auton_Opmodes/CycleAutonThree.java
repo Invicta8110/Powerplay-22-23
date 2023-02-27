@@ -18,7 +18,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous
+
 public class CycleAutonThree extends LinearOpMode {
     OpenCvCamera camera; //TODO: Improve tracking
     ColorPipeline pipeline;

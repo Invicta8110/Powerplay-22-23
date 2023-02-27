@@ -17,9 +17,9 @@ public class ServoTest extends LinearOpMode {
 //        ServoIntakeArm arm = new ServoIntakeArm(gamepad1, telemetry, hardwareMap);
 
 //        Claw claw = new Claw(gamepad1, telemetry, hardwareMap);
-        Wrist wrist = new Wrist(gamepad1, hardwareMap);
+//        Wrist wrist = new Wrist(gamepad1, hardwareMap);
 
-//        OdoRetract retract = new OdoRetract(gamepad1, hardwareMap);
+        OdoRetract retract = new OdoRetract(gamepad1, hardwareMap);
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
@@ -33,13 +33,14 @@ public class ServoTest extends LinearOpMode {
 //            arm.setAngleIndividual();
 //            arm.setTelemetry();
 
-//            retract.toggleState();
-            wrist.setPosition();
+            retract.toggleState();
+//            wrist.setPosition();
 
 //            claw.toggleClaw();
 //            claw.setPosition();
 //            claw.setTelemetry();
 
+            telemetry.addData("podState", retract.podState);
             telemetry.update();
         }
     }

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines;
+package org.firstinspires.ftc.team8109_Rise.Sensors.Camera.MachineLearning;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;

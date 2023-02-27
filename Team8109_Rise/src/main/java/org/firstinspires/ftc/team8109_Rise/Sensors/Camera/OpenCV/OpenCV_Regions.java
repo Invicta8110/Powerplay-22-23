@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -15,7 +16,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-@Disabled
+@Autonomous
 public class OpenCV_Regions extends LinearOpMode {
 
     // Define Webcam
