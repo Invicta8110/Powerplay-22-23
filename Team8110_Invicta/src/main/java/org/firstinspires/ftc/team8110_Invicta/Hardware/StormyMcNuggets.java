@@ -7,9 +7,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Drivetrains.StraferChassis;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms.Claw;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms.Motor;
-import org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms.ScissorLift;
+import org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms.Lift;
 
-public class StormyMcNuggets extends StraferChassis implements ScissorLift, Claw {
+public class StormyMcNuggets extends StraferChassis implements Lift, Claw {
     public Motor lift;
     public Servo claw;
     public Position position;

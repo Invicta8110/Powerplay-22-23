@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
-public interface ScissorLift {
+public interface Lift {
 
 
     /**

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.team8110_Invicta.Hardware.Pipelines;
 
+import org.firstinspires.ftc.team8110_Invicta.Hardware.States.Colors;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -47,6 +48,20 @@ public class ColorDetector extends OpenCvPipeline {
         Imgproc.rectangle(mat, cornerA, cornerB, GOLD, 1);
 
         return mat;
+    }
+
+    public Colors getColor() {
+        int hue = hsv_Value[0];
+
+        if ((hue >= 0 && hue < 30) || (hue >= 301/2 && hue <= 360/2)) {
+            return Colors.RED;
+        } else if (hue >= 120/2 && hue <= 180/20) {
+            return Colors.GREEN;
+        } else if (hue >= 210/2 && hue <= 300/2) {
+            return Colors.BLUE;
+        } else {
+            return Colors.UNKNOWN;
+        }
     }
 
 }

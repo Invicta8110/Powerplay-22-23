@@ -27,7 +27,7 @@ public class MecanumDrive extends LinearOpMode {
             telemetry.update();
 
             robot.teleOpLift(gamepad1);
-            robot.teleOpClaw(gamepad1);
+            //robot.teleOpClaw(gamepad1);
 
             robot.setWeightedDrivePower(
                     new Pose2d(
