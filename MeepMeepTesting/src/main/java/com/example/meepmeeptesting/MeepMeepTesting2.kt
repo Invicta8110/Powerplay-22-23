@@ -13,12 +13,21 @@ object MeepMeepTesting2 {
         val myBot = DefaultBotBuilder(meepMeep) // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60.0, 60.0, Math.toRadians(180.0), Math.toRadians(180.0), 15.0)
                  .followTrajectorySequence { drive: DriveShim ->
-                    drive.trajectorySequenceBuilder(Pose2d(60.0, 36.0, Math.toRadians(180.0)))
-                            .forward(18.0)
-                            .turn(Math.toRadians(90.0))
-                            .forward(12.0)
-                            .turn(Math.toRadians(-90.0))
-                            .forward(12.0)
+                    drive.trajectorySequenceBuilder(Pose2d( 34.4,60.0, Math.toRadians(-90.0)))
+                            .strafeRight(21.3)
+                            .forward(25.0)
+                            .strafeLeft(10.8)
+                            .strafeRight(11.0)
+                            .back(2.0)
+                            .turn(Math.toRadians(180.0))
+                            .forward(24.0)
+                            .turn(Math.toRadians(45.0))
+                            .forward(4.0)
+                            .back(4.0)
+                            .turn(Math.toRadians(-45.0))
+                            .turn(Math.toRadians(180.0))
+                            .forward(25.0)
+                            .strafeLeft(10.8)
                             .build()
 
                 }
@@ -31,6 +40,7 @@ object MeepMeepTesting2 {
                 .start()
 
     }
+
 
 
 }
