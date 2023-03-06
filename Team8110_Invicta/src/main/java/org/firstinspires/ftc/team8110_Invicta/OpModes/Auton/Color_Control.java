@@ -19,7 +19,8 @@ public class Color_Control extends LinearOpMode {
 
     //initialize & create Pipeline
     ColorDetector pipeline;
-//
+
+    //
 //    @Override
     public void runOpMode() {
 
@@ -48,14 +49,15 @@ public class Color_Control extends LinearOpMode {
 
         waitForStart();
 
-        while(opModeIsActive()){
+        while (opModeIsActive()) {
             //prints the HSV from array
-            telemetry.addData("Region 1", "%7d,%7d,%7d",pipeline.hsv_Value[0], pipeline.hsv_Value[1], pipeline.hsv_Value[2]);
+            telemetry.addData("Region 1", "%7d,%7d,%7d", pipeline.hsv_Value[0], pipeline.hsv_Value[1], pipeline.hsv_Value[2]);
             telemetry.addData("Hue", pipeline.getColor());
             //updates each time
             telemetry.update();
         }
     }
+
 }
 
 

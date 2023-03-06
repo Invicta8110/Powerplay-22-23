@@ -17,7 +17,6 @@ import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -31,8 +30,6 @@ import org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.InertialMeasureme
 import org.firstinspires.ftc.team8110_Invicta.Resources.RoadRunnerQuickstart.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.team8110_Invicta.Resources.RoadRunnerQuickstart.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.team8110_Invicta.Resources.RoadRunnerQuickstart.trajectorysequence.TrajectorySequenceRunner;
-import org.firstinspires.ftc.team8110_Invicta.Resources.RoadRunnerQuickstart.util.AxisDirection;
-import org.firstinspires.ftc.team8110_Invicta.Resources.RoadRunnerQuickstart.util.BNO055IMUUtil;
 import org.firstinspires.ftc.team8110_Invicta.Resources.RoadRunnerQuickstart.util.LynxModuleUtil;
 
 import java.util.ArrayList;
@@ -167,8 +164,8 @@ public class SampleMecanumDrive extends MecanumDrive {
         return new TrajectorySequenceBuilder(
                 startPose,
                 VEL_CONSTRAINT, ACCEL_CONSTRAINT,
-                MAX_ANG_VEL, MAX_ANG_ACCEL
-        );
+                MAX_ANG_VEL, MAX_ANG_ACCEL,
+                baseVelConstraint1);
     }
 
     public void turnAsync(double angle) {
