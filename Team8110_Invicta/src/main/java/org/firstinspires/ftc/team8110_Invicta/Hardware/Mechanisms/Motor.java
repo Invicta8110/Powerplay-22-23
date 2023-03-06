@@ -2,13 +2,14 @@ package org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-public class Motor {
+public class Motor implements Mechanism {
     DcMotorEx dcMotorEx;
 
     //Declare all the constants in the Motor class
@@ -142,5 +143,14 @@ public class Motor {
 
     public void setMode(DcMotor.RunMode runMode) {
         dcMotorEx.setMode(runMode);
+    }
+
+    @Override
+    public double getPosition() {
+        return getCurrentPosition();
+    }
+
+    public DcMotorSimple.Direction getDirection() {
+        return dcMotorEx.getDirection();
     }
 }

@@ -104,7 +104,7 @@ public class StraferChassis extends com.acmerobotics.roadrunner.drive.MecanumDri
 
         for (Motor motor : motors) {
             motor.setBreakMode();
-            motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
             motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
             motor.setMotorType(motorConfigurationType);
@@ -114,7 +114,7 @@ public class StraferChassis extends com.acmerobotics.roadrunner.drive.MecanumDri
             setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, MOTOR_VELO_PID);
         }
 
-        frontLeft.setDirectionReverse();
+        frontRight.setDirectionReverse();
         backLeft.setDirectionReverse();
 
         // TODO: if desired, use setLocalizer() to change the localization method
@@ -143,8 +143,8 @@ public class StraferChassis extends com.acmerobotics.roadrunner.drive.MecanumDri
 
         // TODO: adjust the names of the following hardware devices to match your configuration
 
-        this.frontLeft = new Motor(flName, 537.7, 3.77953, hardwareMap);
-        this.frontRight = new Motor(frName, 537.7, 3.77953, hardwareMap);
+        this.frontLeft = new Motor(flName, hardwareMap);
+        this.frontRight = new Motor(frName, hardwareMap);
         this.backRight = new Motor(brName, hardwareMap);
         this.backLeft = new Motor(blName, hardwareMap);
 
@@ -163,9 +163,6 @@ public class StraferChassis extends com.acmerobotics.roadrunner.drive.MecanumDri
         }
 
         // TODO: reverse any motors using DcMotor.setDirection()
-
-        frontRight.setDirectionReverse();
-        backRight.setDirectionReverse();
 
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));

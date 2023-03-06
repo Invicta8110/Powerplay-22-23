@@ -3,7 +3,7 @@ package org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public interface Claw {
+public interface Claw extends Mechanism {
     Servo claw = null;
     Position position = Position.CLOSED;
 

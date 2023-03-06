@@ -14,7 +14,7 @@ public class ElefanteTeleOp extends LinearOpMode {
 
     public void runOpMode() {
         robot = new ElefanteDrugMcNuggets(hardwareMap);
-        claw = robot.getClaw();
+        robot.getLift().reverse();
 
         telemetry.addData("status", "initialized");
         telemetry.update();
@@ -25,13 +25,14 @@ public class ElefanteTeleOp extends LinearOpMode {
         while (opModeIsActive()) {
             telemetry.addData("status", "running");
             telemetry.addData("controller", gamepad1.toString());
+            telemetry.addData("lift", robot.getLift().getPosition());
             telemetry.addData("claw", robot.getClaw().getPosition());
+            telemetry.addData("speed", robot.getSpeed());
             telemetry.update();
 
             robot.teleOpClaw(gamepad1);
             robot.teleOpDrive(gamepad1);
             robot.teleOpLift(gamepad1);
         }
-
     }
 }

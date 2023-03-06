@@ -40,7 +40,7 @@ public class StormyMcNuggets extends StraferChassis implements Lift, Claw {
         double down = gamepad.dpad_down ? 1 : 0;
         double up = gamepad.dpad_up ? 1 : 0;
 
-        this.move(up-down);
+        this.power(up-down);
     }
 
     public double getLiftPosition() {
@@ -81,7 +81,7 @@ public class StormyMcNuggets extends StraferChassis implements Lift, Claw {
      * @param power Power to set the motor to
      */
     @Override
-    public void move(double power) {
+    public void power(double power) {
         lift.setPower(power);
     }
 
@@ -127,5 +127,10 @@ public class StormyMcNuggets extends StraferChassis implements Lift, Claw {
     @Override
     public void downLevel() {
         lift.runToPosition(lift.getCurrentPosition() - 20);
+    }
+
+    @Override
+    public void reverse() {
+
     }
 }

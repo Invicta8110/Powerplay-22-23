@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms;
 
-public interface Lift {
+public interface Lift extends Mechanism {
 
 
     /**
      * Alters the power of the motor
      * @param power Power to set the motor to
      */
-    public void move(double power);
+    public void power(double power);
 
     /**
      * Gets the position of the motor
@@ -30,5 +30,7 @@ public interface Lift {
      * Moves the scissor lift to the previous position
      */
     public void downLevel();
+
+    public void reverse();
 }
 

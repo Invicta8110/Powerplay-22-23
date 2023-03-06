@@ -74,7 +74,7 @@ public class WrapperBuilder {
     }
 
     /**
-     * Strafe/move in a line to a certain location.
+     * Strafe/power in a line to a certain location.
      *
      * @param x is the x coordinate to strafe to
      * @param y is the y coordinate to strafe to
@@ -88,8 +88,8 @@ public class WrapperBuilder {
     /**
      * Move in a line to a coordinate and end at a certain location, the heading changes linearly
      *
-     * @param x          the x coordinate of where to move to
-     * @param y          the y coordinate of where to move to
+     * @param x          the x coordinate of where to power to
+     * @param y          the y coordinate of where to power to
      * @param endHeading the end heading the robot should be at
      * @return this object to use in a builder design pattern
      */
@@ -103,8 +103,8 @@ public class WrapperBuilder {
      * Move in a line to a coordinate and end at a certain location, the heading changes according
      * to a spline function
      *
-     * @param x          the x coordinate of where to move to
-     * @param y          the y coordinate of where to move to
+     * @param x          the x coordinate of where to power to
+     * @param y          the y coordinate of where to power to
      * @param endHeading the end heading the robot should be at
      * @return this object to use in a builder design pattern
      */
