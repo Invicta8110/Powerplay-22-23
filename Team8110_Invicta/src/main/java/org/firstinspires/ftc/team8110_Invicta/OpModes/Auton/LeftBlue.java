@@ -138,8 +138,7 @@ public class LeftBlue extends LinearOpMode {
 
         waitForStart();
 
-
-        // robot.followTrajectorySequence(build);
+        robot.followTrajectorySequence(build);
     }
 
 
