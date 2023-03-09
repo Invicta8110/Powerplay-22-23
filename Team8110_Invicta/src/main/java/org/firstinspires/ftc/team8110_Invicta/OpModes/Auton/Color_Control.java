@@ -20,7 +20,8 @@ public class Color_Control extends LinearOpMode {
     //initialize & create Pipeline
     ColorDetector pipeline;
 //
-//    @Override
+//
+    @Override
     public void runOpMode() {
 
         //set up camera

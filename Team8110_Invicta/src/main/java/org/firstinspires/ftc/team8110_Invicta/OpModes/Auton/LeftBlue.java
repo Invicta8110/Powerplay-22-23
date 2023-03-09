@@ -32,7 +32,7 @@ public class LeftBlue extends LinearOpMode {
 
     Color_Control dog;
 
-    HardwareMap hardwareMap;
+//    HardwareMap hardwareMap;
 
     ColorDetector cat;
 
@@ -67,72 +67,75 @@ public class LeftBlue extends LinearOpMode {
 
         //double num = 2500.0;
 
-        robot.getLift().power(180.0);
-        build = robot.trajectorySequenceBuilder(new Pose2d(34.4,60.0,Math.toRadians(-90.0)))
-                        .forward(4.0)
-                        .build();
-        sup.open();
-        robot.getLift().power(-160.0);
-        sup.close();
-        //yea.upLevel();
-        robot.getLift().power(5200.0);
-        build = robot.trajectorySequenceBuilder(new Pose2d(34.4,60, Math.toRadians(-90.0)))
-                .strafeRight(21.3)
-                .forward(25.0)
-                .strafeLeft(10.8)
-                .build();
-        sup.open();
-        sup.close();
-        //yea.downLevel();
-        //robot.getLift().power(-500.0);
-        for(int i = 0; i < 6; i++) {
-            build = robot.trajectorySequenceBuilder(new Pose2d(23.6, 33.3, Math.toRadians(-90.0)))
-                    .strafeRight(11.0)
-                    .back(2.0)
-                    .turn(Math.toRadians(180.0))
-                    .forward(24.0)
-                    .turn(Math.toRadians(45.0))
+        if(opModeIsActive()){
+            robot.getLift().run(180);
+            build = robot.trajectorySequenceBuilder(new Pose2d(34.4,60.0,Math.toRadians(-90.0)))
                     .forward(4.0)
                     .build();
-            robot.getLift().power(-1000.0);
             sup.open();
+            robot.getLift().run(-160);
             sup.close();
-            robot.getLift().power(5200.0);
             //yea.upLevel();
-            robot.getLift().power(num);
-            build = robot.trajectorySequenceBuilder(new Pose2d(9.5, 62.0, Math.toRadians(-225.0)))
-                    .back(4.0)
-                    .turn(Math.toRadians(-45.0))
-                    .turn(Math.toRadians(180.0))
+            robot.getLift().run(5200);
+            build = robot.trajectorySequenceBuilder(new Pose2d(34.4,60, Math.toRadians(-90.0)))
+                    .strafeRight(21.3)
                     .forward(25.0)
                     .strafeLeft(10.8)
                     .build();
             sup.open();
             sup.close();
-            num = num - 500.0;
+            //yea.downLevel();
+            //robot.getLift().power(-500.0);
+            for(int i = 0; i < 6; i++) {
+                build = robot.trajectorySequenceBuilder(new Pose2d(23.6, 33.3, Math.toRadians(-90.0)))
+                        .strafeRight(11.0)
+                        .back(2.0)
+                        .turn(Math.toRadians(180.0))
+                        .forward(24.0)
+                        .turn(Math.toRadians(45.0))
+                        .forward(4.0)
+                        .build();
+                robot.getLift().run(-1000);
+                sup.open();
+                sup.close();
+                robot.getLift().power(5200.0);
+                //yea.upLevel();
+                robot.getLift().power(num);
+                build = robot.trajectorySequenceBuilder(new Pose2d(9.5, 62.0, Math.toRadians(-225.0)))
+                        .back(4.0)
+                        .turn(Math.toRadians(-45.0))
+                        .turn(Math.toRadians(180.0))
+                        .forward(25.0)
+                        .strafeLeft(10.8)
+                        .build();
+                sup.open();
+                sup.close();
+                num = num - 500.0;
+            }
+
+            //last part for the robot
+            if(cat.getColor() == Colors.RED){
+                //RED
+                build = robot.trajectorySequenceBuilder(new Pose2d(34.4, 60.0, Math.toRadians(-90.0)))
+                        .strafeLeft(30.0)
+                        .build();
+            }
+            if(cat.getColor() == Colors.BLUE){
+                //BLUE
+                build = robot.trajectorySequenceBuilder(new Pose2d(34.4, 60.0, Math.toRadians(-90.0)))
+                        .strafeRight(12.0)
+                        .build();
+            }
+            if(cat.getColor() == Colors.GREEN){
+                //GREEN
+                build = robot.trajectorySequenceBuilder(new Pose2d(34.4,60.0, Math.toRadians(-90.0)))
+                        .strafeRight(12.0)
+                        .forward(22.0)
+                        .strafeLeft(24.0)
+                        .build();
+            }
         }
 
-        //last part for the robot
-        if(cat.getColor() == Colors.RED){
-            //RED
-            build = robot.trajectorySequenceBuilder(new Pose2d(34.4, 60.0, Math.toRadians(-90.0)))
-                    .strafeLeft(30.0)
-                    .build();
-        }
-        if(cat.getColor() == Colors.BLUE){
-                //BLUE
-            build = robot.trajectorySequenceBuilder(new Pose2d(34.4, 60.0, Math.toRadians(-90.0)))
-                    .strafeRight(12.0)
-                    .build();
-        }
-        if(cat.getColor() == Colors.GREEN){
-            //GREEN
-            build = robot.trajectorySequenceBuilder(new Pose2d(34.4,60.0, Math.toRadians(-90.0)))
-                    .strafeRight(12.0)
-                    .forward(22.0)
-                    .strafeLeft(24.0)
-                    .build();
-        }
 
         waitForStart();
 

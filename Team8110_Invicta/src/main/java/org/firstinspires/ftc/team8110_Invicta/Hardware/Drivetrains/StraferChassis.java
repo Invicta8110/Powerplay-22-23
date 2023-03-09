@@ -83,9 +83,8 @@ public class StraferChassis extends com.acmerobotics.roadrunner.drive.MecanumDri
 
         super(DriveConstants.kV, DriveConstants.kA, DriveConstants.kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
-        InertialMeasurementUnit = new InertialMeasurementUnit(hardwareMap);
-        follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
-                new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
+//        follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
+                new Pose2d(0.5, 0.5, Math.toRadians(5.0));
 
         LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
 
