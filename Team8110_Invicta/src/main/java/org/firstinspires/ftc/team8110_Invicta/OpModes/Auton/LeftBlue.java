@@ -44,18 +44,13 @@ public class LeftBlue extends LinearOpMode {
 
     Pose2d pos;
 
-    ElefanteDrugMcNuggets.ConeClaw sup;
-
-    ElefanteDrugMcNuggets.ScissorLift yea;
-
     Vector2d vector;
     public double num = 2500.0;
 
 
 
-
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
 
         robot = new ElefanteDrugMcNuggets(hardwareMap);
         cat = new ColorDetector();
@@ -63,6 +58,10 @@ public class LeftBlue extends LinearOpMode {
         vector = new Vector2d(0,0);
 
         camera = new Webcam(hardwareMap).getCamera();
+
+         ElefanteDrugMcNuggets.ConeClaw sup = robot.getClaw();
+
+        ElefanteDrugMcNuggets.ScissorLift yea = robot.getLift();
 
         cat.getColor();
 
@@ -114,27 +113,26 @@ public class LeftBlue extends LinearOpMode {
         }
 
         //last part for the robot
-//        if(cat.getColor() == Colors.RED){
-//            //RED
-//            build = robot.trajectorySequenceBuilder(new Pose2d(34.4, 60.0, Math.toRadians(-90.0)))
-//                    .strafeLeft(30.0)
-//                    .build();
-//        }
-//        if(cat.getColor() == Colors.BLUE){
-//                //BLUE
-//            build = robot.trajectorySequenceBuilder(new Pose2d(34.4, 60.0, Math.toRadians(-90.0)))
-//                    .strafeRight(12.0)
-//                    .build();
-//        }
-//        if(cat.getColor() == Colors.GREEN){
-//            //GREEN
-//            build = robot.trajectorySequenceBuilder(new Pose2d(34.4,60.0, Math.toRadians(-90.0)))
-//                    .strafeRight(12.0)
-//                    .forward(22.0)
-//                    .strafeLeft(24.0)
-//                    .build();
-//        }
-
+        if(cat.getColor() == Colors.RED){
+            //RED
+            build = robot.trajectorySequenceBuilder(new Pose2d(34.4, 60.0, Math.toRadians(-90.0)))
+                    .strafeLeft(30.0)
+                    .build();
+        }
+        if(cat.getColor() == Colors.BLUE){
+                //BLUE
+            build = robot.trajectorySequenceBuilder(new Pose2d(34.4, 60.0, Math.toRadians(-90.0)))
+                    .strafeRight(12.0)
+                    .build();
+        }
+        if(cat.getColor() == Colors.GREEN){
+            //GREEN
+            build = robot.trajectorySequenceBuilder(new Pose2d(34.4,60.0, Math.toRadians(-90.0)))
+                    .strafeRight(12.0)
+                    .forward(22.0)
+                    .strafeLeft(24.0)
+                    .build();
+        }
 
         waitForStart();
 
