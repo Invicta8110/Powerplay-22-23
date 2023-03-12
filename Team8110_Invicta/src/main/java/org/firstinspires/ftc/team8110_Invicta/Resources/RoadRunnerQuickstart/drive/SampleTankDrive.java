@@ -162,8 +162,8 @@ public class SampleTankDrive extends TankDrive {
         return new TrajectorySequenceBuilder(
                 startPose,
                 VEL_CONSTRAINT, accelConstraint,
-                MAX_ANG_VEL, MAX_ANG_ACCEL
-        );
+                MAX_ANG_VEL, MAX_ANG_ACCEL,
+                baseVelConstraint1);
     }
 
     public void turnAsync(double angle) {
