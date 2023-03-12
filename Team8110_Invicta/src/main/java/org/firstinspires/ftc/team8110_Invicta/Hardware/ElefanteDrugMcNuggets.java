@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.team8110_Invicta.Hardware;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 import static org.firstinspires.ftc.team8110_Invicta.Hardware.States.DriveSpeeds.SLOW;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -11,6 +12,8 @@ import org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms.Claw;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms.Lift;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms.Motor;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.States.DriveSpeeds;
+
+import java.util.List;
 
 public class ElefanteDrugMcNuggets extends StraferChassis {
     HardwareMap hwmap;
@@ -59,8 +62,12 @@ public class ElefanteDrugMcNuggets extends StraferChassis {
             liftMotor.setPower(power);
         }
 
-        public void run(int position) {
+        public void run(double position) {
+//            telemetry.addData("started running to position", 0);
+//            telemetry.update();
             liftMotor.runToPosition(position);
+//            telemetry.addData("ran to position", 0);
+//            telemetry.update();
         }
 
         @Override
@@ -149,7 +156,7 @@ public class ElefanteDrugMcNuggets extends StraferChassis {
 
         double fLeft = 0.875 * drive - 1 * strafe - 0.8 * turn;
         double fRight = 0.875 * drive + 1 * strafe + 0.8 * turn;
-        double bRight = -0.875 * drive - 1 * strafe + 0.8 * turn;
+        double bRight = -0.875 *drive - 1 * strafe + 0.8 * turn;
         double bLeft = -0.875 * drive + 1 * strafe - 0.8 * turn;
 
         switch (speed) {
@@ -167,7 +174,7 @@ public class ElefanteDrugMcNuggets extends StraferChassis {
                 break;
         }
 
-        this.setPower(fLeft*diff, fRight*diff, (bRight*diff)/3, bLeft*diff);
+        this.setPower(fLeft*diff, fRight*diff, bRight*diff, -bLeft*diff);
     }
 
     public void teleOpClaw(Gamepad gamepad) {
@@ -184,4 +191,45 @@ public class ElefanteDrugMcNuggets extends StraferChassis {
 
         lift.power(up-down);
     }
+
+    public void runToPosition(int position, double power) {
+        List<Motor> wheels = this.getWheels();
+
+        for (Motor motor : wheels) {
+            motor.runToPosition(position,power);
+        }
+    }
+
+    public void runToPosition(int position) {
+        this.runToPosition(position*538,1);
+    }
+
+    public void strafeRight(int position){
+        this.frontLeft.runToPosition(position*538,1);
+        this.backLeft.runToPosition(position*5378,1);
+        this.frontRight.runToPosition(position*538,1);
+        this.backRight.runToPosition(position*538,1);
+    }
+
+    public void strafeLeft(int position){
+        this.frontLeft.runToPosition(position*538,-1);
+        this.backLeft.runToPosition(position*538,1);
+        this.frontRight.runToPosition(position*538,1);
+        this.backRight.runToPosition(position*538,1);
+   }
+
+    public void rotate180(int position){
+        this.frontLeft.runToPosition(position*538,1);
+        this.frontRight.runToPosition(position*538,-1);
+        this.backRight.runToPosition(position*538,0);
+        this.backLeft.runToPosition(position*538,0);
+    }
+
+    public void runForward(int pos){
+        this.frontLeft.runToPosition(pos*538,1);
+        this.frontRight.runToPosition(pos*538,1);
+        this.backRight.runToPosition(pos*538,1);
+        this.backLeft.runToPosition(pos*538,1);
+    }
+
 }

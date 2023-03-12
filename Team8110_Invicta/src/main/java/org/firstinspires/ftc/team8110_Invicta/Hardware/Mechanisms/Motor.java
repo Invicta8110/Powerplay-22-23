@@ -56,8 +56,8 @@ public class Motor implements Mechanism {
         dcMotorEx.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void runToPosition(int target){
-        dcMotorEx.setTargetPosition(target);
+    public void runToPosition(double target){
+        dcMotorEx.setTargetPosition((int) target);
         dcMotorEx.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         dcMotorEx.setPower(0.1);

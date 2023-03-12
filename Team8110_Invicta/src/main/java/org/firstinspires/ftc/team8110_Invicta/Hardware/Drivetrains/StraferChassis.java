@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.team8110_Invicta.Hardware.Drivetrains;
 
-import     static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants.MAX_ACCEL;
 import static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants.MAX_ANG_ACCEL;
 import static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants.MAX_ANG_VEL;
 import static org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants.MAX_VEL;
@@ -34,7 +34,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms.Motor;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.DriveConstants;
-import org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.InertialMeasurementUnit;
+//import org.firstinspires.ftc.team8110_Invicta.Hardware.Sensors.InertialMeasurementUnit;
 import org.firstinspires.ftc.team8110_Invicta.Resources.RoadRunnerQuickstart.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.team8110_Invicta.Resources.RoadRunnerQuickstart.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.team8110_Invicta.Resources.RoadRunnerQuickstart.trajectorysequence.TrajectorySequenceRunner;
@@ -76,7 +76,7 @@ public class StraferChassis extends com.acmerobotics.roadrunner.drive.MecanumDri
 
     private List<Motor> motors;
 
-    public InertialMeasurementUnit InertialMeasurementUnit;
+//    public InertialMeasurementUnit InertialMeasurementUnit;
     private VoltageSensor batteryVoltageSensor;
 
     public StraferChassis(HardwareMap hardwareMap) {
@@ -128,7 +128,7 @@ public class StraferChassis extends com.acmerobotics.roadrunner.drive.MecanumDri
 
         super(DriveConstants.kV, DriveConstants.kA, DriveConstants.kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
-        InertialMeasurementUnit = new InertialMeasurementUnit(hardwareMap);
+        //InertialMeasurementUnit = new InertialMeasurementUnit(hardwareMap);
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
 
@@ -311,18 +311,24 @@ public class StraferChassis extends com.acmerobotics.roadrunner.drive.MecanumDri
         frontRight.setPower(v3);
     }
 
-    public double getRawExternalHeading() {
-        return InertialMeasurementUnit.imu.getAngularOrientation().firstAngle;
-    }
+//    public double getRawExternalHeading() {
+////        try {
+////            return InertialMeasurementUnit.imu.getAngularOrientation().firstAngle;
+////        }
+////        catch (NullPointerException ex){
+////           ex.printStackTrace();
+////        }
+//        return InertialMeasurementUnit.imu.getAngularOrientation().firstAngle;
+//    }
 
-    public Double getExternalHeadingVelocity() {
-        // To work around an SDK bug, use -zRotationRate in place of xRotationRate
-        // and -xRotationRate in place of zRotationRate (yRotationRate behaves as
-        // expected). This bug does NOT affect orientation.
-        //
-        // See https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/251 for details.
-        return (double) -InertialMeasurementUnit.imu.getAngularVelocity().xRotationRate;
-    }
+//    public Double getExternalHeadingVelocity() {
+//        // To work around an SDK bug, use -zRotationRate in place of xRotationRate
+//        // and -xRotationRate in place of zRotationRate (yRotationRate behaves as
+//        // expected). This bug does NOT affect orientation.
+//        //
+//        // See https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/251 for details.
+//        return (double) -InertialMeasurementUnit.imu.getAngularVelocity().xRotationRate;
+//    }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
         return new MinVelocityConstraint(Arrays.asList(
@@ -382,5 +388,19 @@ public class StraferChassis extends com.acmerobotics.roadrunner.drive.MecanumDri
         this.frontRight.setFloatMode();
         this.backRight.setFloatMode();
         this.backLeft.setFloatMode();
+    }
+
+    @Override
+    protected double getRawExternalHeading() {
+        return 0.0;
+    }
+
+    public List<Motor> getWheels() {
+        List<Motor> wheels = new ArrayList<>();
+        wheels.add(frontLeft);
+        wheels.add(frontRight);
+        wheels.add(backLeft);
+        wheels.add(backRight);
+        return wheels;
     }
 }

@@ -351,9 +351,17 @@ public class FtcRobotControllerActivity extends Activity
      * have permissions. So...
      */
     if (permissionsValidated) {
-      ClassManager.getInstance().setOnBotJavaClassHelper(onBotJavaHelper);
-      ClassManagerFactory.registerFilters();
-      ClassManagerFactory.processAllClasses();
+      try{
+        ClassManager.getInstance().setOnBotJavaClassHelper(onBotJavaHelper);
+        ClassManagerFactory.registerFilters();
+       ClassManagerFactory.processAllClasses();
+      }
+      catch(NullPointerException ex){
+        ex.printStackTrace();
+      }
+//      ClassManager.getInstance().setOnBotJavaClassHelper(onBotJavaHelper);
+//      ClassManagerFactory.registerFilters();
+//      ClassManagerFactory.processAllClasses();
     }
 
     cfgFileMgr = new RobotConfigFileManager(this);

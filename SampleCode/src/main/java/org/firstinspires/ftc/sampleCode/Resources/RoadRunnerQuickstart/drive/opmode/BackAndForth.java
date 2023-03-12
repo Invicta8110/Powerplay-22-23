@@ -27,7 +27,7 @@ import org.firstinspires.ftc.sampleCode.Resources.RoadRunnerQuickstart.drive.Sam
  */
 @Config
 @Autonomous(group = "drive")
-@Disabled
+//@Disabled
 
 public class BackAndForth extends LinearOpMode {
 
