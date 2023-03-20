@@ -15,11 +15,17 @@ public class ServoIntakeArm extends ServoArm {
     boolean toggle1 = true;
     boolean toggle2 = false;
 
-    boolean lastToggleX = false;
+    boolean triggerToggle1 = true;
+    boolean triggerToggle2 = false;
 
+    boolean lastToggleX = false;
+    boolean lastTriggerLeft = false;
     public enum ServoPosition {
         INTAKE_POSITION,
-        OUTTAKE_POSITION
+        OUTTAKE_POSITION,
+        DUNK_POSITION,
+        AUTO_START,
+        AUTO_NEW
     }
 
     public ServoPosition servoPosition;
@@ -35,11 +41,22 @@ public class ServoIntakeArm extends ServoArm {
     public void setArmPosition(){
         switch (servoPosition){
             case INTAKE_POSITION:
-                setAngle(50);
+                setAngle(60);
                 break;
 
             case OUTTAKE_POSITION:
-                setAngle(230);
+                setAngle(256);
+                break;
+
+            case DUNK_POSITION:
+                setAngle(264);
+                break;
+
+            case AUTO_START:
+                setAngle(252);
+                break;
+            case AUTO_NEW:
+                setAngle(90);
                 break;
         }
     }
@@ -63,9 +80,63 @@ public class ServoIntakeArm extends ServoArm {
 
                     servoPosition = ServoPosition.INTAKE_POSITION;
                 }
+
+                if ((gamepad1.left_bumper != lastTriggerLeft) && gamepad1.left_bumper && triggerToggle1){
+                    triggerToggle1 = false;
+                    triggerToggle2 = true;
+
+                    servoPosition = ServoPosition.DUNK_POSITION;
+                }
+                break;
+            case DUNK_POSITION:
+                if ((gamepad1.x != lastToggleX) && gamepad1.x && toggle2){
+                    toggle2 = false;
+                    toggle1 = true;
+
+                    triggerToggle1 = false;
+                    triggerToggle2 = true;
+                    servoPosition = ServoPosition.INTAKE_POSITION;
+                }
+
+                if ((gamepad1.left_bumper != lastTriggerLeft) && gamepad1.left_bumper && triggerToggle2){
+                    triggerToggle2 = false;
+                    triggerToggle1 = true;
+                    servoPosition = ServoPosition.OUTTAKE_POSITION;
+                }
                 break;
         }
         lastToggleX = gamepad1.x;
+        lastTriggerLeft = gamepad1.left_bumper;
+    }
+
+    public void slidesToggle(ViperSlides.SlidesState slidesState){
+        setArmPosition();
+        switch (slidesState){
+            case GROUND:
+                servoPosition = ServoPosition.INTAKE_POSITION;
+                break;
+
+            case LOW_JUNCTION:
+                servoPosition = ServoPosition.OUTTAKE_POSITION;
+                break;
+            case MIDDLE_JUNCTION:
+                servoPosition = ServoPosition.OUTTAKE_POSITION;
+                break;
+
+            case HIGH_JUNCTION:
+                servoPosition = ServoPosition.OUTTAKE_POSITION;
+                break;
+
+            case LOW_DUNK:
+                servoPosition = ServoPosition.DUNK_POSITION;
+                break;
+            case MIDDLE_DUNK:
+                servoPosition = ServoPosition.DUNK_POSITION;
+                break;
+            case HIGH_DUNK:
+                servoPosition = ServoPosition.DUNK_POSITION;
+                break;
+        }
     }
 
     public void setTelemetry(){

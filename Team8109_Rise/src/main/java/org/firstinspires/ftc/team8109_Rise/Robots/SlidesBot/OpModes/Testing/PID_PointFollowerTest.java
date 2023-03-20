@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.Testing;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -10,7 +11,7 @@ import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Chassis;
 public class PID_PointFollowerTest extends LinearOpMode {
 
     Chassis chassis;
-    Vector3D point = new Vector3D(40, 40, Math.PI/2);
+    Vector3D point = new Vector3D(40, 0, 0);
 
     @Override
     public void runOpMode() throws InterruptedException {

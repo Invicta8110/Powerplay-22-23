@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.team8109_Rise.Control.MotionProfiling.TrapezoidalMotionProfile;
 import org.firstinspires.ftc.team8109_Rise.Control.PIDF_Controller;
 import org.firstinspires.ftc.team8109_Rise.Hardware.Drivetrains.MecanumDriveTrain;
+import org.firstinspires.ftc.team8109_Rise.Math.Vectors.Vector2D;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.IMU;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.Odometry.OdometryLocalizer;
 import org.firstinspires.ftc.team8109_Rise.Math.Vectors.Vector3D;
@@ -30,7 +31,7 @@ public class Chassis extends MecanumDriveTrain {
 
     IMU imu;
 
-    public static PowerPlayPipeline pipeline = new PowerPlayPipeline();
+//    public static PowerPlayPipeline pipeline = new PowerPlayPipeline();
     public double kDrift = 0.1;
     public enum TrackingObject{
         CONESTACK,
@@ -212,9 +213,6 @@ public class Chassis extends MecanumDriveTrain {
     static double PID_TranslationalY_kp = 0.3;
     static double PID_Heading_kp = 2.5;
 
-    static double visionX_kp = 0;
-    static double visionHeading_kp = 0;
-
     static double PID_TranslationalX_ki = 0.0015; //0.0075
     static double PID_TranslationalY_ki = 0.0015;
     //TODO: Slightly Decrease
@@ -236,6 +234,32 @@ public class Chassis extends MecanumDriveTrain {
     static double TrapezoidalY_kp = 0;
     static double TrapezoidalY_kv = 0;
     static double TrapezoidalY_ka = 0;
+
+//    static double visionX_kp = 0.003;
+//    static double visionHeading_kp = 0.0025;
+//
+//    static double visionX_kd = 0.0002; //0.0002
+//    static double visionHeading_kd = 0.0002; //0.00015
+//
+//    static double visionX_ki = 0.001;
+//    static double visionHeading_ki = 0.002;
+
+    static double visionX_kp = 0.0025;
+    static double visionHeading_kp = 0.0025;
+
+    static double visionX_kd = 0; //0.0002
+    static double visionHeading_kd = 0; //0.00015
+
+    static double visionX_ki = 0.0025;
+    static double visionHeading_ki = 0;
+
+//    static double visionX_ki = 0.0017;
+//    static double visionHeading_ki = 0.001;
+
+    double previousFLeft = 0;
+    double previousFRight = 0;
+    double previousBRight = 0;
+    double previousBLeft = 0;
 
     private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(SlidesBot_DriveConstants.MAX_VEL, SlidesBot_DriveConstants.MAX_ANG_VEL, SlidesBot_DriveConstants.TRACK_WIDTH);
     private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(SlidesBot_DriveConstants.MAX_ACCEL);
@@ -332,14 +356,17 @@ public class Chassis extends MecanumDriveTrain {
         TranslationalProfile_X = new TrapezoidalMotionProfile(SlidesBot_DriveConstants.MAX_VEL, SlidesBot_DriveConstants.MAX_ACCEL, TrapezoidalX_kp, TrapezoidalX_kv, TrapezoidalX_ka);
         TranslationalProfile_Y = new TrapezoidalMotionProfile(SlidesBot_DriveConstants.MAX_VEL, SlidesBot_DriveConstants.MAX_ACCEL, TrapezoidalY_kp, TrapezoidalY_kv, TrapezoidalY_ka);
 
-        visionX_PID = new PIDF_Controller(visionX_kp);
-        visionHeading_PID = new PIDF_Controller(visionHeading_kp);
+        visionX_PID = new PIDF_Controller(visionX_kp, visionX_kd, 0, visionX_ki);
+        visionHeading_PID = new PIDF_Controller(visionHeading_kp, visionHeading_kd, 0, visionHeading_ki);
 
-        TranslationalPID_X.tolerance = 0.25;
-        TranslationalPID_Y.tolerance = 0.25;
+        TranslationalPID_X.tolerance = 0.05;
+        TranslationalPID_Y.tolerance = 0.05;
 
         TranslationalProfile_X.tolerance = 0.25;
         TranslationalProfile_Y.tolerance = 0.25;
+
+        visionX_PID.tolerance = 1;
+        visionHeading_PID.tolerance = 1;
 
         odometry = new OdometryLocalizer(hardwareMap);
 
@@ -428,7 +455,17 @@ public class Chassis extends MecanumDriveTrain {
             bRight /= max;
         }
 
+        if (fLeft != previousFLeft) frontLeft.setPower(fLeft);
+        if (fRight != previousFRight) frontRight.setPower(fRight);
+        if (bRight != previousBRight) backRight.setPower(bRight);
+        if (bLeft != previousBLeft) backLeft.setPower(bLeft);
+
         setPower(fLeft, fRight, bRight, bLeft);
+
+        previousFLeft = fLeft;
+        previousFRight = fRight;
+        previousBRight = bRight;
+        previousBLeft = bLeft;
     }
 
     public void  robotRelative(Pose2d powers) {
@@ -503,26 +540,31 @@ public class Chassis extends MecanumDriveTrain {
 //    }
 //
 //    // TODO: Just use machine learning
-    public void visionAlign(Vector3D input){
+    public void visionAlign(Vector2D input, PowerPlayPipeline pipeline){
         // conditions for each
         switch (trackingObject){
             case CONESTACK:
-//                switch () TODO: switch based on alliance
-                if (!pipeline.BlueRect.empty()){
-                    visionDrive = visionX_PID.PIDF_Power(pipeline.YellowRect.y + (pipeline.BlueRect.height/2), 220); //
-                    visionTurn = -visionX_PID.PIDF_Power(pipeline.YellowRect.x + (pipeline.BlueRect.width/2), 160);
-                }
-
-                if (!pipeline.RedRect.empty()){
-                    visionDrive = visionX_PID.PIDF_Power(pipeline.YellowRect.y + (pipeline.RedRect.height/2), 220); //
-                    visionTurn = -visionX_PID.PIDF_Power(pipeline.YellowRect.y + (pipeline.RedRect.height/2), 160);
+                switch (alliance){
+                    case RED:
+                        if (!pipeline.RedRect.empty()){
+//                            visionDrive = visionX_PID.PIDF_Power(pipeline.RedRect.y + (pipeline.RedRect.height/2), input.A); //220
+                            visionDrive = visionX_PID.PIDF_Power(pipeline.RedRect.width, input.A); //220
+                            visionTurn = -visionHeading_PID.PIDF_Power(pipeline.getRectX(pipeline.RedRect), input.B); //160
+                        }
+                        break;
+                    case BLUE:
+                        if (!pipeline.BlueRect.empty()){
+                            visionDrive = visionX_PID.PIDF_Power(pipeline.BlueRect.width, input.A); //220
+                            visionTurn = -visionHeading_PID.PIDF_Power(pipeline.getRectX(pipeline.BlueRect), input.B); //160
+                        }
+                        break;
                 }
                 break;
 
             case JUNCTION:
                 if (!pipeline.YellowRect.empty()){
-                    visionDrive = visionX_PID.PIDF_Power(pipeline.YellowRect.y + (pipeline.YellowRect.height/2), 220); //
-                    visionTurn = -visionX_PID.PIDF_Power(pipeline.YellowRect.y + (pipeline.YellowRect.height/2), 160);
+                    visionDrive = -visionX_PID.PIDF_Power(pipeline.YellowRect.width, input.A); //
+                    visionTurn = -visionHeading_PID.PIDF_Power(pipeline.getRectX(pipeline.YellowRect), input.B);
                 }
                 break;
             case NONE:
@@ -530,7 +572,7 @@ public class Chassis extends MecanumDriveTrain {
         }
 
         VisionAlignPID_Vector.set(visionDrive, 0, visionTurn);
-        setDriveVectorsFieldCentric(VisionAlignPID_Vector);
+        setDriveVectorsRobotCentric(VisionAlignPID_Vector);
     }
 
     //TODO: Test out field-centric

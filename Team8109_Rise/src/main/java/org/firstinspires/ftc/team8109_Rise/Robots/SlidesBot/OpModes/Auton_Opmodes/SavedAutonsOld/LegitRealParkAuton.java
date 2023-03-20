@@ -1,9 +1,10 @@
-package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.Auton_Opmodes;
+package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.Auton_Opmodes.SavedAutonsOld;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.team8109_Rise.Hardware.Intakes.ServoClaw;
 import org.firstinspires.ftc.team8109_Rise.Math.Vectors.Vector3D;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Chassis;
@@ -11,13 +12,17 @@ import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Claw;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ServoIntakeArm;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ViperSlides;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Wrist;
+import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.ColorPipeline;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 //import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.ColorPipeline;
 
 
 @Autonomous
 public class LegitRealParkAuton extends LinearOpMode {
-//    OpenCvCamera camera; //TODO: Improve tracking
-//    ColorPipeline pipeline;
+    OpenCvCamera camera; //TODO: Improve tracking
+    ColorPipeline pipeline;
 
     ElapsedTime runtime = new ElapsedTime();
     ElapsedTime globalTime = new ElapsedTime();
@@ -85,44 +90,44 @@ public class LegitRealParkAuton extends LinearOpMode {
 
         parkingZone = ParkingZone.RIGHT;
 
-//        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-//        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-////        pipeline = new ColorPipeline(telemetry);
-////
-////        camera.setPipeline(pipeline);
-//        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-//            @Override
-//            public void onOpened(){
-//                camera.startStreaming(320,240, OpenCvCameraRotation.UPRIGHT);
-//            }
-//
-//            @Override
-//            public void onError(int errorCode)
-//            {
-//
-//            }
-//        });
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        pipeline = new ColorPipeline(telemetry);
+
+        camera.setPipeline(pipeline);
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened(){
+                camera.startStreaming(320,240, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode)
+            {
+
+            }
+        });
 
         // Adjust 0.5 left
 
         while (opModeInInit()){
             claw.setPosition();
 //            odoRetract.podState = OdoRetract.PodState.GROUND;
-//
-//            if (pipeline.findColor() == ColorPipeline.Colors.BLUE){
-//                parkingZone = ParkingZone.LEFT;
-//            }
-//
-//            if (pipeline.findColor() == ColorPipeline.Colors.RED){
-//                parkingZone = ParkingZone.RIGHT;
-//            }
-//
-//            if (pipeline.findColor() == ColorPipeline.Colors.GREEN){
-//                parkingZone = ParkingZone.MIDDLE;
-//            }
-//
-//            telemetry.addData("color", pipeline.findColor());
-//            telemetry.addData("color", pipeline.getHue());
+
+            if (pipeline.findColor() == ColorPipeline.Colors.BLUE){
+                parkingZone = ParkingZone.LEFT;
+            }
+
+            if (pipeline.findColor() == ColorPipeline.Colors.RED){
+                parkingZone = ParkingZone.RIGHT;
+            }
+
+            if (pipeline.findColor() == ColorPipeline.Colors.GREEN){
+                parkingZone = ParkingZone.MIDDLE;
+            }
+
+            telemetry.addData("color", pipeline.findColor());
+            telemetry.addData("color", pipeline.getHue());
 
             telemetry.update();
         }
@@ -205,11 +210,11 @@ public class LegitRealParkAuton extends LinearOpMode {
         //TODO: show the tolerance stuff and PID values and states
         telemetry.addData("Auton State", parkingStep);
         telemetry.addData("Parking Zone", parkingZone);
-//        telemetry.addData("cycle count", cycleCounter);
-//        telemetry.addData("color", pipeline.findColor());
-//        telemetry.addData("color", pipeline.getHue());
-//        telemetry.addData("runtime", runtime.seconds());
-//        telemetry.addData("claw position", claw.getPositionDegrees());
+        telemetry.addData("cycle count", cycleCounter);
+        telemetry.addData("color", pipeline.findColor());
+        telemetry.addData("color", pipeline.getHue());
+        telemetry.addData("runtime", runtime.seconds());
+        telemetry.addData("claw position", claw.getPositionDegrees());
         telemetry.addData("Pose", chassis.getPoseEstimate());
 
         telemetry.addData("HeadingPID error", chassis.HeadingPID.error);

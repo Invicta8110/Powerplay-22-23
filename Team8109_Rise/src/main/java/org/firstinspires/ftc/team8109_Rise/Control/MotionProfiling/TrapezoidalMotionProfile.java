@@ -7,6 +7,7 @@ public class TrapezoidalMotionProfile {
     public double max_acceleration;
     public double max_velocity;
 
+    public boolean acceleration_dt_test = false;
     public double current_dt = 0;
     public double entire_dt = 0;
     public double cruise_current_dt = 0;
@@ -102,6 +103,9 @@ public class TrapezoidalMotionProfile {
             acceleration_dt = Math.sqrt(Math.abs(halfway_distance) / (0.5 * max_acceleration));
             acceleration_distance = 0.5 * max_acceleration * Math.pow(acceleration_dt,2);
 
+            if (acceleration_dt == 0){
+                acceleration_dt_test = true;
+            }
             // recalculate max velocity based on the time we have to accelerate and decelerate
             max_velocity = max_acceleration * acceleration_dt;
         }

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.TeleOp_OpMo
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.team8109_Rise.Hardware.Intakes.ServoClaw;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Chassis;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Claw;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.OdoRetract;
@@ -38,19 +39,34 @@ public class SlidesBot_TeleOp extends LinearOpMode {
         while (opModeIsActive()){
             // Setting methods from mechanism classes to be looped
             chassis.ManualDrive();
-            chassis.chassisTelemetry();
+//            chassis.chassisTelemetry();
             slides.slidesTelemetry();
+            arm.setTelemetry();
             slides.toggleStates();
 //
-            arm.setArmPosition();
+//            arm.setArmPosition();
 //            arm.setTelemetry();
             if (slides.slidesState == ViperSlides.SlidesState.GROUND){
-                arm.servoPosition = ServoIntakeArm.ServoPosition.INTAKE_POSITION;
+//                arm.servoPosition = ServoIntakeArm.ServoPosition.INTAKE_POSITION;
                 wrist.wristPosition = Wrist.WristPosition.INTAKE_POSITION;
             } else {
-                arm.servoPosition = ServoIntakeArm.ServoPosition.OUTTAKE_POSITION;
+//                arm.servoPosition = ServoIntakeArm.ServoPosition.OUTTAKE_POSITION;
                 wrist.wristPosition = Wrist.WristPosition.OUTTAKE_POSITION;
             }
+
+
+////
+//            if (slides.slidesState == ViperSlides.SlidesState.LOW_JUNCTION && gamepad1.left_bumper){
+//                arm.servoPosition = ServoIntakeArm.ServoPosition.DUNK_POSITION;
+//            }
+
+//            if (slides.slidesState == ViperSlides.SlidesState.JAM){
+//                arm.servoPosition = ServoIntakeArm.ServoPosition.DUNK_POSITION;
+//            }
+
+            arm.slidesToggle(slides.slidesState);
+
+//            arm.togglePosition();
 //
             claw.toggleClaw();
 //            claw.setPosition();
@@ -59,6 +75,7 @@ public class SlidesBot_TeleOp extends LinearOpMode {
             wrist.setPosition();
 
             odoRetract.toggleState();
+
             telemetry.addData("FrontLeft", chassis.fLeft);
             telemetry.addData("FrontRight", chassis.fRight);
             telemetry.addData("BackRight", chassis.bRight);
@@ -68,10 +85,12 @@ public class SlidesBot_TeleOp extends LinearOpMode {
             telemetry.update();
         }
 
-        odoRetract.podState = OdoRetract.PodState.GROUND;
-
-        while (odoRetract.retractionServo.getPosition() > 0.775){
-            odoRetract.setPodPosition();
-        }
+//
+//        if (isStopRequested()){
+//            odoRetract.podState = OdoRetract.PodState.GROUND;
+//        }
+//        //        while (odoRetract.retractionServo.getPosition() > 0.775){
+//            odoRetract.setPodPosition();
+//        }
     }
 }

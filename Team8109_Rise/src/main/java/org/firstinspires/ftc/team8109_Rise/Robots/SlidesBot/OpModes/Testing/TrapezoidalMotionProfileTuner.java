@@ -2,13 +2,11 @@ package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.Testing;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.team8109_Rise.Math.Vectors.Vector3D;
-import org.firstinspires.ftc.team8109_Rise.Resources.RoadRunnerQuickstart.drive.opmode.ManualFeedforwardTuner;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Chassis;
 
 @Autonomous
@@ -85,6 +83,7 @@ public class TrapezoidalMotionProfileTuner extends LinearOpMode {
         telemetry.addData("translational error", drive.trapezoidalTranslationalError);
         telemetry.addData("heading error", drive.HeadingPID.error);
         telemetry.addData("X Profile error", drive.TranslationalProfile_X.positionError);
+        telemetry.addData("accel_dt_test", drive.TranslationalProfile_X.acceleration_dt_test);
 
         telemetry.addData("ProfileState", drive.TranslationalProfile_X.ProfileState);
         telemetry.addData("current_dt", drive.TranslationalProfile_X.current_dt);

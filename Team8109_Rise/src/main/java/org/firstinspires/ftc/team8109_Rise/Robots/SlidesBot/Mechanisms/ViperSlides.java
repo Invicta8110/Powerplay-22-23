@@ -19,7 +19,6 @@ public class ViperSlides extends Slides {
 
     double slidesPower = 0;
 
-    double highJunctionHeight = 19;
     public enum SlidesState{
         GROUND,
         LOW_JUNCTION,
@@ -29,7 +28,10 @@ public class ViperSlides extends Slides {
         CONESTACK_MIDDLE,
         CONESTACK_TOP_MIDDLE,
         CONESTACK_TOP,
-        MANUAL
+        MANUAL,
+        LOW_DUNK,
+        MIDDLE_DUNK,
+        HIGH_DUNK
     }
 
     boolean toggle1 = true;
@@ -38,6 +40,8 @@ public class ViperSlides extends Slides {
     boolean toggleB1 = true;
     boolean toggleB2 = false;
 
+    boolean triggerToggle1 = true;
+    boolean triggerToggle2 = false;
     boolean toggleManual = false;
     boolean[] autonTestToggles = {true, false,  true, false,  true, false,  true, false, true, false};
     boolean[] junctionToggles = {true, false,  true, false,  true, false, true, false};
@@ -47,20 +51,23 @@ public class ViperSlides extends Slides {
     boolean lastToggleUp = false;
     boolean lastToggleDown = false;
 
+    boolean lastTriggerLeft = false;
+
     public SlidesState slidesState;
 
     public PIDF_Controller slidesPID;
 
+
+
     public ViperSlides(Gamepad gamepad1, Telemetry telemetry, HardwareMap hardwareMap) {
-        super(2, name, pulleyRadius, StringingMethod.CONTINUOUS, 2, 0.14, hardwareMap); //0.175
+        super(2, name, pulleyRadius, StringingMethod.CONTINUOUS, 2, 0, hardwareMap); //0.175
 
         // ki: 0.005
 //        slidesPID = new PIDF_Controller(0.04, 0.03, 0, 0.01); //0.01
-        slidesPID = new PIDF_Controller(0.13, 0.008, 0, 0.025); //0.07, 0.0035, 0, 0.01
+        slidesPID = new PIDF_Controller(0.31, 0.03, 0, 0.01); //0.07, 0.0035, 0, 0.01
 
-        //slidesPID = new PIDF_Controller(0.05, 0.0035, 0, 0.005); //0.0175, 0.01
-        slidesPID.tolerance = 0.4;
-
+        //slidesPID = new PIDF_Controller(0.5, 0.05, 0, 0.04);
+        //slidesPID = new PIDF_Controller(0.05, 0.0035, 0, 0.005); //0.0175, 0.
         motors[0].reset();
         motors[1].reset();
 
@@ -79,7 +86,7 @@ public class ViperSlides extends Slides {
     public void setSlidePower(){
         // Continually sets the power to the slides motors
         setPower(slidesPower);
-
+        slidesPID.tolerance = 0.001;
         switch (slidesState){
             //TODO: Add a state to the top High junction scoring state to manual control with dpad
             case MANUAL:
@@ -95,39 +102,49 @@ public class ViperSlides extends Slides {
 
             case GROUND:
                 /* PID controller calculates the power needed to be set to the motors
-                to stay at the target position (of 2 inches as my guess of what ground level is) */
+                to stay at the target position (of 2 inches as my guess of what ground leve
 
-                slidesPower = slidesPID.PIDF_Power(getHeight(), 0.2);
+                l is) */
+
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 0);
                 break;
 
             case HIGH_JUNCTION:
                 /* PID controller calculates the power needed to be set to the motors
-                to stay at the target position (of 36 inches as my guess of what the high level is) */
-                slidesPower = slidesPID.PIDF_Power(getHeight(), 19.2); // 18.5
+                to stay at the target position (of 36 inches as my guess of wha the high level is) */
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 18.4); // 18
 
                 break;
 
             case MIDDLE_JUNCTION:
-                slidesPower = slidesPID.PIDF_Power(getHeight(), 9.7); // 18.5
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 10.27); // 9.4
                 break;
 
             case LOW_JUNCTION:
-                slidesPower = slidesPID.PIDF_Power(getHeight(), 0); // 18.5
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 0.8); // 18.5
                 break;
             case CONESTACK_BOTTOM_MIDDLE:
-                slidesPower = slidesPID.PIDF_Power(getHeight(), 2.1);
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 1.25);
                 break;
 
             case CONESTACK_MIDDLE:
-                slidesPower = slidesPID.PIDF_Power(getHeight(), 3.2);
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 2.95);
                 break;
 
             case CONESTACK_TOP_MIDDLE:
-                slidesPower = slidesPID.PIDF_Power(getHeight(), 4.2);
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 4.11);
                 break;
 
             case CONESTACK_TOP:
-                slidesPower = slidesPID.PIDF_Power(getHeight(), 5);
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 5.45);
+                break;
+            case LOW_DUNK:
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 0); // 18.5
+            case MIDDLE_DUNK:
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 6.4); // 18.5
+                break;
+            case HIGH_DUNK:
+                slidesPower = slidesPID.PIDF_Power(getHeight(), 14.7);
                 break;
         }
     }
@@ -175,6 +192,12 @@ public class ViperSlides extends Slides {
 
                     slidesState = SlidesState.GROUND;
                 }
+
+                if ((gamepad1.left_bumper != lastTriggerLeft) && gamepad1.left_bumper && triggerToggle1){
+                    triggerToggle1 = false;
+                    triggerToggle2 = true;
+//                    slidesState = SlidesState.LOW_DUNK;
+                }
                 break;
             case MIDDLE_JUNCTION:
                 if ((gamepad1.dpad_up != lastToggleUp) && gamepad1.dpad_up && junctionToggles[4]){
@@ -190,6 +213,12 @@ public class ViperSlides extends Slides {
 
                     slidesState = SlidesState.LOW_JUNCTION;
                 }
+
+                if ((gamepad1.left_bumper != lastTriggerLeft) && gamepad1.left_bumper && triggerToggle1){
+                    triggerToggle1 = false;
+                    triggerToggle2 = true;
+                    slidesState = SlidesState.MIDDLE_DUNK;
+                }
                 break;
 
                 //TODO:
@@ -201,6 +230,12 @@ public class ViperSlides extends Slides {
                     toggleManual = false;
 
                     slidesState = SlidesState.GROUND;
+                }
+
+                if ((gamepad1.left_bumper != lastTriggerLeft) && gamepad1.left_bumper && triggerToggle1){
+                    triggerToggle1 = false;
+                    triggerToggle2 = true;
+                    slidesState = SlidesState.HIGH_DUNK;
                 }
 
                 if ((gamepad1.dpad_down != lastToggleDown) && gamepad1.dpad_down && junctionToggles[5]){
@@ -225,6 +260,59 @@ public class ViperSlides extends Slides {
                     slidesState = SlidesState.GROUND;
                 }
                 break;
+            case LOW_DUNK:
+                if (gamepad1.a){
+
+                    triggerToggle2 = false;
+                    triggerToggle1 = true;
+
+                    toggleManual = false;
+
+                    slidesState = SlidesState.GROUND;
+                }
+
+                if ((gamepad1.left_bumper != lastTriggerLeft) && gamepad1.left_bumper && triggerToggle2){
+                    triggerToggle2 = false;
+                    triggerToggle1 = true;
+                    slidesState = SlidesState.LOW_JUNCTION;
+                }
+                break;
+            case MIDDLE_DUNK:
+                if (gamepad1.a){
+                    triggerToggle2 = false;
+                    triggerToggle1 = true;
+
+                    toggleManual = false;
+
+                    slidesState = SlidesState.GROUND;
+                }
+
+                if ((gamepad1.left_bumper != lastTriggerLeft) && gamepad1.left_bumper && triggerToggle2){
+                    triggerToggle2 = false;
+                    triggerToggle1 = true;
+                    slidesState = SlidesState.MIDDLE_JUNCTION;
+                }
+                break;
+
+            case HIGH_DUNK:
+                if ((gamepad1.x != lastToggleX) && gamepad1.x && toggle2){
+                    toggle2 = false;
+                    toggle1 = true;
+
+                    triggerToggle2 = false;
+                    triggerToggle1 = true;
+
+                    toggleManual = false;
+
+                    slidesState = SlidesState.GROUND;
+                }
+
+                if ((gamepad1.left_bumper != lastTriggerLeft) && gamepad1.left_bumper && triggerToggle2){
+                    triggerToggle2 = false;
+                    triggerToggle1 = true;
+                    slidesState = SlidesState.HIGH_JUNCTION;
+                }
+                break;
         }
 
         if ((gamepad1.b != lastToggleB) && gamepad1.b && toggleB1){
@@ -244,6 +332,7 @@ public class ViperSlides extends Slides {
         lastToggleB = gamepad1.b;
         lastToggleUp = gamepad1.dpad_up;
         lastToggleDown = gamepad1.dpad_down;
+        lastTriggerLeft = gamepad1.left_bumper;
     }
 
 

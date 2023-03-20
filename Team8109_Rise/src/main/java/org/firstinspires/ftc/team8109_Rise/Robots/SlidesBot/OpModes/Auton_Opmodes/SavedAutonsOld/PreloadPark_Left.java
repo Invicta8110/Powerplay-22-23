@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.Auton_Opmodes;
+package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.Auton_Opmodes.SavedAutonsOld;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -19,8 +19,8 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous
-public class PreloadPark_Left_Wall extends LinearOpMode {
+//@Autonomous
+public class PreloadPark_Left extends LinearOpMode {
     OpenCvCamera camera; //TODO: Improve tracking
     ColorPipeline pipeline;
 
@@ -155,7 +155,7 @@ public class PreloadPark_Left_Wall extends LinearOpMode {
     public void autonLeftRed(){
         switch (autonState){
             case PUSH_CONE:
-                targetPose.set(61, 0, 0);
+                targetPose.set(60, 0, 0);
 //
 
                 claw.clawState = ServoClaw.ClawState.CLOSED;
@@ -168,7 +168,7 @@ public class PreloadPark_Left_Wall extends LinearOpMode {
                 }
                 break;
             case RETURN_TO_POLE:
-                targetPose.set(47, 0, -0.773);
+                targetPose.set(46, 0, -0.773);
                 chassis.goToPosePID(targetPose);
 
                 if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
@@ -181,7 +181,7 @@ public class PreloadPark_Left_Wall extends LinearOpMode {
 
                 arm.servoPosition = ServoIntakeArm.ServoPosition.OUTTAKE_POSITION;
                 wrist.wristPosition = Wrist.WristPosition.OUTTAKE_POSITION;
-                targetPose.set(55.5, -3.5, -0.959);
+                targetPose.set(54.5, -3.5, -0.959);
 
                 chassis.goToPosePID(targetPose);
 
@@ -192,7 +192,7 @@ public class PreloadPark_Left_Wall extends LinearOpMode {
                 }
                 break;
             case SCORE_PRELOAD:
-                targetPose.set(55.5, -3.5, -0.959);
+                targetPose.set(54.5, -3.5, -0.959);
 
                 if (runtime.seconds() > 0.5){
                     claw.clawState = ServoClaw.ClawState.OPEN;
@@ -211,7 +211,7 @@ public class PreloadPark_Left_Wall extends LinearOpMode {
 
                 switch (parkingStep){
                     case STEP_ONE:
-                        targetPose.set(46, 0, 0);
+                        targetPose.set(45, 0, 0);
 
                         if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
                             parkingStep = CycleAuton_PID.ParkingStep.STEP_TWO;
@@ -219,7 +219,7 @@ public class PreloadPark_Left_Wall extends LinearOpMode {
                         }
                         break;
                     case STEP_TWO:
-                        targetPose.set(27, 0, 0);
+                        targetPose.set(26, 0, 0);
                         if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
                             parkingStep = CycleAuton_PID.ParkingStep.STEP_THREE;
                             runtime.reset();
@@ -228,14 +228,14 @@ public class PreloadPark_Left_Wall extends LinearOpMode {
                     case STEP_THREE:
                         switch (parkingZone){
                             case LEFT:
-                                targetPose.set(27, 23, 0);
+                                targetPose.set(26, 23, 0);
                                 break;
                             case MIDDLE:
-                                targetPose.set(27, 0, 0);
+                                targetPose.set(26, 0, 0);
 
                                 break;
                             case RIGHT:
-                                targetPose.set(27, -23, 0);
+                                targetPose.set(26, -23, 0);
                                 break;
                         }
                 }

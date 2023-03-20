@@ -2,12 +2,16 @@ package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.team8109_Rise.Hardware.Odometry.ServoOdoRetract;
 
 public class OdoRetract extends ServoOdoRetract {
     Gamepad gamepad1;
+    static String[] names = {"leftRetract", "rightRetract", "middleRetract"};
 
+    static double[] groundPositions = {0.75, 0.7, 0.5};
+    static double[] retractPositions = {0.9, 0.875, 0.85};
     public enum PodState{
         GROUND,
         RETRACTED
@@ -20,7 +24,7 @@ public class OdoRetract extends ServoOdoRetract {
 
     public PodState podState;
     public OdoRetract(Gamepad gamepad1, HardwareMap hardwareMap) {
-        super("odoRetract", hardwareMap);
+        super(3, groundPositions, retractPositions, names, hardwareMap);
 
         podState = PodState.GROUND;
 
@@ -30,10 +34,15 @@ public class OdoRetract extends ServoOdoRetract {
     public void setPodPosition(){
         switch (podState) {
             case GROUND:
-                retractionServo.setPosition(0.4);
+                for (int i = 0; i < podCount; i++){
+                    retractionServo[i].setPosition(groundPosition[i]);
+                }
+
                 break;
             case RETRACTED:
-                retractionServo.setPosition(0.7);
+                for (int i = 0; i < podCount; i++){
+                    retractionServo[i].setPosition(retractPosition[i]);
+                }
                 break;
         }
     }

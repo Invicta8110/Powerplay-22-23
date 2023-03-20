@@ -12,7 +12,7 @@ public class Claw extends ServoClaw {
     Telemetry telemetry;
 
     //TODO convert baack
-    static double openPosition = 150;
+    static double openPosition = 142;
     static double closedPosition = 100;
 
 //    static double openPosition = 235;
@@ -57,6 +57,41 @@ public class Claw extends ServoClaw {
         }
         lastToggleY = gamepad1.y;
     }
+
+    public void clawSlidesToggle(ViperSlides.SlidesState slidesState){
+        setPosition();
+        if (slidesState != ViperSlides.SlidesState.LOW_DUNK || slidesState != ViperSlides.SlidesState.MIDDLE_DUNK || slidesState != ViperSlides.SlidesState.HIGH_DUNK){
+            switch (clawState){
+                case OPEN:
+                    setAngle(openPosition);
+
+                    if ((gamepad1.y != lastToggleY) && gamepad1.y && toggle1){
+                        toggle1 = false;
+                        toggle2 = true;
+
+                        clawState = ClawState.CLOSED;
+                    }
+                    break;
+                case CLOSED:
+                    setAngle(closedPosition);
+
+                    if ((gamepad1.y != lastToggleY) && gamepad1.y && toggle2){
+                        toggle2 = false;
+                        toggle1 = true;
+
+                        clawState = ClawState.OPEN;
+                    }
+                    break;
+            }
+        } else {
+            clawState = ClawState.OPEN;
+            toggle2 = false;
+            toggle1 = true;
+        }
+
+        lastToggleY = gamepad1.y;
+    }
+    
 
     public void setTelemetry(){
         telemetry.addData("Claw State", clawState);

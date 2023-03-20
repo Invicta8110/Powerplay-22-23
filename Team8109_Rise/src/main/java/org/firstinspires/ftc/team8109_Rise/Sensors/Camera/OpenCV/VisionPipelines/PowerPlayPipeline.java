@@ -3,6 +3,7 @@ package org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipeline
 import static org.opencv.core.Core.inRange;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.R;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Rect;
@@ -16,11 +17,12 @@ import java.util.Collections;
 import java.util.List;
 
 public class PowerPlayPipeline extends OpenCvPipeline {
+    Telemetry telemetry;
     static final Scalar GREEN = new Scalar(0, 255, 0);
 
-    boolean RED = true;
-    boolean BLUE = true;
-    boolean YELLOW = true;
+    public boolean RED = true;
+    public boolean BLUE = true;
+    public boolean YELLOW = true;
 
     public int redContourCount = 0;
     public int blueContourCount = 0;
@@ -42,7 +44,7 @@ public class PowerPlayPipeline extends OpenCvPipeline {
     public MatOfPoint biggestBlueContour;
     public MatOfPoint biggestYellowContour;
 
-    public PowerPlayPipeline() {
+    public PowerPlayPipeline(Telemetry telemetry) {
         redContours = new ArrayList<MatOfPoint>();
         redRect = new ArrayList<Rect>();
         RedRect = new Rect();
@@ -57,11 +59,13 @@ public class PowerPlayPipeline extends OpenCvPipeline {
         yellowRect = new ArrayList<Rect>();
         YellowRect = new Rect();
         biggestYellowContour = new MatOfPoint();
+
+        this.telemetry = telemetry;
     }
 
     // Filters the contours to be greater than a specific area in order to be tracked
     public boolean filterContours(MatOfPoint contour) {
-        return Imgproc.contourArea(contour) > 10;
+        return Imgproc.contourArea(contour) > 25;
     }
 
     // Red masking thresholding values:
@@ -203,5 +207,30 @@ public class PowerPlayPipeline extends OpenCvPipeline {
         //TODO: move this when actually using code (this is just for EasyOpenCV sim)
 
         return input;
+    }
+
+    public double getRectY(Rect rect){
+        return rect.y + (rect.height/2);
+    }
+
+    public double getRectX(Rect rect){
+        return rect.x + (rect.width/2);
+    }
+
+    public void Telemetry(){
+        if (!YellowRect.empty()){
+            telemetry.addData("Junction X Pos", getRectX(YellowRect));
+            telemetry.addData("Junction Width", YellowRect.width);
+        }
+
+        if (!RedRect.empty()){
+            telemetry.addData("Conestack X Pos", getRectX(RedRect));
+            telemetry.addData("Conestack Width", RedRect.width);
+        }
+
+        if (!BlueRect.empty()){
+            telemetry.addData("Conestack X Pos", getRectX(BlueRect));
+            telemetry.addData("Conestack Width", BlueRect.width);
+        }
     }
 }

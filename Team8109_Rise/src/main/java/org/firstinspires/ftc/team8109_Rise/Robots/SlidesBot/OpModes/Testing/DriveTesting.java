@@ -32,6 +32,7 @@ public class DriveTesting extends LinearOpMode {
 //        odoRetract.podState = OdoRetract.PodState.GROUND;
         waitForStart();
 
+        chassis.setPoseEstimate(new Pose2d(0,0,0));
         while (opModeIsActive()){
             chassis.ManualDrive();
 //            odoRetract.toggleState();
