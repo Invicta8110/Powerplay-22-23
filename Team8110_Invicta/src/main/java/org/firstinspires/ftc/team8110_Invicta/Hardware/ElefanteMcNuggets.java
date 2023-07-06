@@ -3,6 +3,7 @@ package org.firstinspires.ftc.team8110_Invicta.Hardware;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 import static org.firstinspires.ftc.team8110_Invicta.Hardware.States.DriveSpeeds.SLOW;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -11,27 +12,37 @@ import org.firstinspires.ftc.team8110_Invicta.Hardware.Drivetrains.StraferChassi
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms.Claw;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms.Lift;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms.Motor;
+import org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms.Webcam;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.States.DriveSpeeds;
+import org.openftc.easyopencv.OpenCvCamera;
 
 import java.util.List;
 
-public class ElefanteDrugMcNuggets extends StraferChassis {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class ElefanteMcNuggets extends StraferChassis {
     HardwareMap hwmap;
     ScissorLift lift;
 
     ConeClaw claw;
 
+    OpenCvCamera camera;
+
     DriveSpeeds speed = SLOW;
     double diff = 0.5;
 
-    public ElefanteDrugMcNuggets(HardwareMap hardwareMap) {
+    public ElefanteMcNuggets(HardwareMap hardwareMap) {
         super(hardwareMap);
         this.hwmap = hardwareMap;
         this.lift = new ScissorLift("lift");
         this.claw = new ConeClaw("claw");
+        this.camera = new Webcam(hardwareMap).getCamera();
 
         this.backRight.setDirectionReverse();
         this.frontRight.setDirectionReverse();
+
 
     }
 
@@ -81,8 +92,14 @@ public class ElefanteDrugMcNuggets extends StraferChassis {
         }
 
         @Override
-        public void upLevel() {
-            liftMotor.runToPosition((int) (getPosition() + 160));
+        public void goToHigh() {
+            liftMotor.runToPosition(3000, 1);
+            liftMotor.reset();
+        }
+
+        public void goToGround() {
+            liftMotor.runToPosition(3000, -1);
+            liftMotor.reset();
         }
 
         @Override
@@ -153,28 +170,37 @@ public class ElefanteDrugMcNuggets extends StraferChassis {
         double drive = Math.pow(gamepad.left_stick_y, 3);
         double strafe = Math.pow(gamepad.left_stick_x, 3);
         double turn = Math.pow(gamepad.right_stick_x, 3);
+        setDrivePower(gamepad.left_stick_y, gamepad.left_stick_x, gamepad.right_stick_x);
+    }
+
+    public void setDrivePower(double drive, double strafe, double turn) {
 
         double fLeft = 0.875 * drive - 1 * strafe - 0.8 * turn;
         double fRight = 0.875 * drive + 1 * strafe + 0.8 * turn;
-        double bRight = -0.875 *drive - 1 * strafe + 0.8 * turn;
+        double bRight = -0.875 * drive - 1 * strafe + 0.8 * turn;
         double bLeft = -0.875 * drive + 1 * strafe - 0.8 * turn;
 
-        switch (speed) {
-            case FASTER:
-                if (gamepad.x) {
-                    diff = 0.5;
-                    speed = SLOW;
-                }
-                break;
-            case SLOW:
-                if (gamepad.x) {
-                    diff = 1;
-                    speed = DriveSpeeds.FASTER;
-                }
-                break;
-        }
+//        switch (speed) {
+//            case FASTER:
+//                if (gamepad.x) {
+//                    diff = 0.5;
+//                    speed = SLOW;
+//                }
+//                break;
+//            case SLOW:
+//                if (gamepad.x) {
+//                    diff = 1.5;
+//                    speed = DriveSpeeds.FASTER;
+//                }
+//                break;
+//        }
 
-        this.setPower(fLeft*diff, fRight*diff, bRight*diff, -bLeft*diff);
+        this.setPower(fLeft, fRight, bRight, -bLeft);
+    }
+
+    @Override
+    public void setDrivePower(Pose2d pose) {
+        this.setDrivePower(pose.getX(), pose.getY(), pose.getHeading());
     }
 
     public void teleOpClaw(Gamepad gamepad) {

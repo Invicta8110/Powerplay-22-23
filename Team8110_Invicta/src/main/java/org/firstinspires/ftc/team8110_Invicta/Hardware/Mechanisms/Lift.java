@@ -24,7 +24,7 @@ public interface Lift extends Mechanism {
     /**
      * Moves the scissor lift to the next position
      */
-    public void upLevel();
+    public void goToHigh();
 
     /**
      * Moves the scissor lift to the previous position

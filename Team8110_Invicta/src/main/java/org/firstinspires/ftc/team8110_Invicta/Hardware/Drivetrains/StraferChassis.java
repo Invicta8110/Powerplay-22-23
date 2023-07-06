@@ -186,8 +186,8 @@ public class StraferChassis extends com.acmerobotics.roadrunner.drive.MecanumDri
         return new TrajectorySequenceBuilder(
                 startPose,
                 VEL_CONSTRAINT, ACCEL_CONSTRAINT,
-                MAX_ANG_VEL, MAX_ANG_ACCEL,
-                baseVelConstraint1);
+                MAX_ANG_VEL, MAX_ANG_ACCEL
+        );
     }
 
     public void turnAsync(double angle) {
@@ -216,12 +216,12 @@ public class StraferChassis extends com.acmerobotics.roadrunner.drive.MecanumDri
         waitForIdle();
     }
 
-    public void followTrajectorySequenceAsync(TrajectorySequence trajectorySequence) {
+    public void followTrajectorySequenceAsynfc(TrajectorySequence trajectorySequence) {
         trajectorySequenceRunner.followTrajectorySequenceAsync(trajectorySequence);
     }
 
-    public void followTrajectorySequence() {
-        followTrajectorySequenceAsync(trajectorySequence);
+    public void followTrajectorySequence(TrajectorySequence trajectorySequence) {
+        trajectorySequenceRunner.followTrajectorySequenceAsync(trajectorySequence);
         waitForIdle();
     }
 

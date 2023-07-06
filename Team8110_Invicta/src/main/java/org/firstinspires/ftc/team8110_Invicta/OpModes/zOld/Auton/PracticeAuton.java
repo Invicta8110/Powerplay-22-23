@@ -1,18 +1,7 @@
-package org.firstinspires.ftc.team8110_Invicta.OpModes.Auton;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
+package org.firstinspires.ftc.team8110_Invicta.OpModes.zOld.Auton;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 //import org.firstinspires.ftc.team8110_Invicta.Hardware.;
-import org.firstinspires.ftc.team8110_Invicta.Hardware.ElefanteDrugMcNuggets;
-import org.firstinspires.ftc.team8110_Invicta.Hardware.Pipelines.ColorDetector;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
+
 
 //@Autonomous
 //public class PracticeAuton extends LinearOpMode {

@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.team8110_Invicta.OpModes.Auton;
+package org.firstinspires.ftc.team8110_Invicta.OpModes.zOld.Auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.team8110_Invicta.Hardware.ElefanteDrugMcNuggets;
+import org.firstinspires.ftc.team8110_Invicta.Hardware.ElefanteMcNuggets;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms.Webcam;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Pipelines.ColorDetector;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -12,7 +12,7 @@ public class leftSide extends LinearOpMode {
 
     ElapsedTime current;
 
-    ElefanteDrugMcNuggets robot;
+    ElefanteMcNuggets robot;
 
     ColorDetector cat;
 
@@ -20,9 +20,9 @@ public class leftSide extends LinearOpMode {
 
     OpenCvCamera camera;
 
-    ElefanteDrugMcNuggets.ConeClaw sup;
+    ElefanteMcNuggets.ConeClaw sup;
 
-    ElefanteDrugMcNuggets.ScissorLift yea;
+    ElefanteMcNuggets.ScissorLift yea;
 
     public int currentPos;
 
@@ -31,7 +31,7 @@ public class leftSide extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         camera = new Webcam(hardwareMap).getCamera();
-        robot = new ElefanteDrugMcNuggets(hardwareMap);
+        robot = new ElefanteMcNuggets(hardwareMap);
         cat = new ColorDetector();
         camera.setPipeline(cat);
 

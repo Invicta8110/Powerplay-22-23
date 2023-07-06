@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.team8110_Invicta.OpModes.Auton;
+package org.firstinspires.ftc.team8110_Invicta.OpModes.zOld.Auton;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.team8110_Invicta.Hardware.ElefanteDrugMcNuggets;
+import org.firstinspires.ftc.team8110_Invicta.Hardware.ElefanteMcNuggets;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms.Webcam;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Pipelines.ColorDetector;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.States.Colors;
@@ -13,18 +13,16 @@ import org.firstinspires.ftc.team8110_Invicta.Resources.RoadRunnerQuickstart.tra
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-import java.util.Vector;
-
 @Autonomous
 public class RedLeft extends LinearOpMode {
-    ElefanteDrugMcNuggets robot;
+    ElefanteMcNuggets robot;
     ColorDetector pipeline;
     OpenCvCamera camera;
 
     @Override
     public void runOpMode() {
         pipeline = new ColorDetector();
-        robot = new ElefanteDrugMcNuggets(hardwareMap);
+        robot = new ElefanteMcNuggets(hardwareMap);
         camera = new Webcam(hardwareMap).getCamera();
 
         camera.setPipeline(pipeline);
@@ -46,9 +44,14 @@ public class RedLeft extends LinearOpMode {
 
         Colors color = pipeline.getColor();
 
-        TrajectorySequence step1 = robot.trajectorySequenceBuilder(new Pose2d(0, 0, 0)).forward(36).turn(Math.toRadians(45)).build();
+        TrajectorySequence step1 = robot.trajectorySequenceBuilder(new Pose2d(34,-58, Math.toRadians(87))).setTangent(Math.toRadians(87))
+            .lineToSplineHeading(new Pose2d(24.4,-3.2, Math.toRadians(95)))
+            .lineToSplineHeading(new Pose2d(66.8,-11.6, Math.toRadians(-9)))
+            .lineToSplineHeading(new Pose2d(28,-1.2, Math.toRadians(168)))
+            .lineToSplineHeading(new Pose2d(61.6,-34.8, Math.toRadians(-39)))
+            .build();
         robot.followTrajectorySequence(step1);
-        robot.getLift().upLevel();
+        robot.getLift().goToHigh();
         robot.getClaw().open();
         Pose2d endPose = robot.getPoseEstimate();
         TrajectorySequence park;

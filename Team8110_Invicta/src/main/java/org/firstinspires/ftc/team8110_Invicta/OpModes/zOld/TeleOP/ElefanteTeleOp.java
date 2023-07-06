@@ -1,19 +1,18 @@
-package org.firstinspires.ftc.team8110_Invicta.OpModes.TeleOP;
+package org.firstinspires.ftc.team8110_Invicta.OpModes.zOld.TeleOP;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.team8110_Invicta.Hardware.ElefanteDrugMcNuggets;
+import org.firstinspires.ftc.team8110_Invicta.Hardware.ElefanteMcNuggets;
 
 @TeleOp
 public class ElefanteTeleOp extends LinearOpMode {
-    ElefanteDrugMcNuggets robot;
+    ElefanteMcNuggets robot;
 
-    ElefanteDrugMcNuggets.ConeClaw claw;
+    ElefanteMcNuggets.ConeClaw claw;
 
     public void runOpMode() {
-        robot = new ElefanteDrugMcNuggets(hardwareMap);
+        robot = new ElefanteMcNuggets(hardwareMap);
         robot.getLift().reverse();
 
         telemetry.addData("status", "initialized");

@@ -1,19 +1,15 @@
-package org.firstinspires.ftc.team8110_Invicta.OpModes.Auton;
+package org.firstinspires.ftc.team8110_Invicta.OpModes.zOld.Auton;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.team8110_Invicta.Hardware.ElefanteDrugMcNuggets;
-import org.firstinspires.ftc.team8110_Invicta.Hardware.Pipelines.ColorDetector;
+import org.firstinspires.ftc.team8110_Invicta.Hardware.ElefanteMcNuggets;
 
 @Config
 @Autonomous
-
-
 public class blueLeft extends LinearOpMode {
 
 //    InertialMeasurementUnit imu;
@@ -24,7 +20,7 @@ public class blueLeft extends LinearOpMode {
     public void runOpMode() {
 
 //        InertialMeasurementUnit imu = new InertialMeasurementUnit(hardwareMap);
-        ElefanteDrugMcNuggets robot = new ElefanteDrugMcNuggets(hardwareMap);
+        ElefanteMcNuggets robot = new ElefanteMcNuggets(hardwareMap);
 
         Trajectory example = robot.trajectoryBuilder(new Pose2d())
                 .forward(24.0)

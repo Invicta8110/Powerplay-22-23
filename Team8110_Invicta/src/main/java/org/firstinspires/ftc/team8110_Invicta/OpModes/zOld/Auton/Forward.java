@@ -1,17 +1,17 @@
-package org.firstinspires.ftc.team8110_Invicta.OpModes.Auton;
+package org.firstinspires.ftc.team8110_Invicta.OpModes.zOld.Auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.team8110_Invicta.Hardware.ElefanteDrugMcNuggets;
+import org.firstinspires.ftc.team8110_Invicta.Hardware.ElefanteMcNuggets;
 
 @Autonomous
 public class Forward extends LinearOpMode {
-    ElefanteDrugMcNuggets robot;
+    ElefanteMcNuggets robot;
 
     @Override
     public void runOpMode() {
-        robot = new ElefanteDrugMcNuggets(hardwareMap);
+        robot = new ElefanteMcNuggets(hardwareMap);
 
         waitForStart();
 

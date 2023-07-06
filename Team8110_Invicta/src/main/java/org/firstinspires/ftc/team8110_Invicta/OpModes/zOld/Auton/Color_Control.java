@@ -1,15 +1,12 @@
-package org.firstinspires.ftc.team8110_Invicta.OpModes.Auton;
+package org.firstinspires.ftc.team8110_Invicta.OpModes.zOld.Auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Mechanisms.Webcam;
 import org.firstinspires.ftc.team8110_Invicta.Hardware.Pipelines.ColorDetector;
 import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvWebcam;
 
 @Autonomous
 public class Color_Control extends LinearOpMode {

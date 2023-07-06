@@ -117,7 +117,7 @@ public class StormyMcNuggets extends StraferChassis implements Lift, Claw {
      * Moves the scissor lift to the next position
      */
     @Override
-    public void upLevel() {
+    public void goToHigh() {
         lift.runToPosition(lift.getCurrentPosition() + 20);
     }
 
