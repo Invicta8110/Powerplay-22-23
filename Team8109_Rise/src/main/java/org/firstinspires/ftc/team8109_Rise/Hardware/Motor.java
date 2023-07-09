@@ -66,6 +66,7 @@ public class Motor {
     public void reset(){
         dcMotorEx.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dcMotorEx.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
     }
 
     // Testing

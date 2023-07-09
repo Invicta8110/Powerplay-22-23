@@ -42,7 +42,7 @@ public class ColorPipeline extends OpenCvPipeline {
     public Mat processFrame(Mat input) {
 
         // Define the dimensions and location of each region
-        Point REGION_TOPLEFT_ANCHOR_POINT = new Point((input.cols()/2)-10,(input.rows()/2) + 30);
+        Point REGION_TOPLEFT_ANCHOR_POINT = new Point((input.cols()/2)-100,(input.rows()/2) + 25);
         int REGION_WIDTH = 10;
         int REGION_HEIGHT = 3;
 

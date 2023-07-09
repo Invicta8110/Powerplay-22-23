@@ -2,13 +2,14 @@ package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.team8109_Rise.Hardware.Arms.ServoArm;
 
 public class ServoIntakeArm extends ServoArm {
     static String[] name = {"armLeft", "armRight"};
-
+//    static String[] name = {"armRight", "armLeft"};
     Gamepad gamepad1;
     Telemetry telemetry;
 
@@ -33,6 +34,7 @@ public class ServoIntakeArm extends ServoArm {
     public ServoIntakeArm(Gamepad gamepad1, Telemetry telemetry, HardwareMap hardwareMap) {
         super(ServoArmType.DOUBLE_SERVO, name, hardwareMap);
 
+//        armServo1.setDirection(Servo.Direction.REVERSE);
         this.gamepad1 = gamepad1;
         this.telemetry = telemetry;
 
@@ -41,11 +43,11 @@ public class ServoIntakeArm extends ServoArm {
     public void setArmPosition(){
         switch (servoPosition){
             case INTAKE_POSITION:
-                setAngle(60);
+                setAngle(90);
                 break;
 
             case OUTTAKE_POSITION:
-                setAngle(256);
+                setAngle(257);
                 break;
 
             case DUNK_POSITION:

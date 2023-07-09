@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.team8109_Rise.Math.Vectors.Vector3D;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Chassis;
 
-@Autonomous
+//@Autonomous
 public class TrapezoidalMotionProfileTuner extends LinearOpMode {
 
     public static double DISTANCE = 30; // in

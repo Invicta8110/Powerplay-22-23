@@ -31,7 +31,6 @@ public class Chassis extends MecanumDriveTrain {
 
     IMU imu;
 
-//    public static PowerPlayPipeline pipeline = new PowerPlayPipeline();
     public double kDrift = 0.1;
     public enum TrackingObject{
         CONESTACK,
@@ -43,6 +42,7 @@ public class Chassis extends MecanumDriveTrain {
         RED,
         BLUE
     }
+
     public TrackingObject trackingObject;
     public Alliance alliance;
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 0);
@@ -228,7 +228,7 @@ public class Chassis extends MecanumDriveTrain {
     static double PID_Heading_a = 0.1;
 
     static double TrapezoidalX_kp = 0;
-    static double TrapezoidalX_kv = 0.005;
+    static double TrapezoidalX_kv = 0.0075;
     static double TrapezoidalX_ka = 0;
 
     static double TrapezoidalY_kp = 0;
@@ -578,6 +578,7 @@ public class Chassis extends MecanumDriveTrain {
     //TODO: Test out field-centric
     public void ManualDrive(){
         controllerInput.set(Math.pow(gamepad1.left_stick_y, 3), Math.pow(gamepad1.left_stick_x, 3), Math.pow(gamepad1.right_stick_x, 3));
+//        controllerInput.set(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 //        controllerInput.set(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
         setDriveVectorsRobotCentric(controllerInput);
     }

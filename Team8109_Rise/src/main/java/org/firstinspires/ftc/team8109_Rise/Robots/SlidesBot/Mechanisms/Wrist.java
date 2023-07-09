@@ -31,7 +31,7 @@ public class Wrist extends ArmWrist {
     public void setPosition(){
         switch (wristPosition){
             case INTAKE_POSITION:
-                setAngle(230);
+                setAngle(237.5);
                 if ((gamepad1.x != lastToggleX) && gamepad1.x && toggle1){
                     toggle1 = false;
                     toggle2 = true;
@@ -41,7 +41,7 @@ public class Wrist extends ArmWrist {
                 break;
 
             case OUTTAKE_POSITION:
-                setAngle(50);
+                setAngle(57.5);
 
                 if ((gamepad1.x != lastToggleX) && gamepad1.x && toggle2){
                     toggle2 = false;

@@ -7,7 +7,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.team8109_Rise.Hardware.Intakes.ServoClaw;
 
 public class Claw extends ServoClaw {
-
     Gamepad gamepad1;
     Telemetry telemetry;
 

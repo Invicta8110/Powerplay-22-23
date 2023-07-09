@@ -54,7 +54,7 @@ public abstract class StandardThreeWheelOdoLocalizer extends ThreeTrackingWheelL
 
                 new Pose2d(0, DriveConstants[3] / 2, 0), // left
                 new Pose2d(0, -DriveConstants[3] / 2, 0), // right
-                new Pose2d(DriveConstants[4], -1.25, Math.toRadians(90)) // front
+                new Pose2d(DriveConstants[4], -1.4, Math.toRadians(90)) // front
         ));
 
         TICKS_PER_REV = DriveConstants[0];

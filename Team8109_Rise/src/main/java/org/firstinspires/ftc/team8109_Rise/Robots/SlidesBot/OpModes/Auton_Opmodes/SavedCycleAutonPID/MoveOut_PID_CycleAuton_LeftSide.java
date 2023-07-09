@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.Auton_Opmodes;
+package org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.Auton_Opmodes.SavedCycleAutonPID;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -19,8 +19,8 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous
-public class NewPark_PID_CycleAuton_LeftSide extends LinearOpMode {
+//@Autonomous
+public class MoveOut_PID_CycleAuton_LeftSide extends LinearOpMode {
 
     /*
     TODO:
@@ -353,12 +353,12 @@ public class NewPark_PID_CycleAuton_LeftSide extends LinearOpMode {
 
                 // could also vector sum all errors
                 if (withinPoseTolerance()){
-                    // && (Math.abs(slides.slidesPID.error) < slides.slidesPID.tolerance)
                     autonState = AutonState.DUNK_CONE;
 //                    chassis.trackingObject = Chassis.TrackingObject.JUNCTION;
                     runtime.reset();
                 }
-                break;
+                break;                    // && (Math.abs(slides.slidesPID.error) < slides.slidesPID.tolerance)
+
             case DUNK_CONE:
                 chassis.goToPosePID(targetPose);
 
@@ -412,10 +412,11 @@ public class NewPark_PID_CycleAuton_LeftSide extends LinearOpMode {
             case CYCLE:
                 switch (cycleState){
                     case TO_CONE_STACK:
-                        chassis.TranslationalPID_X.setPIDCoefficents(0.17, 0.035, 0, 0.001);//0.03 0.001
-                        chassis.TranslationalPID_Y.setPIDCoefficents(0.17, 0.035, 0.1, 0.001);
-                        chassis.HeadingPID.setPIDCoefficents(1.3, 0.03, 0, 0.001);
 
+                        translationalTolerance = 0.5;
+                        chassis.TranslationalPID_X.setPIDCoefficents(0.2, 0.035, 0, 0.001);//0.03 0.001
+                        chassis.TranslationalPID_Y.setPIDCoefficents(0.2, 0.035, 0.1, 0.001);
+                        chassis.HeadingPID.setPIDCoefficents(1.25, 0.03, 0, 0.001);
                         targetPose.set(51.113, 22.3, -1.589); //51.9, 24.7, -1.59
 
                         chassis.goToPosePID(targetPose);
@@ -456,7 +457,7 @@ public class NewPark_PID_CycleAuton_LeftSide extends LinearOpMode {
 
                         // TODO: Note that the claw won't actually reach this position closing
                         //runtime.seconds timer maybe needed
-                        if ((claw.getPositionDegrees() < 110) && runtime.seconds() > 0.6) {
+                        if ((claw.getPositionDegrees() < 110) && runtime.seconds() > 0.5) {
                             cycleState = CycleState.BOOST_UP;
                             runtime.reset();
                         }
@@ -466,17 +467,16 @@ public class NewPark_PID_CycleAuton_LeftSide extends LinearOpMode {
                         slides.slidesState = ViperSlides.SlidesState.HIGH_JUNCTION;
                         claw.clawState = ServoClaw.ClawState.CLOSED;
 
-                        if (runtime.seconds() > 0.25) {
-                            chassis.TranslationalPID_X.setPIDCoefficents(0.15, 0.0375, 0, 0.001);//0.03 0.001
-                            chassis.TranslationalPID_Y.setPIDCoefficents(0.3, 0.0375, 0, 0.001);
-                            chassis.HeadingPID.setPIDCoefficents(2, 0.03, 0, 0.001);
-
+                        if (runtime.seconds() > 0.75) {
+                            chassis.TranslationalPID_X.setPIDCoefficents(0.17, 0.034, 0, 0.001);//0.03 0.001
+                            chassis.TranslationalPID_Y.setPIDCoefficents(0.17, 0.034, 0, 0.001);
+                            chassis.HeadingPID.setPIDCoefficents(2.1, 0.03, 0, 0.001);
 
 //                            chassis.TranslationalPID_X.setPIDCoefficents(0.15, 0.0375, 0, 0.001);//0.03 0.001
-//                            chassis.TranslationalPID_Y.setPIDCoefficents(0.21, 0.0375, 0, 0.001);
-//                            chassis.HeadingPID.setPIDCoefficents(2.1, 0.03, 0, 0.001);
+//                            chassis.TranslationalPID_Y.setPIDCoefficents(0.2, 0.0375, 0, 0.001);
+//                            chassis.HeadingPID.setPIDCoefficents(2.2, 0.03, 0, 0.001);
 
-                            cycleState = CycleState.TO_HIGH_JUNCTION;
+                            cycleState = CycleState.MOVE_OUT;
                             slides.slidesState = ViperSlides.SlidesState.HIGH_JUNCTION;
                             arm.servoPosition = ServoIntakeArm.ServoPosition.OUTTAKE_POSITION;
                             wrist.wristPosition = Wrist.WristPosition.OUTTAKE_POSITION;
@@ -486,16 +486,36 @@ public class NewPark_PID_CycleAuton_LeftSide extends LinearOpMode {
                         }
                         break;
                     case MOVE_OUT:
-//                        targetPose.set(50.3, 10, -1.609);
+                        targetPose.set(50.3, 5, -1.609);
+//                        targetPose.set(50, -4, -1.606);
+//                        targetPose.set(53, -2, -0.959);
+//                        chassis.setPower(-0.4);
+                        // 51.477, 10.488, 270
+
+                        chassis.setPower(-0.5);
+
+//                        chassis.goToPosePID(targetPose);
+                        if (Math.abs(5 - chassis.getPoseEstimate().getY()) < 2){
+                            cycleState = CycleState.TO_HIGH_JUNCTION;
+//                            chassis.TranslationalPID_X.setPIDCoefficents(0.2, 0.035, 0, 0.001);//0.03 0.001
+//                            chassis.TranslationalPID_Y.setPIDCoefficents(0.2, 0.035, 0, 0.001);
+//                            chassis.HeadingPID.setPIDCoefficents(1.25, 0.02, 0, 0.001); // 0.03 0.1 0.001
+
+//                            translationalTolerance = 1;
+                            runtime.reset();
+                        }
+                        targetPose.set(50.3, 10, -1.609);
 //                        targetPose.set(50, -4, -1.606);
 //                        targetPose.set(53, -2, -0.959);
 //                        chassis.setPower(-0.4);
 
                         // 51.477, 10.488, 270
 
-                        chassis.goToPosePID(targetPose);
+                        ///chassis.setPower(-0.5);
 
-                        if (Math.abs(chassis.TranslationalPID_Y.error) < 5){
+//                        chassis.goToPosePID(targetPose);
+
+                        if (Math.abs(chassis.TranslationalPID_Y.error) < 1){
                             cycleState = CycleState.TO_HIGH_JUNCTION;
 //                            chassis.TranslationalPID_X.setPIDCoefficents(0.2, 0.035, 0, 0.001);//0.03 0.001
 //                            chassis.TranslationalPID_Y.setPIDCoefficents(0.2, 0.035, 0, 0.001);

@@ -8,7 +8,7 @@ import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Claw;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ServoIntakeArm;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ViperSlides;
 
-@TeleOp
+//@TeleOp
 public class SlidesConeStackTesting extends LinearOpMode {
     ViperSlides slides;
     ServoIntakeArm arm;

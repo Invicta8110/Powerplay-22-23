@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
-public class TensorFlowModel {
+public abstract class TensorFlowModel {
     static String TFOD_MODEL_FILE;
     String[] LABELS;
 

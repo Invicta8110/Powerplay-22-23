@@ -10,8 +10,8 @@ public class OdoRetract extends ServoOdoRetract {
     Gamepad gamepad1;
     static String[] names = {"leftRetract", "rightRetract", "middleRetract"};
 
-    static double[] groundPositions = {0.75, 0.7, 0.5};
-    static double[] retractPositions = {0.9, 0.875, 0.85};
+    static double[] groundPositions = {0.75, 0.7, 0.8};
+    static double[] retractPositions = {0.9, 0.875, 0.8};
     public enum PodState{
         GROUND,
         RETRACTED

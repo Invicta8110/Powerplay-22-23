@@ -19,9 +19,10 @@ import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Wrist;
 public class ServoTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-//        ServoIntakeArm arm = new ServoIntakeArm(gamepad1, telemetry, hardwareMap);
-//        Servo armServo1 = hardwareMap.get(Servo.class, "armLeft");
-        Claw claw = new Claw(gamepad1, telemetry, hardwareMap);
+        ServoIntakeArm arm = new ServoIntakeArm(gamepad1, telemetry, hardwareMap);
+//        Servo armServo1 = hardwareMap.get(Servo.class, "armRight");
+//        Servo armServo2 = hardwareMap.get(Servo.class, "armRight");
+//        Claw claw = new Claw(gamepad1, telemetry, hardwareMap);
 //        Wrist wrist = new Wrist(gamepad1, hardwareMap);
 
 //        OdoRetract retract = new OdoRetract(gamepad1, hardwareMap);
@@ -35,28 +36,32 @@ public class ServoTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-//            arm.togglePosition();
+            arm.togglePosition();
 //            arm.setAngleIndividual();
-//            arm.setTelemetry();
-
+            arm.setTelemetry();
+            telemetry.update();
 //            retract.toggleState();
 //            retract.setPodPosition();
 //            wrist.setPosition();
 
-            claw.toggleClaw();
-            claw.setPosition();
-            claw.setTelemetry();
+//            claw.toggleClaw();
+//            claw.setPosition();
+//            claw.setTelemetry();
 
 
             //TODO: revermosempm
 
+//            telemetry.addData("leftServoPos", armServo1.getPosition());
+////            telemetry.addData("rightServoPos", armServo2.getPosition());
+//            telemetry.update();
+//
 //            if (gamepad1.a){
 ////                arm.armServo1.setPosition(60);
-//                setAngle(armServo1, 60);
+//                setAngle(armServo1, 140);
 //            }
 //
 //            if (gamepad1.b){
-//                setAngle(armServo1, 256);
+//                setAngle(armServo1, 180);
 //            }
 
 //

@@ -69,12 +69,15 @@ public class TrapezoidalMotionProfile {
         error = targetPos - currPos;
 
         if (previousTargetPos != targetPos){
+
             distance = error;
             initialPos = currPos;
+
+            initialCalculations();
             runtime.reset();
         }
+        current_dt = runtime.seconds();
 
-        initialCalculations();
         setProfileState();
 
         x = motion_profile_position(distance);
@@ -89,8 +92,41 @@ public class TrapezoidalMotionProfile {
         return positionError*kp + v*kv + a*ka;
     }
 
+//    public void initialCalculations(){
+//        current_dt = runtime.seconds();
+//
+//        // calculate the time it takes to accelerate to max velocity
+//        acceleration_dt = max_velocity / max_acceleration;
+//
+//        // If we can't accelerate to max velocity in the given distance, we'll accelerate as much as possible
+//        halfway_distance = distance / 2;
+//        acceleration_distance = 0.5 * max_acceleration * Math.pow(acceleration_dt,2);
+//
+//        if (acceleration_distance > Math.abs(halfway_distance)){
+//            acceleration_dt = Math.sqrt(Math.abs(halfway_distance) / (0.5 * max_acceleration));
+//            acceleration_distance = 0.5 * max_acceleration * Math.pow(acceleration_dt,2);
+//
+//            if (acceleration_dt == 0){
+//                acceleration_dt_test = true;
+//            }
+//            // recalculate max velocity based on the time we have to accelerate and decelerate
+//            max_velocity = max_acceleration * acceleration_dt;
+//        }
+//
+//        // we decelerate at the same rate as we accelerate
+//        deacceleration_dt = acceleration_dt;
+//
+//        // calculate the time that we're at max velocity
+//        cruise_distance = distance - 2 * acceleration_distance;
+//        cruise_dt = cruise_distance / max_velocity;
+//        deacceleration_time = acceleration_dt + cruise_dt;
+//
+//        // check if we're still in the motion profile
+//        entire_dt = acceleration_dt + cruise_dt + deacceleration_dt;
+//    }
+
     public void initialCalculations(){
-        current_dt = runtime.seconds();
+
 
         // calculate the time it takes to accelerate to max velocity
         acceleration_dt = max_velocity / max_acceleration;
