@@ -91,6 +91,31 @@ public class PIDF_Controller {
         return P + I + D;
     }
 
+
+    public double PID_Controller(double currPos, double targetPos){
+        error = targetPos - currPos;
+
+        errorChange = error - previousError;
+
+        P = kp*error;
+
+        deltaTime = runtime.seconds();
+        runtime.reset();
+
+        area += error*deltaTime;
+
+        I = area*ki;
+
+        D = kd * (errorChange / deltaTime);
+
+        previousError = error;
+        previousFilterEstimate = currentFilterEstimate;
+        previousTarget = targetPos;
+
+        return P + I + D;
+    }
+
+
     public void setPIDCoefficents(double kp){
         this.kp = kp;
     }
