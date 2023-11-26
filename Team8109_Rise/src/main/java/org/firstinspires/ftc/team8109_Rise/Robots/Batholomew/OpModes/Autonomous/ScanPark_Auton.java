@@ -124,7 +124,6 @@ public class ScanPark_Auton extends LinearOpMode {
     }
 
     public void autonLeftRed(){
-//        odoRetract.podState = OdoRetract.PodState.GROUND;
         slides.slidesState = ViperSlides.SlidesState.GROUND;
 
         switch (parkingZone){
