@@ -13,7 +13,6 @@ import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.OdoRetrac
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ServoIntakeArm;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.ViperSlides;
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Mechanisms.Wrist;
-import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.OpModes.Auton_Opmodes.SavedCycleAutonPID.CycleAuton_PID;
 import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.ColorPipeline;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -58,10 +57,10 @@ public class PreloadPark_Left extends LinearOpMode {
         RIGHT
     }
 
-    CycleAuton_PID.AutonState autonState;
-    CycleAuton_PID.CycleState cycleState;
-    CycleAuton_PID.ParkingStep parkingStep;
-    CycleAuton_PID.ParkingZone parkingZone;
+    AutonState autonState;
+    CycleState cycleState;
+    ParkingStep parkingStep;
+    ParkingZone parkingZone;
 
     Chassis chassis;
     ViperSlides slides;
@@ -76,9 +75,9 @@ public class PreloadPark_Left extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        autonState = CycleAuton_PID.AutonState.PUSH_CONE;
-        cycleState = CycleAuton_PID.CycleState.TO_CONE_STACK;
-        parkingStep = CycleAuton_PID.ParkingStep.STEP_ONE;
+        autonState = AutonState.PUSH_CONE;
+        cycleState = CycleState.TO_CONE_STACK;
+        parkingStep = ParkingStep.STEP_ONE;
 
         chassis = new Chassis(gamepad1, telemetry, hardwareMap);
         slides = new ViperSlides(gamepad1, telemetry, hardwareMap);
@@ -112,15 +111,15 @@ public class PreloadPark_Left extends LinearOpMode {
             odoRetract.podState = OdoRetract.PodState.GROUND;
 
             if (pipeline.findColor() == ColorPipeline.Colors.BLUE){
-                parkingZone = CycleAuton_PID.ParkingZone.LEFT;
+                parkingZone = ParkingZone.LEFT;
             }
 
             if (pipeline.findColor() == ColorPipeline.Colors.RED){
-                parkingZone = CycleAuton_PID.ParkingZone.RIGHT;
+                parkingZone = ParkingZone.RIGHT;
             }
 
             if (pipeline.findColor() == ColorPipeline.Colors.GREEN){
-                parkingZone = CycleAuton_PID.ParkingZone.MIDDLE;
+                parkingZone = ParkingZone.MIDDLE;
             }
 
             telemetry.addData("color", pipeline.findColor());
@@ -163,7 +162,7 @@ public class PreloadPark_Left extends LinearOpMode {
                 chassis.goToPosePID(targetPose);
 
                 if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
-                    autonState = CycleAuton_PID.AutonState.RETURN_TO_POLE;
+                    autonState = AutonState.RETURN_TO_POLE;
                     runtime.reset();
                 }
                 break;
@@ -172,7 +171,7 @@ public class PreloadPark_Left extends LinearOpMode {
                 chassis.goToPosePID(targetPose);
 
                 if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
-                    autonState = CycleAuton_PID.AutonState.GO_TO_SCORE_PRELOAD;
+                    autonState = AutonState.GO_TO_SCORE_PRELOAD;
                     runtime.reset();
                 }
                 break;
@@ -187,7 +186,7 @@ public class PreloadPark_Left extends LinearOpMode {
 
                 // could also vector sum all errors
                 if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
-                    autonState = CycleAuton_PID.AutonState.SCORE_PRELOAD;
+                    autonState = AutonState.SCORE_PRELOAD;
                     runtime.reset();
                 }
                 break;
@@ -200,7 +199,7 @@ public class PreloadPark_Left extends LinearOpMode {
 
                 // if ((claw.getPositionDegrees() > 175) && runtime.seconds() > 2){
                 if ((claw.getPositionDegrees() > 140)){
-                    autonState = CycleAuton_PID.AutonState.PARK;
+                    autonState = AutonState.PARK;
                 }
                 break;
             case PARK:
@@ -214,14 +213,14 @@ public class PreloadPark_Left extends LinearOpMode {
                         targetPose.set(45, 0, 0);
 
                         if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
-                            parkingStep = CycleAuton_PID.ParkingStep.STEP_TWO;
+                            parkingStep = ParkingStep.STEP_TWO;
                             runtime.reset();
                         }
                         break;
                     case STEP_TWO:
                         targetPose.set(26, 0, 0);
                         if (targetPose.findDistance(chassis.getPoseVector()) < tolerance){
-                            parkingStep = CycleAuton_PID.ParkingStep.STEP_THREE;
+                            parkingStep = ParkingStep.STEP_THREE;
                             runtime.reset();
                         }
                         break;

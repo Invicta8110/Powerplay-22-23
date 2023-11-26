@@ -21,6 +21,7 @@ import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.Odometry.Odo
 import org.firstinspires.ftc.team8109_Rise.Robots.SlidesBot.Sensors.SlidesBot_DriveConstants;
 import org.firstinspires.ftc.team8109_Rise.Sensors.Camera.OpenCV.VisionPipelines.PowerPlayPipeline;
 
+// make extends MecanumDriveTrain_Old if using drive encoders
 @Config
 public class Chassis extends MecanumDriveTrain {
 
@@ -132,6 +133,7 @@ public class Chassis extends MecanumDriveTrain {
         frontLeft.setDirectionForward();
         backLeft.setDirectionForward();
 
+        // if no 3 wheel odometry then remove
         setLocalizer(odometry);
         imu = new IMU(hardwareMap);
 
