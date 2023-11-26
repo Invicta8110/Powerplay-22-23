@@ -20,22 +20,6 @@ public class ScanPark_Auton extends LinearOpMode {
 
     int cycleCounter = 1;
 
-    public enum AutonState {
-        PUSH_CONE,
-        RETURN_TO_POLE,
-        GO_TO_SCORE_PRELOAD,
-        SCORE_PRELOAD,
-        CYCLE,
-        PARK
-    }
-
-    public enum CycleState{
-        TO_CONE_STACK,
-        PICK_UP_CONE,
-        TO_HIGH_JUNCTION,
-        SCORE_CONE
-    }
-
     public enum ParkingStep{
         STEP_ONE,
         STEP_TWO
@@ -51,9 +35,6 @@ public class ScanPark_Auton extends LinearOpMode {
 
     ViperSlides slides;
 //    OdoRetract odoRetract;
-
-    AutonState autonState;
-    CycleState cycleState;
     ParkingStep parkingStep;
     ParkingZone parkingZone;
 
@@ -65,7 +46,6 @@ public class ScanPark_Auton extends LinearOpMode {
         chassis = new Chassis(gamepad1, telemetry, hardwareMap);
         slides = new ViperSlides(gamepad1, telemetry, hardwareMap);
 
-        autonState = AutonState.PARK;
         parkingStep = ParkingStep.STEP_ONE;
 
         parkingZone = ParkingZone.RIGHT;
